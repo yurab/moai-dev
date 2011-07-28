@@ -54,7 +54,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;..\..\3rdparty\curl-7.19.7\lib&quot;;&quot;..\..\3rdparty\curl-7.19.7\include&quot;;&quot;..\..\3rdparty\openssl-1.0.0d\include&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\3rdparty\curl-7.21.7\lib&quot;;&quot;..\..\3rdparty\curl-7.21.7\include&quot;;&quot;..\..\3rdparty\openssl-1.0.0d\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;BUILDING_LIBCURL;CURL_STATICLIB;USE_SSL;USE_SSLEAY;USE_OPENSSL"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -215,7 +215,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\3rdparty\curl-7.19.7\lib&quot;;&quot;..\..\3rdparty\curl-7.19.7\include&quot;;&quot;..\..\3rdparty\openssl-1.0.0d\include&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\3rdparty\curl-7.21.7\lib&quot;;&quot;..\..\3rdparty\curl-7.21.7\include&quot;;&quot;..\..\3rdparty\openssl-1.0.0d\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;BUILDING_LIBCURL;CURL_STATICLIB;USE_SSL;USE_SSLEAY;USE_OPENSSL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -349,291 +349,399 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\base64.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\amigaos.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\connect.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\asyn-ares.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\content_encoding.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\asyn-thread.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\cookie.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\axtls.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_addrinfo.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\base64.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_memrchr.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\connect.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_rand.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\content_encoding.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_sspi.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\cookie.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\dict.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_addrinfo.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\easy.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_fnmatch.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\escape.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_gethostname.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\file.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_memrchr.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\formdata.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_rand.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ftp.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_rtmp.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\getenv.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_sspi.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\getinfo.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_threads.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\gtls.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\cyassl.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hash.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\dict.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostares.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\easy.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostasyn.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\escape.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostip.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\file.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostip4.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\fileinfo.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostip6.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\formdata.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostsyn.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ftp.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostthre.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ftplistparser.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\getenv.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_chunks.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\getinfo.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_digest.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\gopher.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_negotiate.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\gtls.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_ntlm.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hash.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\if2ip.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hmac.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\inet_ntop.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostasyn.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\inet_pton.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostip.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\krb4.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostip4.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\krb5.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostip6.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ldap.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostsyn.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\llist.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\md5.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_chunks.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\memdebug.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_digest.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\mprintf.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_negotiate.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\multi.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_negotiate_sspi.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\netrc.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_ntlm.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\nonblock.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_proxy.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\nss.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\idn_win32.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\parsedate.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\if2ip.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\progress.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\imap.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\qssl.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\inet_ntop.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\rawstr.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\inet_pton.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\security.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\krb4.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\select.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\krb5.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\sendf.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ldap.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\share.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\llist.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\slist.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\md4.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\socks.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\md5.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\socks_gssapi.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\memdebug.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\socks_sspi.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\mprintf.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\speedcheck.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\multi.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\splay.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\netrc.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ssh.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\non-ascii.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\sslgen.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nonblock.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ssluse.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nss.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strdup.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nwlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strequal.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nwos.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strerror.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\openldap.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strtok.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\parsedate.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strtoofft.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\pingpong.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\telnet.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\polarssl.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\tftp.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\pop3.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\timeval.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\progress.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\transfer.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\qssl.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\url.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\rawstr.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\version.c"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\rtsp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\security.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\select.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\sendf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\share.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\slist.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\smtp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\socks.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\socks_gssapi.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\socks_sspi.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\speedcheck.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\splay.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ssh.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\sslgen.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ssluse.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strdup.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strequal.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strerror.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strtok.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strtoofft.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\telnet.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\tftp.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\timeval.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\transfer.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\url.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\version.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\warnless.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\wildcard.c"
 				>
 			</File>
 		</Filter>
@@ -641,271 +749,407 @@
 			Name="Header Files"
 			>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\arpa_telnet.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\amigaos.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\config-win32.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\arpa_telnet.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\connect.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\asyn.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\content_encoding.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\axtls.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\cookie.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-amigaos.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_addrinfo.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-dos.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_base64.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-mac.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_ldap.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-os400.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_md5.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-riscos.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_memory.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-symbian.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_memrchr.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-tpf.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_rand.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-vms.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curl_sspi.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-vxworks.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\curlx.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-win32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\dict.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\config-win32ce.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\easyif.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\connect.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\escape.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\content_encoding.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\file.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\cookie.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\formdata.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_addrinfo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ftp.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_base64.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\getinfo.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_fnmatch.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\gtls.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_gethostname.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hash.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_hmac.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\hostip.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_ldap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_md4.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_chunks.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_md5.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_digest.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_memory.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_negotiate.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_memrchr.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\http_ntlm.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_rand.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\if2ip.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_rtmp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\inet_ntop.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_sspi.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\inet_pton.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curl_threads.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\krb4.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\curlx.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\llist.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\cyassl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\memdebug.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\dict.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\multiif.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\easyif.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\netrc.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\escape.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\nonblock.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\file.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\nssg.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\fileinfo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\parsedate.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\formdata.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\progress.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ftp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\qssl.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ftplistparser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\rawstr.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\getinfo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\select.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\gopher.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\sendf.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\gtls.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\setup.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hash.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\setup_once.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\hostip.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\share.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\slist.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_chunks.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\sockaddr.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_digest.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\socks.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_negotiate.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\speedcheck.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_ntlm.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\splay.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\http_proxy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ssh.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\if2ip.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\sslgen.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\imap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\ssluse.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\inet_ntop.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strdup.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\inet_pton.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strequal.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\krb4.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strerror.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\llist.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strtok.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\memdebug.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\strtoofft.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\multiif.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\telnet.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\netrc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\tftp.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\non-ascii.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\timeval.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nonblock.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\transfer.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\nssg.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\url.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\parsedate.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\3rdparty\curl-7.19.7\lib\urldata.h"
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\pingpong.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\polarssl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\pop3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\progress.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\qssl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\rawstr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\rtsp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\select.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\sendf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\setup-os400.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\setup.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\setup_once.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\share.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\slist.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\smtp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\sockaddr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\socks.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\speedcheck.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\splay.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ssh.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\sslgen.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\ssluse.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strdup.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strequal.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strerror.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strtok.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\strtoofft.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\telnet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\tftp.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\timeval.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\transfer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\url.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\urldata.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\warnless.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\3rdparty\curl-7.21.7\lib\wildcard.h"
 				>
 			</File>
 		</Filter>

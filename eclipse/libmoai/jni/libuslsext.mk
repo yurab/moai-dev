@@ -24,10 +24,10 @@ $(SRC_PATH)/3rdparty/freetype-2.4.4/src \
 $(SRC_PATH)/3rdparty/freetype-2.4.4/config \
 $(SRC_PATH)/3rdparty/lua-5.1.3/src \
 $(SRC_PATH)/3rdparty/lpng140 \
-$(SRC_PATH)/3rdparty/curl-7.19.7 \
-$(SRC_PATH)/3rdparty/curl-7.19.7/lib \
-$(SRC_PATH)/3rdparty/curl-7.19.7/include-android \
-$(SRC_PATH)/3rdparty/curl-7.19.7/include-android/curl \
+$(SRC_PATH)/3rdparty/curl-7.21.7 \
+$(SRC_PATH)/3rdparty/curl-7.21.7/lib \
+$(SRC_PATH)/3rdparty/curl-7.21.7/include-android \
+$(SRC_PATH)/3rdparty/curl-7.21.7/include-android/curl \
 $(SRC_PATH)/3rdparty/sqlite-3.6.16 \
 $(SRC_PATH)/3rdparty/tinyxml \
 $(SRC_PATH)/3rdparty/openssl-1.0.0d/include-android \
