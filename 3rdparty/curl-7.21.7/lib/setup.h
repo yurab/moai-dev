@@ -36,11 +36,11 @@
  * configuration file for platforms which lack config tool.
  */
 
-#ifdef HAVE_CONFIG_H
+#ifdef CURL_HAVE_CONFIG_H
 
 #include "curl_config.h"
 
-#else /* HAVE_CONFIG_H */
+#else /* CURL_HAVE_CONFIG_H */
 
 #ifdef _WIN32_WCE
 #  include "config-win32ce.h"
@@ -74,7 +74,7 @@
 #  include "config-vxworks.h"
 #endif
 
-#endif /* HAVE_CONFIG_H */
+#endif /* CURL_HAVE_CONFIG_H */
 
 /* ================================================================ */
 /* Definition of preprocessor macros/symbols which modify compiler  */

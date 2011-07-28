@@ -1752,28 +1752,6 @@
 		07D3C4ED13E0F03D0052F8EE /* warnless.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37B13E0F03D0052F8EE /* warnless.h */; };
 		07D3C4EE13E0F03D0052F8EE /* wildcard.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37C13E0F03D0052F8EE /* wildcard.c */; };
 		07D3C4EF13E0F03D0052F8EE /* wildcard.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37D13E0F03D0052F8EE /* wildcard.h */; };
-		07D3C4FB13E0F0A00052F8EE /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F013E0F0A00052F8EE /* curl_config.h */; };
-		07D3C4FC13E0F0A00052F8EE /* curl.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F113E0F0A00052F8EE /* curl.h */; };
-		07D3C4FD13E0F0A00052F8EE /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F213E0F0A00052F8EE /* curlbuild.h */; };
-		07D3C4FE13E0F0A00052F8EE /* curlrules.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F313E0F0A00052F8EE /* curlrules.h */; };
-		07D3C4FF13E0F0A00052F8EE /* curlver.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F413E0F0A00052F8EE /* curlver.h */; };
-		07D3C50013E0F0A00052F8EE /* easy.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F513E0F0A00052F8EE /* easy.h */; };
-		07D3C50113E0F0A00052F8EE /* mprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F613E0F0A00052F8EE /* mprintf.h */; };
-		07D3C50213E0F0A00052F8EE /* multi.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F713E0F0A00052F8EE /* multi.h */; };
-		07D3C50313E0F0A00052F8EE /* stdcheaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F813E0F0A00052F8EE /* stdcheaders.h */; };
-		07D3C50413E0F0A00052F8EE /* typecheck-gcc.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F913E0F0A00052F8EE /* typecheck-gcc.h */; };
-		07D3C50513E0F0A00052F8EE /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4FA13E0F0A00052F8EE /* types.h */; };
-		07D3C50613E0F0A00052F8EE /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F013E0F0A00052F8EE /* curl_config.h */; };
-		07D3C50713E0F0A00052F8EE /* curl.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F113E0F0A00052F8EE /* curl.h */; };
-		07D3C50813E0F0A00052F8EE /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F213E0F0A00052F8EE /* curlbuild.h */; };
-		07D3C50913E0F0A00052F8EE /* curlrules.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F313E0F0A00052F8EE /* curlrules.h */; };
-		07D3C50A13E0F0A00052F8EE /* curlver.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F413E0F0A00052F8EE /* curlver.h */; };
-		07D3C50B13E0F0A00052F8EE /* easy.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F513E0F0A00052F8EE /* easy.h */; };
-		07D3C50C13E0F0A00052F8EE /* mprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F613E0F0A00052F8EE /* mprintf.h */; };
-		07D3C50D13E0F0A00052F8EE /* multi.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F713E0F0A00052F8EE /* multi.h */; };
-		07D3C50E13E0F0A00052F8EE /* stdcheaders.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F813E0F0A00052F8EE /* stdcheaders.h */; };
-		07D3C50F13E0F0A00052F8EE /* typecheck-gcc.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4F913E0F0A00052F8EE /* typecheck-gcc.h */; };
-		07D3C51013E0F0A00052F8EE /* types.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C4FA13E0F0A00052F8EE /* types.h */; };
 		07E885BF13BE3E78008D75AA /* MOAIParticleDistanceEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07E885BB13BE3E78008D75AA /* MOAIParticleDistanceEmitter.cpp */; };
 		07E885C013BE3E78008D75AA /* MOAIParticleDistanceEmitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 07E885BC13BE3E78008D75AA /* MOAIParticleDistanceEmitter.h */; };
 		07E885C113BE3E78008D75AA /* MOAIParticleTimedEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 07E885BD13BE3E78008D75AA /* MOAIParticleTimedEmitter.cpp */; };
@@ -2728,6 +2706,8 @@
 		CDEB914B1360A78800AAC558 /* MOAIImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDEB91441360A78800AAC558 /* MOAIImage.cpp */; };
 		CDEB914C1360A78800AAC558 /* MOAIImage.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEB91451360A78800AAC558 /* MOAIImage.h */; };
 		CDEB914D1360A78800AAC558 /* MOAIImage.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEB91451360A78800AAC558 /* MOAIImage.h */; };
+		CDEFEB8613E20884002F6621 /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEFEB8513E20884002F6621 /* curl_config.h */; };
+		CDEFEB8813E208A2002F6621 /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEFEB8713E208A2002F6621 /* curl_config.h */; };
 		CDFCFDCA13995A6800E43A41 /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 03240B6D13564CB0000ADC60 /* lapi.c */; };
 		CDFCFDCB13995A6800E43A41 /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 03240B6E13564CB0000ADC60 /* lapi.h */; };
 		CDFCFDCC13995A6800E43A41 /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 03240B6F13564CB0000ADC60 /* lauxlib.c */; };
@@ -3809,17 +3789,6 @@
 		07D3C37B13E0F03D0052F8EE /* warnless.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = warnless.h; path = "../../3rdparty/curl-7.21.7/lib/warnless.h"; sourceTree = SOURCE_ROOT; };
 		07D3C37C13E0F03D0052F8EE /* wildcard.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = wildcard.c; path = "../../3rdparty/curl-7.21.7/lib/wildcard.c"; sourceTree = SOURCE_ROOT; };
 		07D3C37D13E0F03D0052F8EE /* wildcard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wildcard.h; path = "../../3rdparty/curl-7.21.7/lib/wildcard.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F013E0F0A00052F8EE /* curl_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl_config.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/curl_config.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F113E0F0A00052F8EE /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/curl.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F213E0F0A00052F8EE /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/curlbuild.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F313E0F0A00052F8EE /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlrules.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/curlrules.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F413E0F0A00052F8EE /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlver.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/curlver.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F513E0F0A00052F8EE /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easy.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/easy.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F613E0F0A00052F8EE /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mprintf.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/mprintf.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F713E0F0A00052F8EE /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multi.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/multi.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F813E0F0A00052F8EE /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/stdcheaders.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4F913E0F0A00052F8EE /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
-		07D3C4FA13E0F0A00052F8EE /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = types.h; path = "../../3rdparty/curl-7.21.7/include-iphone/curl/types.h"; sourceTree = SOURCE_ROOT; };
 		07E885BB13BE3E78008D75AA /* MOAIParticleDistanceEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAIParticleDistanceEmitter.cpp; sourceTree = "<group>"; };
 		07E885BC13BE3E78008D75AA /* MOAIParticleDistanceEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIParticleDistanceEmitter.h; sourceTree = "<group>"; };
 		07E885BD13BE3E78008D75AA /* MOAIParticleTimedEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAIParticleTimedEmitter.cpp; sourceTree = "<group>"; };
@@ -4741,6 +4710,8 @@
 		CDEB91431360A78800AAC558 /* MOAIEventSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIEventSource.h; sourceTree = "<group>"; };
 		CDEB91441360A78800AAC558 /* MOAIImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAIImage.cpp; sourceTree = "<group>"; };
 		CDEB91451360A78800AAC558 /* MOAIImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIImage.h; sourceTree = "<group>"; };
+		CDEFEB8513E20884002F6621 /* curl_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl_config.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl_config.h"; sourceTree = SOURCE_ROOT; };
+		CDEFEB8713E208A2002F6621 /* curl_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl_config.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl_config.h"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5043,27 +5014,18 @@
 			isa = PBXGroup;
 			children = (
 				03240A8613564CAF000ADC60 /* lib */,
-				03240A7A13564CAF000ADC60 /* iphone */,
+				03240A7A13564CAF000ADC60 /* include-ios */,
+				CDEFEB8413E20865002F6621 /* include-osx */,
 			);
 			name = curl;
 			sourceTree = "<group>";
 		};
-		03240A7A13564CAF000ADC60 /* iphone */ = {
+		03240A7A13564CAF000ADC60 /* include-ios */ = {
 			isa = PBXGroup;
 			children = (
-				07D3C4F013E0F0A00052F8EE /* curl_config.h */,
-				07D3C4F113E0F0A00052F8EE /* curl.h */,
-				07D3C4F213E0F0A00052F8EE /* curlbuild.h */,
-				07D3C4F313E0F0A00052F8EE /* curlrules.h */,
-				07D3C4F413E0F0A00052F8EE /* curlver.h */,
-				07D3C4F513E0F0A00052F8EE /* easy.h */,
-				07D3C4F613E0F0A00052F8EE /* mprintf.h */,
-				07D3C4F713E0F0A00052F8EE /* multi.h */,
-				07D3C4F813E0F0A00052F8EE /* stdcheaders.h */,
-				07D3C4F913E0F0A00052F8EE /* typecheck-gcc.h */,
-				07D3C4FA13E0F0A00052F8EE /* types.h */,
+				CDEFEB8513E20884002F6621 /* curl_config.h */,
 			);
-			name = iphone;
+			name = "include-ios";
 			sourceTree = "<group>";
 		};
 		03240A8613564CAF000ADC60 /* lib */ = {
@@ -7918,6 +7880,14 @@
 			name = luacrypto;
 			sourceTree = "<group>";
 		};
+		CDEFEB8413E20865002F6621 /* include-osx */ = {
+			isa = PBXGroup;
+			children = (
+				CDEFEB8713E208A2002F6621 /* curl_config.h */,
+			);
+			name = "include-osx";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -8153,17 +8123,7 @@
 				07D3C4EA13E0F03D0052F8EE /* urldata.h in Headers */,
 				07D3C4ED13E0F03D0052F8EE /* warnless.h in Headers */,
 				07D3C4EF13E0F03D0052F8EE /* wildcard.h in Headers */,
-				07D3C50613E0F0A00052F8EE /* curl_config.h in Headers */,
-				07D3C50713E0F0A00052F8EE /* curl.h in Headers */,
-				07D3C50813E0F0A00052F8EE /* curlbuild.h in Headers */,
-				07D3C50913E0F0A00052F8EE /* curlrules.h in Headers */,
-				07D3C50A13E0F0A00052F8EE /* curlver.h in Headers */,
-				07D3C50B13E0F0A00052F8EE /* easy.h in Headers */,
-				07D3C50C13E0F0A00052F8EE /* mprintf.h in Headers */,
-				07D3C50D13E0F0A00052F8EE /* multi.h in Headers */,
-				07D3C50E13E0F0A00052F8EE /* stdcheaders.h in Headers */,
-				07D3C50F13E0F0A00052F8EE /* typecheck-gcc.h in Headers */,
-				07D3C51013E0F0A00052F8EE /* types.h in Headers */,
+				CDEFEB8813E208A2002F6621 /* curl_config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8785,17 +8745,7 @@
 				07D3C43113E0F03D0052F8EE /* urldata.h in Headers */,
 				07D3C43413E0F03D0052F8EE /* warnless.h in Headers */,
 				07D3C43613E0F03D0052F8EE /* wildcard.h in Headers */,
-				07D3C4FB13E0F0A00052F8EE /* curl_config.h in Headers */,
-				07D3C4FC13E0F0A00052F8EE /* curl.h in Headers */,
-				07D3C4FD13E0F0A00052F8EE /* curlbuild.h in Headers */,
-				07D3C4FE13E0F0A00052F8EE /* curlrules.h in Headers */,
-				07D3C4FF13E0F0A00052F8EE /* curlver.h in Headers */,
-				07D3C50013E0F0A00052F8EE /* easy.h in Headers */,
-				07D3C50113E0F0A00052F8EE /* mprintf.h in Headers */,
-				07D3C50213E0F0A00052F8EE /* multi.h in Headers */,
-				07D3C50313E0F0A00052F8EE /* stdcheaders.h in Headers */,
-				07D3C50413E0F0A00052F8EE /* typecheck-gcc.h in Headers */,
-				07D3C50513E0F0A00052F8EE /* types.h in Headers */,
+				CDEFEB8613E20884002F6621 /* curl_config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11119,31 +11069,10 @@
 				);
 				GCC_PREFIX_HEADER = "../../3rdparty/untz/src/native/ios/Untz-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					PHYSFS_SUPPORTS_ZIP,
-					_DEBUG,
-					DEBUG,
-					POSIX,
 					MACOSX,
 					i386,
 					x86_64,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					SQLITE_ENABLE_FTS3,
-					SQLITE_ENABLE_FTS3_PARENTHESIS,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT_DEBUG_LEVEL_ERROR,
-					FT_DEBUG_LEVEL_TRACE,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11166,6 +11095,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../3rdparty/chipmunk-5.3.4/msvc/glut/lib\"",
@@ -11189,25 +11122,10 @@
 				);
 				GCC_PREFIX_HEADER = "../../3rdparty/untz/src/native/ios/Untz-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					PHYSFS_SUPPORTS_ZIP,
-					POSIX,
 					MACOSX,
 					i386,
 					x86_64,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11230,6 +11148,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../3rdparty/chipmunk-5.3.4/msvc/glut/lib\"",
@@ -11249,6 +11171,12 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					MACOSX,
+					i386,
+					x86_64,
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
 					"$(inherited)",
 				);
 				PRODUCT_NAME = "moai-osx";
@@ -11262,8 +11190,14 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
 					MACOSX,
+					i386,
+					x86_64,
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
 				);
 				PRODUCT_NAME = "moai-osx";
 				SDKROOT = "";
@@ -11296,6 +11230,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../3rdparty/chipmunk-5.3.4/msvc/glut/lib\"",
@@ -11334,6 +11272,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../3rdparty/chipmunk-5.3.4/msvc/glut/lib\"",
@@ -11359,6 +11301,9 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_OBJC_CALL_CXX_CDTORS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					POSIX,
+					CURL_HAVE_CONFIG_H,
+					HAVE_MEMMOVE,
 					PHYSFS_SUPPORTS_ZIP,
 					OPENSSL_NO_STORE,
 					OPENSSL_NO_RFC3779,
@@ -11370,10 +11315,10 @@
 					DARWIN_NO_CARBON,
 					FT2_BUILD_LIBRARY,
 					XML_STATIC,
-					HAVE_MEMMOVE,
 					TIXML_USE_STL,
+					SQLITE_ENABLE_FTS3,
+					SQLITE_ENABLE_FTS3_PARENTHESIS,
 					SQLITE_ENABLE_COLUMN_METADATA,
-					POSIX,
 					BUILDING_LIBCURL,
 					USE_SSL,
 					USE_SSLEAY,
@@ -11410,7 +11355,7 @@
 					"\"../../3rdparty/lua-5.1.3/src\"",
 					"\"../../3rdparty/lpng140\"",
 					"\"../../3rdparty/openssl-1.0.0d/include-iphone\"",
-					"\"../../3rdparty/curl-7.21.7/include-iphone\"",
+					"\"../../3rdparty/curl-7.21.7/include\"",
 					"\"../../3rdparty/curl-7.21.7/lib\"",
 					"\"../../3rdparty/expat-2.0.1/lib\"",
 					"\"../../3rdparty/freetype-2.4.4/include\"",
@@ -11444,6 +11389,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11455,6 +11404,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11473,6 +11426,11 @@
 				GCC_OBJC_CALL_CXX_CDTORS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					_DEBUG,
+					POSIX,
+					HAVE_MEMMOVE,
+					CURL_HAVE_CONFIG_H,
 					PHYSFS_SUPPORTS_ZIP,
 					OPENSSL_NO_STORE,
 					OPENSSL_NO_RFC3779,
@@ -11486,12 +11444,9 @@
 					FT_DEBUG_LEVEL_TRACE,
 					FT_DEBUG_LEVEL_ERROR,
 					TIXML_USE_STL,
-					SQLITE_ENABLE_FTS3_PARENTHESIS,
 					SQLITE_ENABLE_FTS3,
+					SQLITE_ENABLE_FTS3_PARENTHESIS,
 					SQLITE_ENABLE_COLUMN_METADATA,
-					POSIX,
-					DEBUG,
-					_DEBUG,
 					BUILDING_LIBCURL,
 					USE_SSL,
 					USE_SSLEAY,
@@ -11528,7 +11483,7 @@
 					"\"../../3rdparty/lua-5.1.3/src\"",
 					"\"../../3rdparty/lpng140\"",
 					"\"../../3rdparty/openssl-1.0.0d/include-iphone\"",
-					"\"../../3rdparty/curl-7.21.7/include-iphone\"",
+					"\"../../3rdparty/curl-7.21.7/include\"",
 					"\"../../3rdparty/curl-7.21.7/lib\"",
 					"\"../../3rdparty/expat-2.0.1/lib\"",
 					"\"../../3rdparty/freetype-2.4.4/include\"",
@@ -11582,6 +11537,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios-untz";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11614,6 +11573,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios-untz";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11626,28 +11589,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					_DEBUG,
-					DEBUG,
-					POSIX,
 					MACOSX,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					SQLITE_ENABLE_FTS3,
-					SQLITE_ENABLE_FTS3_PARENTHESIS,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT_DEBUG_LEVEL_ERROR,
-					FT_DEBUG_LEVEL_TRACE,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					i386,
+					x86_64,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11670,6 +11615,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-osx-untz";
 				SDKROOT = "";
 				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
@@ -11682,22 +11631,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					POSIX,
 					MACOSX,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					i386,
+					x86_64,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11720,6 +11657,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-osx-untz";
 				SDKROOT = "";
 				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
@@ -11752,6 +11693,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios-luaext";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11784,6 +11729,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-ios\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-ios-luaext";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
@@ -11796,28 +11745,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					_DEBUG,
-					DEBUG,
-					POSIX,
 					MACOSX,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					SQLITE_ENABLE_FTS3,
-					SQLITE_ENABLE_FTS3_PARENTHESIS,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT_DEBUG_LEVEL_ERROR,
-					FT_DEBUG_LEVEL_TRACE,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					i386,
+					x86_64,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11840,6 +11771,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-osx-luaext";
 				SDKROOT = "";
 				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
@@ -11852,22 +11787,10 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					POSIX,
 					MACOSX,
-					SQLITE_ENABLE_COLUMN_METADATA,
-					TIXML_USE_STL,
-					HAVE_MEMMOVE,
-					XML_STATIC,
-					FT2_BUILD_LIBRARY,
-					DARWIN_NO_CARBON,
-					L_ENDIAN,
-					OPENSSL_NO_GMP,
-					OPENSSL_NO_JPAKE,
-					OPENSSL_NO_MD2,
-					OPENSSL_NO_RC5,
-					OPENSSL_NO_RFC3779,
-					OPENSSL_NO_STORE,
-					OPENSSL_NO_DEPRECATED,
+					i386,
+					x86_64,
+					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
@@ -11890,6 +11813,10 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VALUE = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"$(inherited)",
+				);
 				PRODUCT_NAME = "moai-osx-luaext";
 				SDKROOT = "";
 				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
