@@ -1,6 +1,8 @@
 /* lib/curl_config.h.  Generated from curl_config.h.in by configure.  */
 /* lib/curl_config.h.in.  Generated from configure.ac by autoheader.  */
 
+#define SIZEOF_SHORT 2
+
 /* when building libcurl itself */
 /* #undef BUILDING_LIBCURL */
 
