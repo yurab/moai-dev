@@ -82,7 +82,6 @@
 /* ================================================================ */
 /*  DEFINITION OF THESE SYMBOLS SHALL NOT TAKE PLACE ANYWHERE ELSE  */
 /* ================================================================ */
-#error DIE!
 
 #ifdef CARES_SIZEOF_LONG
 #  error "CARES_SIZEOF_LONG shall not be defined except in ares_build.h"
@@ -99,20 +98,27 @@
    Error Compilation_aborted_CARES_SIZEOF_ARES_SOCKLEN_T_already_defined
 #endif
 
-/* ================================================================ */
-/*    EXTERNAL INTERFACE SETTINGS FOR NON-CONFIGURE SYSTEMS ONLY    */
-/* ================================================================ */
-/* The size of `long', as computed by sizeof. */
-#define CARES_SIZEOF_LONG 4
+#  define CARES_SIZEOF_LONG           4
+#  define CARES_TYPEOF_ARES_SOCKLEN_T socklen_t
+#  define CARES_SIZEOF_ARES_SOCKLEN_T 4
+#  define CARES_PULL_SYS_TYPES_H      1
+#  define CARES_PULL_SYS_SOCKET_H     1
 
-/* Integral data type used for curl_socklen_t. */
-#define CARES_TYPEOF_ARES_SOCKLEN_T socklen_t
+/* CARES_PULL_SYS_TYPES_H is defined above when inclusion of header file  */
+/* sys/types.h is required here to properly make type definitions below.  */
+#ifdef CARES_PULL_SYS_TYPES_H
+#  include <sys/types.h>
+#endif
 
-/* The size of `curl_socklen_t', as computed by sizeof. */
-#define CARES_SIZEOF_ARES_SOCKLEN_T 4
+/* CARES_PULL_SYS_SOCKET_H is defined above when inclusion of header file  */
+/* sys/socket.h is required here to properly make type definitions below.  */
+#ifdef CARES_PULL_SYS_SOCKET_H
+#  include <sys/socket.h>
+#endif
 
-/*#  define CARES_PULL_SYS_TYPES_H      1*/
-/*#  define CARES_PULL_SYS_SOCKET_H     1*/
-
+/* Data type definition of ares_socklen_t. */
+#ifdef CARES_TYPEOF_ARES_SOCKLEN_T
+  typedef CARES_TYPEOF_ARES_SOCKLEN_T ares_socklen_t;
+#endif
 
 #endif /* __CARES_BUILD_H */

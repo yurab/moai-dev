@@ -63,7 +63,7 @@
 /* #undef CURL_DISABLE_TLS_SRP */
 
 /* to disable verbose strings */
-/* #undef CURL_DISABLE_VERBOSE_STRINGS
+/* #undef CURL_DISABLE_VERBOSE_STRINGS */
 
 /* to make a symbol visible */
 /* #undef CURL_EXTERN_SYMBOL */

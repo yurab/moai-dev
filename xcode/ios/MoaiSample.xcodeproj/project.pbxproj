@@ -39,6 +39,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		CD7C73AE13B95516006CFA19 /* ParticlePresets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7C73AC13B95516006CFA19 /* ParticlePresets.cpp */; };
+		CDE4993613E27D9900E85424 /* libcurl-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD26D3D313E27B6B006FB33D /* libcurl-ios.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,27 @@
 			remoteGlobalIDString = CD07C3A313A182AA00C9386C;
 			remoteInfo = "libmoai-iphone-untz";
 		};
+		CD26D3D213E27B6B006FB33D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CD26D3D013E27B6B006FB33D;
+			remoteInfo = "libmoai-ios copy";
+		};
+		CDE4993713E27DAE00E85424 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CD26D1F213E27B6B006FB33D;
+			remoteInfo = "libcurl-ios";
+		};
+		CDE49AB613E28B3000E85424 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDE49AB413E28B3000E85424 /* libcurl-ios.a */;
+			remoteInfo = "libcurl-ios copy";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -178,6 +200,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDE4993613E27D9900E85424 /* libcurl-ios.a in Frameworks */,
 				07E9F73E13B50582006396F3 /* libmoai-ios.a in Frameworks */,
 				07E9F73F13B50582006396F3 /* libmoai-ios-3rdparty.a in Frameworks */,
 				07E9F74013B50582006396F3 /* libmoai-ios-luaext.a in Frameworks */,
@@ -203,6 +226,7 @@
 		03CC90AF13B3C39D00B2724C /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				CD26D3D313E27B6B006FB33D /* libcurl-ios.a */,
 				03CC90BD13B3C39D00B2724C /* libmoai-ios.a */,
 				03CC90BF13B3C39D00B2724C /* libmoai-ios-3rdparty.a */,
 				03CC90C113B3C39D00B2724C /* libmoai-ios-luaext.a */,
@@ -211,6 +235,7 @@
 				03CC90C713B3C39D00B2724C /* libmoai-osx-3rdparty.a */,
 				03CC90C913B3C39D00B2724C /* libmoai-osx-luaext.a */,
 				03CC90CB13B3C39D00B2724C /* libmoai-osx-untz.a */,
+				CDE49AB713E28B3000E85424 /* libcurl-ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -327,6 +352,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CDE4993813E27DAE00E85424 /* PBXTargetDependency */,
 				07E9F73713B50574006396F3 /* PBXTargetDependency */,
 				07E9F73913B50574006396F3 /* PBXTargetDependency */,
 				07E9F73B13B50574006396F3 /* PBXTargetDependency */,
@@ -424,6 +450,20 @@
 			remoteRef = 03CC90CA13B3C39D00B2724C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		CD26D3D313E27B6B006FB33D /* libcurl-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcurl-ios.a";
+			remoteRef = CD26D3D213E27B6B006FB33D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDE49AB713E28B3000E85424 /* libcurl-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcurl-ios.a";
+			remoteRef = CDE49AB613E28B3000E85424 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -499,6 +539,11 @@
 			isa = PBXTargetDependency;
 			name = "libmoai-iphone-untz";
 			targetProxy = 07E9F73C13B50574006396F3 /* PBXContainerItemProxy */;
+		};
+		CDE4993813E27DAE00E85424 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcurl-ios";
+			targetProxy = CDE4993713E27DAE00E85424 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
