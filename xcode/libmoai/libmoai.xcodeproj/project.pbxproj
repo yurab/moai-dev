@@ -1528,15 +1528,6 @@
 		CD218FBB13A7FDBA008337E7 /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = CD218F9D13A7FDBA008337E7 /* utf.c */; };
 		CD218FBC13A7FDBA008337E7 /* utf.h in Headers */ = {isa = PBXBuildFile; fileRef = CD218F9E13A7FDBA008337E7 /* utf.h */; };
 		CD218FBD13A7FDBA008337E7 /* value.c in Sources */ = {isa = PBXBuildFile; fileRef = CD218F9F13A7FDBA008337E7 /* value.c */; };
-		CD26D4C813E27D1A006FB33D /* curl.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1D713E27AA0006FB33D /* curl.h */; };
-		CD26D4C913E27D1A006FB33D /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1D813E27AA0006FB33D /* curlbuild.h */; };
-		CD26D4CA13E27D1A006FB33D /* curlrules.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1D913E27AA0006FB33D /* curlrules.h */; };
-		CD26D4CB13E27D1A006FB33D /* curlver.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DA13E27AA0006FB33D /* curlver.h */; };
-		CD26D4CC13E27D1A006FB33D /* easy.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DB13E27AA0006FB33D /* easy.h */; };
-		CD26D4CD13E27D1A006FB33D /* mprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DC13E27AA0006FB33D /* mprintf.h */; };
-		CD26D4CE13E27D1A006FB33D /* multi.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DD13E27AA0006FB33D /* multi.h */; };
-		CD26D4CF13E27D1A006FB33D /* stdcheaders.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DE13E27AA0006FB33D /* stdcheaders.h */; };
-		CD26D4D013E27D1A006FB33D /* typecheck-gcc.h in Headers */ = {isa = PBXBuildFile; fileRef = CD26D1DF13E27AA0006FB33D /* typecheck-gcc.h */; };
 		CD26D4D113E27D1A006FB33D /* arpa_telnet.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2C513E0F03D0052F8EE /* arpa_telnet.h */; };
 		CD26D4D213E27D1A006FB33D /* asyn-ares.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2C613E0F03D0052F8EE /* asyn-ares.c */; };
 		CD26D4D313E27D1A006FB33D /* asyn-thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2C713E0F03D0052F8EE /* asyn-thread.c */; };
@@ -2433,10 +2424,284 @@
 		CD7C726E13B947AC006CFA19 /* AKU-particles.h in Headers */ = {isa = PBXBuildFile; fileRef = CD7C726A13B947AC006CFA19 /* AKU-particles.h */; };
 		CD80F63F135BBCFF006B0683 /* ISO8601DateFormatter.h in Headers */ = {isa = PBXBuildFile; fileRef = CD80F63D135BBCFF006B0683 /* ISO8601DateFormatter.h */; };
 		CD80F641135BBCFF006B0683 /* ISO8601DateFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CD80F63E135BBCFF006B0683 /* ISO8601DateFormatter.m */; };
+		CDB6C80B13E2967400CF15B0 /* curl.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80213E2967400CF15B0 /* curl.h */; };
+		CDB6C80C13E2967400CF15B0 /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80313E2967400CF15B0 /* curlbuild.h */; };
+		CDB6C80D13E2967400CF15B0 /* curlrules.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80413E2967400CF15B0 /* curlrules.h */; };
+		CDB6C80E13E2967400CF15B0 /* curlver.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80513E2967400CF15B0 /* curlver.h */; };
+		CDB6C80F13E2967400CF15B0 /* easy.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80613E2967400CF15B0 /* easy.h */; };
+		CDB6C81013E2967400CF15B0 /* mprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80713E2967400CF15B0 /* mprintf.h */; };
+		CDB6C81113E2967400CF15B0 /* multi.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80813E2967400CF15B0 /* multi.h */; };
+		CDB6C81213E2967400CF15B0 /* stdcheaders.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80913E2967400CF15B0 /* stdcheaders.h */; };
+		CDB6C81313E2967400CF15B0 /* typecheck-gcc.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C80A13E2967400CF15B0 /* typecheck-gcc.h */; };
+		CDB6C81D13E2969900CF15B0 /* curl.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81413E2969900CF15B0 /* curl.h */; };
+		CDB6C81E13E2969900CF15B0 /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81513E2969900CF15B0 /* curlbuild.h */; };
+		CDB6C81F13E2969900CF15B0 /* curlrules.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81613E2969900CF15B0 /* curlrules.h */; };
+		CDB6C82013E2969900CF15B0 /* curlver.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81713E2969900CF15B0 /* curlver.h */; };
+		CDB6C82113E2969900CF15B0 /* easy.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81813E2969900CF15B0 /* easy.h */; };
+		CDB6C82213E2969900CF15B0 /* mprintf.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81913E2969900CF15B0 /* mprintf.h */; };
+		CDB6C82313E2969900CF15B0 /* multi.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81A13E2969900CF15B0 /* multi.h */; };
+		CDB6C82413E2969900CF15B0 /* stdcheaders.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81B13E2969900CF15B0 /* stdcheaders.h */; };
+		CDB6C82513E2969900CF15B0 /* typecheck-gcc.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C81C13E2969900CF15B0 /* typecheck-gcc.h */; };
+		CDB6C87E13E29BA400CF15B0 /* ares_data.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AC213E28C4D00E85424 /* ares_data.h */; };
+		CDB6C87F13E29BA400CF15B0 /* ares_dns.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AC413E28C4D00E85424 /* ares_dns.h */; };
+		CDB6C88013E29BA400CF15B0 /* ares_getopt.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49ACE13E28C4E00E85424 /* ares_getopt.h */; };
+		CDB6C88113E29BA400CF15B0 /* ares_ipv6.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AD113E28C4E00E85424 /* ares_ipv6.h */; };
+		CDB6C88213E29BA400CF15B0 /* ares_library_init.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AD313E28C4E00E85424 /* ares_library_init.h */; };
+		CDB6C88313E29BA400CF15B0 /* ares_llist.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AD513E28C4E00E85424 /* ares_llist.h */; };
+		CDB6C88413E29BA400CF15B0 /* ares_nowarn.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AD813E28C4E00E85424 /* ares_nowarn.h */; };
+		CDB6C88513E29BA400CF15B0 /* ares_private.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AE113E28C4E00E85424 /* ares_private.h */; };
+		CDB6C88613E29BA400CF15B0 /* ares_rules.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AE413E28C4E00E85424 /* ares_rules.h */; };
+		CDB6C88713E29BA400CF15B0 /* ares_setup.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AE713E28C4E00E85424 /* ares_setup.h */; };
+		CDB6C88813E29BA400CF15B0 /* ares_strcasecmp.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AE913E28C4E00E85424 /* ares_strcasecmp.h */; };
+		CDB6C88913E29BA400CF15B0 /* ares_strdup.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AEB13E28C4E00E85424 /* ares_strdup.h */; };
+		CDB6C88A13E29BA400CF15B0 /* ares_version.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AEF13E28C4E00E85424 /* ares_version.h */; };
+		CDB6C88B13E29BA400CF15B0 /* ares_writev.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF113E28C4E00E85424 /* ares_writev.h */; };
+		CDB6C88C13E29BA400CF15B0 /* ares.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF213E28C4E00E85424 /* ares.h */; };
+		CDB6C88D13E29BA400CF15B0 /* bitncmp.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF413E28C4E00E85424 /* bitncmp.h */; };
+		CDB6C88E13E29BA400CF15B0 /* config-dos.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF513E28C4E00E85424 /* config-dos.h */; };
+		CDB6C88F13E29BA400CF15B0 /* config-win32.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF613E28C4E00E85424 /* config-win32.h */; };
+		CDB6C89013E29BA400CF15B0 /* inet_net_pton.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AF813E28C4E00E85424 /* inet_net_pton.h */; };
+		CDB6C89113E29BA400CF15B0 /* inet_ntop.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AFA13E28C4E00E85424 /* inet_ntop.h */; };
+		CDB6C89213E29BA400CF15B0 /* nameser.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AFB13E28C4E00E85424 /* nameser.h */; };
+		CDB6C89313E29BA400CF15B0 /* setup_once.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE49AFC13E28C4E00E85424 /* setup_once.h */; };
+		CDB6C89713E29BA400CF15B0 /* acountry.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AB813E28C4D00E85424 /* acountry.c */; };
+		CDB6C89813E29BA400CF15B0 /* adig.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AB913E28C4D00E85424 /* adig.c */; };
+		CDB6C89913E29BA400CF15B0 /* ahost.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABA13E28C4D00E85424 /* ahost.c */; };
+		CDB6C89A13E29BA400CF15B0 /* ares__close_sockets.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABB13E28C4D00E85424 /* ares__close_sockets.c */; };
+		CDB6C89B13E29BA400CF15B0 /* ares__get_hostent.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABC13E28C4D00E85424 /* ares__get_hostent.c */; };
+		CDB6C89C13E29BA400CF15B0 /* ares__read_line.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABD13E28C4D00E85424 /* ares__read_line.c */; };
+		CDB6C89D13E29BA400CF15B0 /* ares__timeval.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABE13E28C4D00E85424 /* ares__timeval.c */; };
+		CDB6C89E13E29BA400CF15B0 /* ares_cancel.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC013E28C4D00E85424 /* ares_cancel.c */; };
+		CDB6C89F13E29BA400CF15B0 /* ares_data.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC113E28C4D00E85424 /* ares_data.c */; };
+		CDB6C8A013E29BA400CF15B0 /* ares_destroy.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC313E28C4D00E85424 /* ares_destroy.c */; };
+		CDB6C8A113E29BA400CF15B0 /* ares_expand_name.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC513E28C4D00E85424 /* ares_expand_name.c */; };
+		CDB6C8A213E29BA400CF15B0 /* ares_expand_string.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC613E28C4D00E85424 /* ares_expand_string.c */; };
+		CDB6C8A313E29BA400CF15B0 /* ares_fds.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC713E28C4D00E85424 /* ares_fds.c */; };
+		CDB6C8A413E29BA400CF15B0 /* ares_free_hostent.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC813E28C4D00E85424 /* ares_free_hostent.c */; };
+		CDB6C8A513E29BA400CF15B0 /* ares_free_string.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AC913E28C4D00E85424 /* ares_free_string.c */; };
+		CDB6C8A613E29BA400CF15B0 /* ares_gethostbyaddr.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ACA13E28C4D00E85424 /* ares_gethostbyaddr.c */; };
+		CDB6C8A713E29BA400CF15B0 /* ares_gethostbyname.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ACB13E28C4D00E85424 /* ares_gethostbyname.c */; };
+		CDB6C8A813E29BA400CF15B0 /* ares_getnameinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ACC13E28C4D00E85424 /* ares_getnameinfo.c */; };
+		CDB6C8A913E29BA400CF15B0 /* ares_getopt.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ACD13E28C4D00E85424 /* ares_getopt.c */; };
+		CDB6C8AA13E29BA400CF15B0 /* ares_getsock.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ACF13E28C4E00E85424 /* ares_getsock.c */; };
+		CDB6C8AB13E29BA400CF15B0 /* ares_init.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD013E28C4E00E85424 /* ares_init.c */; };
+		CDB6C8AC13E29BA400CF15B0 /* ares_library_init.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD213E28C4E00E85424 /* ares_library_init.c */; };
+		CDB6C8AD13E29BA400CF15B0 /* ares_llist.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD413E28C4E00E85424 /* ares_llist.c */; };
+		CDB6C8AE13E29BA400CF15B0 /* ares_mkquery.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD613E28C4E00E85424 /* ares_mkquery.c */; };
+		CDB6C8AF13E29BA400CF15B0 /* ares_nowarn.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD713E28C4E00E85424 /* ares_nowarn.c */; };
+		CDB6C8B013E29BA400CF15B0 /* ares_options.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AD913E28C4E00E85424 /* ares_options.c */; };
+		CDB6C8B113E29BA400CF15B0 /* ares_parse_a_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADA13E28C4E00E85424 /* ares_parse_a_reply.c */; };
+		CDB6C8B213E29BA400CF15B0 /* ares_parse_aaaa_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADB13E28C4E00E85424 /* ares_parse_aaaa_reply.c */; };
+		CDB6C8B313E29BA400CF15B0 /* ares_parse_mx_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADC13E28C4E00E85424 /* ares_parse_mx_reply.c */; };
+		CDB6C8B413E29BA400CF15B0 /* ares_parse_ns_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADD13E28C4E00E85424 /* ares_parse_ns_reply.c */; };
+		CDB6C8B513E29BA400CF15B0 /* ares_parse_ptr_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADE13E28C4E00E85424 /* ares_parse_ptr_reply.c */; };
+		CDB6C8B613E29BA400CF15B0 /* ares_parse_srv_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ADF13E28C4E00E85424 /* ares_parse_srv_reply.c */; };
+		CDB6C8B713E29BA400CF15B0 /* ares_parse_txt_reply.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE013E28C4E00E85424 /* ares_parse_txt_reply.c */; };
+		CDB6C8B813E29BA400CF15B0 /* ares_process.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE213E28C4E00E85424 /* ares_process.c */; };
+		CDB6C8B913E29BA400CF15B0 /* ares_query.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE313E28C4E00E85424 /* ares_query.c */; };
+		CDB6C8BA13E29BA400CF15B0 /* ares_search.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE513E28C4E00E85424 /* ares_search.c */; };
+		CDB6C8BB13E29BA400CF15B0 /* ares_send.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE613E28C4E00E85424 /* ares_send.c */; };
+		CDB6C8BC13E29BA400CF15B0 /* ares_strcasecmp.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AE813E28C4E00E85424 /* ares_strcasecmp.c */; };
+		CDB6C8BD13E29BA400CF15B0 /* ares_strdup.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AEA13E28C4E00E85424 /* ares_strdup.c */; };
+		CDB6C8BE13E29BA400CF15B0 /* ares_strerror.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AEC13E28C4E00E85424 /* ares_strerror.c */; };
+		CDB6C8BF13E29BA400CF15B0 /* ares_timeout.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AED13E28C4E00E85424 /* ares_timeout.c */; };
+		CDB6C8C013E29BA400CF15B0 /* ares_version.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AEE13E28C4E00E85424 /* ares_version.c */; };
+		CDB6C8C113E29BA400CF15B0 /* ares_writev.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AF013E28C4E00E85424 /* ares_writev.c */; };
+		CDB6C8C213E29BA400CF15B0 /* bitncmp.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AF313E28C4E00E85424 /* bitncmp.c */; };
+		CDB6C8C313E29BA400CF15B0 /* inet_net_pton.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AF713E28C4E00E85424 /* inet_net_pton.c */; };
+		CDB6C8C413E29BA400CF15B0 /* inet_ntop.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AF913E28C4E00E85424 /* inet_ntop.c */; };
+		CDB6C8C513E29BA400CF15B0 /* windows_port.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AFD13E28C4E00E85424 /* windows_port.c */; };
+		CDB6C8D013E29C4100CF15B0 /* ares_build.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C87A13E29B8100CF15B0 /* ares_build.h */; };
+		CDB6C8D113E29C4100CF15B0 /* ares_config.h in Headers */ = {isa = PBXBuildFile; fileRef = CDB6C87B13E29B8100CF15B0 /* ares_config.h */; };
 		CDBC71181398C6E50016F98A /* MOAIFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDBC71161398C6E50016F98A /* MOAIFileSystem.cpp */; };
 		CDBC71191398C6E50016F98A /* MOAIFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = CDBC71171398C6E50016F98A /* MOAIFileSystem.h */; };
 		CDBC711A1398C6E50016F98A /* MOAIFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDBC71161398C6E50016F98A /* MOAIFileSystem.cpp */; };
 		CDBC711B1398C6E50016F98A /* MOAIFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = CDBC71171398C6E50016F98A /* MOAIFileSystem.h */; };
+		CDCD6BB213E2938700CDFFCE /* arpa_telnet.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2C513E0F03D0052F8EE /* arpa_telnet.h */; };
+		CDCD6BB313E2938700CDFFCE /* asyn.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2C813E0F03D0052F8EE /* asyn.h */; };
+		CDCD6BB413E2938700CDFFCE /* axtls.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2CA13E0F03D0052F8EE /* axtls.h */; };
+		CDCD6BB513E2938700CDFFCE /* connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2CD13E0F03D0052F8EE /* connect.h */; };
+		CDCD6BB613E2938700CDFFCE /* content_encoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2CF13E0F03D0052F8EE /* content_encoding.h */; };
+		CDCD6BB713E2938700CDFFCE /* cookie.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D113E0F03D0052F8EE /* cookie.h */; };
+		CDCD6BB813E2938700CDFFCE /* curl_addrinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D313E0F03D0052F8EE /* curl_addrinfo.h */; };
+		CDCD6BB913E2938700CDFFCE /* curl_base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D413E0F03D0052F8EE /* curl_base64.h */; };
+		CDCD6BBA13E2938700CDFFCE /* curl_fnmatch.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D513E0F03D0052F8EE /* curl_fnmatch.h */; };
+		CDCD6BBB13E2938700CDFFCE /* curl_gethostname.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D713E0F03D0052F8EE /* curl_gethostname.h */; };
+		CDCD6BBC13E2938700CDFFCE /* curl_hmac.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D813E0F03D0052F8EE /* curl_hmac.h */; };
+		CDCD6BBD13E2938700CDFFCE /* curl_ldap.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2D913E0F03D0052F8EE /* curl_ldap.h */; };
+		CDCD6BBE13E2938700CDFFCE /* curl_md4.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2DA13E0F03D0052F8EE /* curl_md4.h */; };
+		CDCD6BBF13E2938700CDFFCE /* curl_md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2DB13E0F03D0052F8EE /* curl_md5.h */; };
+		CDCD6BC013E2938700CDFFCE /* curl_memory.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2DC13E0F03D0052F8EE /* curl_memory.h */; };
+		CDCD6BC113E2938700CDFFCE /* curl_memrchr.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2DE13E0F03D0052F8EE /* curl_memrchr.h */; };
+		CDCD6BC213E2938700CDFFCE /* curl_rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E013E0F03D0052F8EE /* curl_rand.h */; };
+		CDCD6BC313E2938700CDFFCE /* curl_rtmp.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E213E0F03D0052F8EE /* curl_rtmp.h */; };
+		CDCD6BC413E2938700CDFFCE /* curl_sspi.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E413E0F03D0052F8EE /* curl_sspi.h */; };
+		CDCD6BC513E2938700CDFFCE /* curl_threads.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E613E0F03D0052F8EE /* curl_threads.h */; };
+		CDCD6BC613E2938700CDFFCE /* curlx.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E713E0F03D0052F8EE /* curlx.h */; };
+		CDCD6BC713E2938700CDFFCE /* cyassl.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2E913E0F03D0052F8EE /* cyassl.h */; };
+		CDCD6BC813E2938700CDFFCE /* dict.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2EB13E0F03D0052F8EE /* dict.h */; };
+		CDCD6BC913E2938700CDFFCE /* easyif.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2ED13E0F03D0052F8EE /* easyif.h */; };
+		CDCD6BCA13E2938700CDFFCE /* escape.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2EF13E0F03D0052F8EE /* escape.h */; };
+		CDCD6BCB13E2938700CDFFCE /* file.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2F113E0F03D0052F8EE /* file.h */; };
+		CDCD6BCC13E2938700CDFFCE /* fileinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2F313E0F03D0052F8EE /* fileinfo.h */; };
+		CDCD6BCD13E2938700CDFFCE /* formdata.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2F513E0F03D0052F8EE /* formdata.h */; };
+		CDCD6BCE13E2938700CDFFCE /* ftp.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2F713E0F03D0052F8EE /* ftp.h */; };
+		CDCD6BCF13E2938700CDFFCE /* ftplistparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2F913E0F03D0052F8EE /* ftplistparser.h */; };
+		CDCD6BD013E2938700CDFFCE /* getinfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2FC13E0F03D0052F8EE /* getinfo.h */; };
+		CDCD6BD113E2938700CDFFCE /* gopher.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C2FE13E0F03D0052F8EE /* gopher.h */; };
+		CDCD6BD213E2938700CDFFCE /* gtls.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C30013E0F03D0052F8EE /* gtls.h */; };
+		CDCD6BD313E2938700CDFFCE /* hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C30213E0F03D0052F8EE /* hash.h */; };
+		CDCD6BD413E2938700CDFFCE /* hostip.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C30613E0F03D0052F8EE /* hostip.h */; };
+		CDCD6BD513E2938700CDFFCE /* http_chunks.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C30B13E0F03D0052F8EE /* http_chunks.h */; };
+		CDCD6BD613E2938700CDFFCE /* http_digest.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C30D13E0F03D0052F8EE /* http_digest.h */; };
+		CDCD6BD713E2938700CDFFCE /* http_negotiate.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31013E0F03D0052F8EE /* http_negotiate.h */; };
+		CDCD6BD813E2938700CDFFCE /* http_ntlm.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31213E0F03D0052F8EE /* http_ntlm.h */; };
+		CDCD6BD913E2938700CDFFCE /* http_proxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31413E0F03D0052F8EE /* http_proxy.h */; };
+		CDCD6BDA13E2938700CDFFCE /* http.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31613E0F03D0052F8EE /* http.h */; };
+		CDCD6BDB13E2938700CDFFCE /* if2ip.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31813E0F03D0052F8EE /* if2ip.h */; };
+		CDCD6BDC13E2938700CDFFCE /* imap.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31A13E0F03D0052F8EE /* imap.h */; };
+		CDCD6BDD13E2938700CDFFCE /* inet_ntop.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31C13E0F03D0052F8EE /* inet_ntop.h */; };
+		CDCD6BDE13E2938700CDFFCE /* inet_pton.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C31E13E0F03D0052F8EE /* inet_pton.h */; };
+		CDCD6BDF13E2938700CDFFCE /* krb4.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32013E0F03D0052F8EE /* krb4.h */; };
+		CDCD6BE013E2938700CDFFCE /* llist.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32413E0F03D0052F8EE /* llist.h */; };
+		CDCD6BE113E2938700CDFFCE /* memdebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32813E0F03D0052F8EE /* memdebug.h */; };
+		CDCD6BE213E2938700CDFFCE /* multiif.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32B13E0F03D0052F8EE /* multiif.h */; };
+		CDCD6BE313E2938700CDFFCE /* netrc.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32D13E0F03D0052F8EE /* netrc.h */; };
+		CDCD6BE413E2938700CDFFCE /* non-ascii.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C32F13E0F03D0052F8EE /* non-ascii.h */; };
+		CDCD6BE513E2938700CDFFCE /* nonblock.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33113E0F03D0052F8EE /* nonblock.h */; };
+		CDCD6BE613E2938700CDFFCE /* nssg.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33313E0F03D0052F8EE /* nssg.h */; };
+		CDCD6BE713E2938700CDFFCE /* parsedate.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33813E0F03D0052F8EE /* parsedate.h */; };
+		CDCD6BE813E2938700CDFFCE /* pingpong.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33A13E0F03D0052F8EE /* pingpong.h */; };
+		CDCD6BE913E2938700CDFFCE /* polarssl.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33C13E0F03D0052F8EE /* polarssl.h */; };
+		CDCD6BEA13E2938700CDFFCE /* pop3.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C33E13E0F03D0052F8EE /* pop3.h */; };
+		CDCD6BEB13E2938700CDFFCE /* progress.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34013E0F03D0052F8EE /* progress.h */; };
+		CDCD6BEC13E2938700CDFFCE /* qssl.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34213E0F03D0052F8EE /* qssl.h */; };
+		CDCD6BED13E2938700CDFFCE /* rawstr.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34413E0F03D0052F8EE /* rawstr.h */; };
+		CDCD6BEE13E2938700CDFFCE /* rtsp.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34613E0F03D0052F8EE /* rtsp.h */; };
+		CDCD6BEF13E2938700CDFFCE /* select.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34913E0F03D0052F8EE /* select.h */; };
+		CDCD6BF013E2938700CDFFCE /* sendf.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34B13E0F03D0052F8EE /* sendf.h */; };
+		CDCD6BF113E2938700CDFFCE /* setup_once.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34C13E0F03D0052F8EE /* setup_once.h */; };
+		CDCD6BF213E2938700CDFFCE /* setup.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C34E13E0F03D0052F8EE /* setup.h */; };
+		CDCD6BF313E2938700CDFFCE /* share.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35013E0F03D0052F8EE /* share.h */; };
+		CDCD6BF413E2938700CDFFCE /* slist.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35213E0F03D0052F8EE /* slist.h */; };
+		CDCD6BF513E2938700CDFFCE /* smtp.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35413E0F03D0052F8EE /* smtp.h */; };
+		CDCD6BF613E2938700CDFFCE /* sockaddr.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35513E0F03D0052F8EE /* sockaddr.h */; };
+		CDCD6BF713E2938700CDFFCE /* socks.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35913E0F03D0052F8EE /* socks.h */; };
+		CDCD6BF813E2938700CDFFCE /* speedcheck.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35B13E0F03D0052F8EE /* speedcheck.h */; };
+		CDCD6BF913E2938700CDFFCE /* splay.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35D13E0F03D0052F8EE /* splay.h */; };
+		CDCD6BFA13E2938700CDFFCE /* ssh.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C35F13E0F03D0052F8EE /* ssh.h */; };
+		CDCD6BFB13E2938700CDFFCE /* sslgen.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36113E0F03D0052F8EE /* sslgen.h */; };
+		CDCD6BFC13E2938700CDFFCE /* ssluse.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36313E0F03D0052F8EE /* ssluse.h */; };
+		CDCD6BFD13E2938700CDFFCE /* strdup.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36513E0F03D0052F8EE /* strdup.h */; };
+		CDCD6BFE13E2938700CDFFCE /* strequal.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36713E0F03D0052F8EE /* strequal.h */; };
+		CDCD6BFF13E2938700CDFFCE /* strerror.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36913E0F03D0052F8EE /* strerror.h */; };
+		CDCD6C0013E2938700CDFFCE /* strtok.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36B13E0F03D0052F8EE /* strtok.h */; };
+		CDCD6C0113E2938700CDFFCE /* strtoofft.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36D13E0F03D0052F8EE /* strtoofft.h */; };
+		CDCD6C0213E2938700CDFFCE /* telnet.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C36F13E0F03D0052F8EE /* telnet.h */; };
+		CDCD6C0313E2938700CDFFCE /* tftp.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37113E0F03D0052F8EE /* tftp.h */; };
+		CDCD6C0413E2938700CDFFCE /* timeval.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37313E0F03D0052F8EE /* timeval.h */; };
+		CDCD6C0513E2938700CDFFCE /* transfer.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37513E0F03D0052F8EE /* transfer.h */; };
+		CDCD6C0613E2938700CDFFCE /* url.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37713E0F03D0052F8EE /* url.h */; };
+		CDCD6C0713E2938700CDFFCE /* urldata.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37813E0F03D0052F8EE /* urldata.h */; };
+		CDCD6C0813E2938700CDFFCE /* warnless.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37B13E0F03D0052F8EE /* warnless.h */; };
+		CDCD6C0913E2938700CDFFCE /* wildcard.h in Headers */ = {isa = PBXBuildFile; fileRef = 07D3C37D13E0F03D0052F8EE /* wildcard.h */; };
+		CDCD6C0D13E2938700CDFFCE /* asyn-ares.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2C613E0F03D0052F8EE /* asyn-ares.c */; };
+		CDCD6C0E13E2938700CDFFCE /* asyn-thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2C713E0F03D0052F8EE /* asyn-thread.c */; };
+		CDCD6C0F13E2938700CDFFCE /* axtls.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2C913E0F03D0052F8EE /* axtls.c */; };
+		CDCD6C1013E2938700CDFFCE /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2CB13E0F03D0052F8EE /* base64.c */; };
+		CDCD6C1113E2938700CDFFCE /* connect.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2CC13E0F03D0052F8EE /* connect.c */; };
+		CDCD6C1213E2938700CDFFCE /* content_encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2CE13E0F03D0052F8EE /* content_encoding.c */; };
+		CDCD6C1313E2938700CDFFCE /* cookie.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2D013E0F03D0052F8EE /* cookie.c */; };
+		CDCD6C1413E2938700CDFFCE /* curl_addrinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2D213E0F03D0052F8EE /* curl_addrinfo.c */; };
+		CDCD6C1513E2938700CDFFCE /* curl_gethostname.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2D613E0F03D0052F8EE /* curl_gethostname.c */; };
+		CDCD6C1613E2938700CDFFCE /* curl_memrchr.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2DD13E0F03D0052F8EE /* curl_memrchr.c */; };
+		CDCD6C1713E2938700CDFFCE /* curl_rand.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2DF13E0F03D0052F8EE /* curl_rand.c */; };
+		CDCD6C1813E2938700CDFFCE /* curl_rtmp.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2E113E0F03D0052F8EE /* curl_rtmp.c */; };
+		CDCD6C1913E2938700CDFFCE /* curl_sspi.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2E313E0F03D0052F8EE /* curl_sspi.c */; };
+		CDCD6C1A13E2938700CDFFCE /* curl_threads.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2E513E0F03D0052F8EE /* curl_threads.c */; };
+		CDCD6C1B13E2938700CDFFCE /* cyassl.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2E813E0F03D0052F8EE /* cyassl.c */; };
+		CDCD6C1C13E2938700CDFFCE /* dict.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2EA13E0F03D0052F8EE /* dict.c */; };
+		CDCD6C1D13E2938700CDFFCE /* easy.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2EC13E0F03D0052F8EE /* easy.c */; };
+		CDCD6C1E13E2938700CDFFCE /* escape.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2EE13E0F03D0052F8EE /* escape.c */; };
+		CDCD6C1F13E2938700CDFFCE /* file.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2F013E0F03D0052F8EE /* file.c */; };
+		CDCD6C2013E2938700CDFFCE /* fileinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2F213E0F03D0052F8EE /* fileinfo.c */; };
+		CDCD6C2113E2938700CDFFCE /* formdata.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2F413E0F03D0052F8EE /* formdata.c */; };
+		CDCD6C2213E2938700CDFFCE /* ftp.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2F613E0F03D0052F8EE /* ftp.c */; };
+		CDCD6C2313E2938700CDFFCE /* ftplistparser.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2F813E0F03D0052F8EE /* ftplistparser.c */; };
+		CDCD6C2413E2938700CDFFCE /* getenv.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2FA13E0F03D0052F8EE /* getenv.c */; };
+		CDCD6C2513E2938700CDFFCE /* getinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2FB13E0F03D0052F8EE /* getinfo.c */; };
+		CDCD6C2613E2938700CDFFCE /* gopher.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2FD13E0F03D0052F8EE /* gopher.c */; };
+		CDCD6C2713E2938700CDFFCE /* gtls.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C2FF13E0F03D0052F8EE /* gtls.c */; };
+		CDCD6C2813E2938700CDFFCE /* hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30113E0F03D0052F8EE /* hash.c */; };
+		CDCD6C2913E2938700CDFFCE /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30313E0F03D0052F8EE /* hmac.c */; };
+		CDCD6C2A13E2938700CDFFCE /* hostasyn.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30413E0F03D0052F8EE /* hostasyn.c */; };
+		CDCD6C2B13E2938700CDFFCE /* hostip.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30513E0F03D0052F8EE /* hostip.c */; };
+		CDCD6C2C13E2938700CDFFCE /* hostip4.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30713E0F03D0052F8EE /* hostip4.c */; };
+		CDCD6C2D13E2938700CDFFCE /* hostip6.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30813E0F03D0052F8EE /* hostip6.c */; };
+		CDCD6C2E13E2938700CDFFCE /* hostsyn.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30913E0F03D0052F8EE /* hostsyn.c */; };
+		CDCD6C2F13E2938700CDFFCE /* http_chunks.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30A13E0F03D0052F8EE /* http_chunks.c */; };
+		CDCD6C3013E2938700CDFFCE /* http_digest.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30C13E0F03D0052F8EE /* http_digest.c */; };
+		CDCD6C3113E2938700CDFFCE /* http_negotiate_sspi.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30E13E0F03D0052F8EE /* http_negotiate_sspi.c */; };
+		CDCD6C3213E2938700CDFFCE /* http_negotiate.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C30F13E0F03D0052F8EE /* http_negotiate.c */; };
+		CDCD6C3313E2938700CDFFCE /* http_ntlm.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31113E0F03D0052F8EE /* http_ntlm.c */; };
+		CDCD6C3413E2938700CDFFCE /* http_proxy.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31313E0F03D0052F8EE /* http_proxy.c */; };
+		CDCD6C3513E2938700CDFFCE /* http.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31513E0F03D0052F8EE /* http.c */; };
+		CDCD6C3613E2938700CDFFCE /* if2ip.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31713E0F03D0052F8EE /* if2ip.c */; };
+		CDCD6C3713E2938700CDFFCE /* imap.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31913E0F03D0052F8EE /* imap.c */; };
+		CDCD6C3813E2938700CDFFCE /* inet_ntop.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31B13E0F03D0052F8EE /* inet_ntop.c */; };
+		CDCD6C3913E2938700CDFFCE /* inet_pton.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31D13E0F03D0052F8EE /* inet_pton.c */; };
+		CDCD6C3A13E2938700CDFFCE /* krb4.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C31F13E0F03D0052F8EE /* krb4.c */; };
+		CDCD6C3B13E2938700CDFFCE /* krb5.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32113E0F03D0052F8EE /* krb5.c */; };
+		CDCD6C3C13E2938700CDFFCE /* ldap.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32213E0F03D0052F8EE /* ldap.c */; };
+		CDCD6C3D13E2938700CDFFCE /* llist.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32313E0F03D0052F8EE /* llist.c */; };
+		CDCD6C3E13E2938700CDFFCE /* md4.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32513E0F03D0052F8EE /* md4.c */; };
+		CDCD6C3F13E2938700CDFFCE /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32613E0F03D0052F8EE /* md5.c */; };
+		CDCD6C4013E2938700CDFFCE /* memdebug.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32713E0F03D0052F8EE /* memdebug.c */; };
+		CDCD6C4113E2938700CDFFCE /* mprintf.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32913E0F03D0052F8EE /* mprintf.c */; };
+		CDCD6C4213E2938700CDFFCE /* multi.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32A13E0F03D0052F8EE /* multi.c */; };
+		CDCD6C4313E2938700CDFFCE /* netrc.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32C13E0F03D0052F8EE /* netrc.c */; };
+		CDCD6C4413E2938700CDFFCE /* non-ascii.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C32E13E0F03D0052F8EE /* non-ascii.c */; };
+		CDCD6C4513E2938700CDFFCE /* nonblock.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33013E0F03D0052F8EE /* nonblock.c */; };
+		CDCD6C4613E2938700CDFFCE /* nss.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33213E0F03D0052F8EE /* nss.c */; };
+		CDCD6C4713E2938700CDFFCE /* nwlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33413E0F03D0052F8EE /* nwlib.c */; };
+		CDCD6C4813E2938700CDFFCE /* nwos.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33513E0F03D0052F8EE /* nwos.c */; };
+		CDCD6C4913E2938700CDFFCE /* openldap.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33613E0F03D0052F8EE /* openldap.c */; };
+		CDCD6C4A13E2938700CDFFCE /* parsedate.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33713E0F03D0052F8EE /* parsedate.c */; };
+		CDCD6C4B13E2938700CDFFCE /* pingpong.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33913E0F03D0052F8EE /* pingpong.c */; };
+		CDCD6C4C13E2938700CDFFCE /* polarssl.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33B13E0F03D0052F8EE /* polarssl.c */; };
+		CDCD6C4D13E2938700CDFFCE /* pop3.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33D13E0F03D0052F8EE /* pop3.c */; };
+		CDCD6C4E13E2938700CDFFCE /* progress.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C33F13E0F03D0052F8EE /* progress.c */; };
+		CDCD6C4F13E2938700CDFFCE /* qssl.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34113E0F03D0052F8EE /* qssl.c */; };
+		CDCD6C5013E2938700CDFFCE /* rawstr.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34313E0F03D0052F8EE /* rawstr.c */; };
+		CDCD6C5113E2938700CDFFCE /* rtsp.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34513E0F03D0052F8EE /* rtsp.c */; };
+		CDCD6C5213E2938700CDFFCE /* security.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34713E0F03D0052F8EE /* security.c */; };
+		CDCD6C5313E2938700CDFFCE /* select.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34813E0F03D0052F8EE /* select.c */; };
+		CDCD6C5413E2938700CDFFCE /* sendf.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34A13E0F03D0052F8EE /* sendf.c */; };
+		CDCD6C5513E2938700CDFFCE /* share.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C34F13E0F03D0052F8EE /* share.c */; };
+		CDCD6C5613E2938700CDFFCE /* slist.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35113E0F03D0052F8EE /* slist.c */; };
+		CDCD6C5713E2938700CDFFCE /* smtp.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35313E0F03D0052F8EE /* smtp.c */; };
+		CDCD6C5813E2938700CDFFCE /* socks_gssapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35613E0F03D0052F8EE /* socks_gssapi.c */; };
+		CDCD6C5913E2938700CDFFCE /* socks_sspi.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35713E0F03D0052F8EE /* socks_sspi.c */; };
+		CDCD6C5A13E2938700CDFFCE /* socks.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35813E0F03D0052F8EE /* socks.c */; };
+		CDCD6C5B13E2938700CDFFCE /* speedcheck.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35A13E0F03D0052F8EE /* speedcheck.c */; };
+		CDCD6C5C13E2938700CDFFCE /* splay.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35C13E0F03D0052F8EE /* splay.c */; };
+		CDCD6C5D13E2938700CDFFCE /* ssh.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C35E13E0F03D0052F8EE /* ssh.c */; };
+		CDCD6C5E13E2938700CDFFCE /* sslgen.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36013E0F03D0052F8EE /* sslgen.c */; };
+		CDCD6C5F13E2938700CDFFCE /* ssluse.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36213E0F03D0052F8EE /* ssluse.c */; };
+		CDCD6C6013E2938700CDFFCE /* strdup.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36413E0F03D0052F8EE /* strdup.c */; };
+		CDCD6C6113E2938700CDFFCE /* strequal.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36613E0F03D0052F8EE /* strequal.c */; };
+		CDCD6C6213E2938700CDFFCE /* strerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36813E0F03D0052F8EE /* strerror.c */; };
+		CDCD6C6313E2938700CDFFCE /* strtok.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36A13E0F03D0052F8EE /* strtok.c */; };
+		CDCD6C6413E2938700CDFFCE /* strtoofft.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36C13E0F03D0052F8EE /* strtoofft.c */; };
+		CDCD6C6513E2938700CDFFCE /* telnet.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C36E13E0F03D0052F8EE /* telnet.c */; };
+		CDCD6C6613E2938700CDFFCE /* tftp.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37013E0F03D0052F8EE /* tftp.c */; };
+		CDCD6C6713E2938700CDFFCE /* timeval.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37213E0F03D0052F8EE /* timeval.c */; };
+		CDCD6C6813E2938700CDFFCE /* transfer.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37413E0F03D0052F8EE /* transfer.c */; };
+		CDCD6C6913E2938700CDFFCE /* url.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37613E0F03D0052F8EE /* url.c */; };
+		CDCD6C6A13E2938700CDFFCE /* version.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37913E0F03D0052F8EE /* version.c */; };
+		CDCD6C6B13E2938700CDFFCE /* warnless.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37A13E0F03D0052F8EE /* warnless.c */; };
+		CDCD6C6C13E2938700CDFFCE /* wildcard.c in Sources */ = {isa = PBXBuildFile; fileRef = 07D3C37C13E0F03D0052F8EE /* wildcard.c */; };
+		CDCD6C7B13E2948900CDFFCE /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEFEB8713E208A2002F6621 /* curl_config.h */; };
 		CDD06D8A1398832300AB0420 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = CDD06D881398832300AB0420 /* lcrypto.c */; };
 		CDD06D8B1398832300AB0420 /* lcrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = CDD06D891398832300AB0420 /* lcrypto.h */; };
 		CDD06D8C1398832300AB0420 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = CDD06D881398832300AB0420 /* lcrypto.c */; };
@@ -2524,7 +2789,6 @@
 		CDD06F041398BA6300AB0420 /* NSObject+MOAILib.mm in Sources */ = {isa = PBXBuildFile; fileRef = CDD06EDA1398BA6200AB0420 /* NSObject+MOAILib.mm */; };
 		CDD06F051398BA6300AB0420 /* NSString+MOAILib.h in Headers */ = {isa = PBXBuildFile; fileRef = CDD06EDB1398BA6200AB0420 /* NSString+MOAILib.h */; };
 		CDD06F061398BA6300AB0420 /* NSString+MOAILib.mm in Sources */ = {isa = PBXBuildFile; fileRef = CDD06EDC1398BA6200AB0420 /* NSString+MOAILib.mm */; };
-		CDE499BC13E2846400E85424 /* curlbuild.h in Headers */ = {isa = PBXBuildFile; fileRef = CDE499BB13E2846400E85424 /* curlbuild.h */; };
 		CDE49AFE13E28C4E00E85424 /* acountry.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AB813E28C4D00E85424 /* acountry.c */; };
 		CDE49AFF13E28C4E00E85424 /* adig.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49AB913E28C4D00E85424 /* adig.c */; };
 		CDE49B0013E28C4E00E85424 /* ahost.c in Sources */ = {isa = PBXBuildFile; fileRef = CDE49ABA13E28C4D00E85424 /* ahost.c */; };
@@ -2604,7 +2868,6 @@
 		CDEB914B1360A78800AAC558 /* MOAIImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDEB91441360A78800AAC558 /* MOAIImage.cpp */; };
 		CDEB914C1360A78800AAC558 /* MOAIImage.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEB91451360A78800AAC558 /* MOAIImage.h */; };
 		CDEB914D1360A78800AAC558 /* MOAIImage.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEB91451360A78800AAC558 /* MOAIImage.h */; };
-		CDEFEB8813E208A2002F6621 /* curl_config.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEFEB8713E208A2002F6621 /* curl_config.h */; };
 		CDFCFDCA13995A6800E43A41 /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 03240B6D13564CB0000ADC60 /* lapi.c */; };
 		CDFCFDCB13995A6800E43A41 /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 03240B6E13564CB0000ADC60 /* lapi.h */; };
 		CDFCFDCC13995A6800E43A41 /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = 03240B6F13564CB0000ADC60 /* lauxlib.c */; };
@@ -2776,6 +3039,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0324E2B11356485F000ADC60;
 			remoteInfo = "libmoai-osx";
+		};
+		CDB6C86213E29A9000CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDCD6BA513E2938700CDFFCE;
+			remoteInfo = "libcurl-osx";
+		};
+		CDB6C8CE13E29BAD00CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDB6C87C13E29BA400CF15B0;
+			remoteInfo = "libc-ares-osx";
+		};
+		CDCD6C7213E2939300CDFFCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CDCD6BA513E2938700CDFFCE;
+			remoteInfo = "libcurl-osx";
 		};
 		CDE4998413E2805900E85424 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3838,15 +4122,6 @@
 		CD218F9D13A7FDBA008337E7 /* utf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf.c; path = "../../3rdparty/jansson-2.1/src/utf.c"; sourceTree = SOURCE_ROOT; };
 		CD218F9E13A7FDBA008337E7 /* utf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utf.h; path = "../../3rdparty/jansson-2.1/src/utf.h"; sourceTree = SOURCE_ROOT; };
 		CD218F9F13A7FDBA008337E7 /* value.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = value.c; path = "../../3rdparty/jansson-2.1/src/value.c"; sourceTree = SOURCE_ROOT; };
-		CD26D1D713E27AA0006FB33D /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl.h; path = "../../3rdparty/curl-7.21.7/include/curl/curl.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1D813E27AA0006FB33D /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = "../../3rdparty/curl-7.21.7/include/curl/curlbuild.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1D913E27AA0006FB33D /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlrules.h; path = "../../3rdparty/curl-7.21.7/include/curl/curlrules.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DA13E27AA0006FB33D /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlver.h; path = "../../3rdparty/curl-7.21.7/include/curl/curlver.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DB13E27AA0006FB33D /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easy.h; path = "../../3rdparty/curl-7.21.7/include/curl/easy.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DC13E27AA0006FB33D /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mprintf.h; path = "../../3rdparty/curl-7.21.7/include/curl/mprintf.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DD13E27AA0006FB33D /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multi.h; path = "../../3rdparty/curl-7.21.7/include/curl/multi.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DE13E27AA0006FB33D /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = "../../3rdparty/curl-7.21.7/include/curl/stdcheaders.h"; sourceTree = SOURCE_ROOT; };
-		CD26D1DF13E27AA0006FB33D /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../3rdparty/curl-7.21.7/include/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
 		CD26D3D013E27B6B006FB33D /* libcurl-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcurl-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD2FDEBB13542F1400B814DF /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/AddressBook.framework; sourceTree = DEVELOPER_DIR; };
 		CD2FDEBC13542F1400B814DF /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/AddressBookUI.framework; sourceTree = DEVELOPER_DIR; };
@@ -4569,8 +4844,30 @@
 		CD7C726A13B947AC006CFA19 /* AKU-particles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AKU-particles.h"; path = "../../src/aku/AKU-particles.h"; sourceTree = SOURCE_ROOT; };
 		CD80F63D135BBCFF006B0683 /* ISO8601DateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ISO8601DateFormatter.h; path = ../../3rdparty/contrib/ISO8601DateFormatter.h; sourceTree = "<group>"; };
 		CD80F63E135BBCFF006B0683 /* ISO8601DateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ISO8601DateFormatter.m; path = ../../3rdparty/contrib/ISO8601DateFormatter.m; sourceTree = "<group>"; };
+		CDB6C80213E2967400CF15B0 /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/curl.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80313E2967400CF15B0 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/curlbuild.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80413E2967400CF15B0 /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlrules.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/curlrules.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80513E2967400CF15B0 /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlver.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/curlver.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80613E2967400CF15B0 /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easy.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/easy.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80713E2967400CF15B0 /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mprintf.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/mprintf.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80813E2967400CF15B0 /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multi.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/multi.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80913E2967400CF15B0 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = "../../3rdparty/curl-7.21.7/include-osx/curl/stdcheaders.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C80A13E2967400CF15B0 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../3rdparty/curl-7.21.7/include-osx/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81413E2969900CF15B0 /* curl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curl.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/curl.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81513E2969900CF15B0 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/curlbuild.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81613E2969900CF15B0 /* curlrules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlrules.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/curlrules.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81713E2969900CF15B0 /* curlver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlver.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/curlver.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81813E2969900CF15B0 /* easy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = easy.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/easy.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81913E2969900CF15B0 /* mprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mprintf.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/mprintf.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81A13E2969900CF15B0 /* multi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = multi.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/multi.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81B13E2969900CF15B0 /* stdcheaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stdcheaders.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/stdcheaders.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C81C13E2969900CF15B0 /* typecheck-gcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "typecheck-gcc.h"; path = "../../3rdparty/curl-7.21.7/include-ios/curl/typecheck-gcc.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C87A13E29B8100CF15B0 /* ares_build.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ares_build.h; path = "../../3rdparty/c-ares-1.7.4/include-osx/ares_build.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C87B13E29B8100CF15B0 /* ares_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ares_config.h; path = "../../3rdparty/c-ares-1.7.4/include-osx/ares_config.h"; sourceTree = SOURCE_ROOT; };
+		CDB6C8CA13E29BA400CF15B0 /* libc-ares-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libc-ares-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDBC71161398C6E50016F98A /* MOAIFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOAIFileSystem.cpp; path = ../../src/moaicore/MOAIFileSystem.cpp; sourceTree = SOURCE_ROOT; };
 		CDBC71171398C6E50016F98A /* MOAIFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOAIFileSystem.h; path = ../../src/moaicore/MOAIFileSystem.h; sourceTree = SOURCE_ROOT; };
+		CDCD6C7113E2938700CDFFCE /* libcurl-osx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcurl-osx.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDD06BD01398822500AB0420 /* libmoai-ios-luaext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmoai-ios-luaext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDD06D87139882D900AB0420 /* libmoai-osx-luaext.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmoai-osx-luaext.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDD06D881398832300AB0420 /* lcrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lcrypto.c; path = "../../3rdparty/luacrypto-0.2.0/src/lcrypto.c"; sourceTree = SOURCE_ROOT; };
@@ -4627,7 +4924,6 @@
 		CDD06EDA1398BA6200AB0420 /* NSObject+MOAILib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSObject+MOAILib.mm"; path = "../../src/moaiext-iphone/NSObject+MOAILib.mm"; sourceTree = SOURCE_ROOT; };
 		CDD06EDB1398BA6200AB0420 /* NSString+MOAILib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+MOAILib.h"; path = "../../src/moaiext-iphone/NSString+MOAILib.h"; sourceTree = SOURCE_ROOT; };
 		CDD06EDC1398BA6200AB0420 /* NSString+MOAILib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = "NSString+MOAILib.mm"; path = "../../src/moaiext-iphone/NSString+MOAILib.mm"; sourceTree = SOURCE_ROOT; };
-		CDE499BB13E2846400E85424 /* curlbuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curlbuild.h; path = "../../3rdparty/curl-7.21.7/include-ios/curl/curlbuild.h"; sourceTree = SOURCE_ROOT; };
 		CDE49AB413E28B3000E85424 /* libc-ares-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libc-ares-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDE49AB813E28C4D00E85424 /* acountry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = acountry.c; path = "../../3rdparty/c-ares-1.7.4/acountry.c"; sourceTree = SOURCE_ROOT; };
 		CDE49AB913E28C4D00E85424 /* adig.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = adig.c; path = "../../3rdparty/c-ares-1.7.4/adig.c"; sourceTree = SOURCE_ROOT; };
@@ -4753,6 +5049,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CD26D3CB13E27B6B006FB33D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDB6C8C613E29BA400CF15B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDCD6C6D13E2938700CDFFCE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -5022,15 +5332,6 @@
 		03240A7913564CAF000ADC60 /* curl */ = {
 			isa = PBXGroup;
 			children = (
-				CD26D1D713E27AA0006FB33D /* curl.h */,
-				CD26D1D813E27AA0006FB33D /* curlbuild.h */,
-				CD26D1D913E27AA0006FB33D /* curlrules.h */,
-				CD26D1DA13E27AA0006FB33D /* curlver.h */,
-				CD26D1DB13E27AA0006FB33D /* easy.h */,
-				CD26D1DC13E27AA0006FB33D /* mprintf.h */,
-				CD26D1DD13E27AA0006FB33D /* multi.h */,
-				CD26D1DE13E27AA0006FB33D /* stdcheaders.h */,
-				CD26D1DF13E27AA0006FB33D /* typecheck-gcc.h */,
 				03240A8613564CAF000ADC60 /* lib */,
 				03240A7A13564CAF000ADC60 /* include-ios */,
 				CDEFEB8413E20865002F6621 /* include-osx */,
@@ -5570,6 +5871,8 @@
 				CD07C4E513A1918600C9386C /* libmoai-osx-untz.a */,
 				CD26D3D013E27B6B006FB33D /* libcurl-ios.a */,
 				CDE49AB413E28B3000E85424 /* libc-ares-ios.a */,
+				CDCD6C7113E2938700CDFFCE /* libcurl-osx.a */,
+				CDB6C8CA13E29BA400CF15B0 /* libc-ares-osx.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7856,60 +8159,23 @@
 			path = "../../3rdparty/openssl-1.0.0d/crypto/pqueue";
 			sourceTree = "<group>";
 		};
-		CDD06BD11398824600AB0420 /* luasocket */ = {
+		CDB6C80113E2965400CF15B0 /* curl */ = {
 			isa = PBXGroup;
 			children = (
-				CDD06D8E1398838D00AB0420 /* auxiliar.c */,
-				CDD06D8F1398838D00AB0420 /* auxiliar.h */,
-				CDD06D901398838D00AB0420 /* buffer.c */,
-				CDD06D911398838D00AB0420 /* buffer.h */,
-				CDD06D921398838D00AB0420 /* except.c */,
-				CDD06D931398838D00AB0420 /* except.h */,
-				CDD06D941398838D00AB0420 /* inet.c */,
-				CDD06D951398838D00AB0420 /* inet.h */,
-				CDD06D961398838D00AB0420 /* io.c */,
-				CDD06D971398838D00AB0420 /* io.h */,
-				CDD06D981398838D00AB0420 /* luasocket.c */,
-				CDD06D991398838D00AB0420 /* luasocket.h */,
-				CDD06D9B1398838D00AB0420 /* mime.c */,
-				CDD06D9C1398838D00AB0420 /* mime.h */,
-				CDD06D9D1398838D00AB0420 /* options.c */,
-				CDD06D9E1398838D00AB0420 /* options.h */,
-				CDD06D9F1398838D00AB0420 /* select.c */,
-				CDD06DA01398838D00AB0420 /* select.h */,
-				CDD06DA11398838D00AB0420 /* socket.h */,
-				CDD06DA21398838D00AB0420 /* tcp.c */,
-				CDD06DA31398838D00AB0420 /* tcp.h */,
-				CDD06DA41398838D00AB0420 /* timeout.c */,
-				CDD06DA51398838D00AB0420 /* timeout.h */,
-				CDD06DA71398838D00AB0420 /* udp.c */,
-				CDD06DA81398838D00AB0420 /* udp.h */,
-				CDD06DA91398838D00AB0420 /* unix.c */,
-				CDD06DAA1398838D00AB0420 /* unix.h */,
-				CDD06DAC1398838D00AB0420 /* usocket.c */,
-				CDD06DAD1398838D00AB0420 /* usocket.h */,
-			);
-			name = luasocket;
-			sourceTree = "<group>";
-		};
-		CDD06BD21398824F00AB0420 /* luacrypto */ = {
-			isa = PBXGroup;
-			children = (
-				CDD06D881398832300AB0420 /* lcrypto.c */,
-				CDD06D891398832300AB0420 /* lcrypto.h */,
-			);
-			name = luacrypto;
-			sourceTree = "<group>";
-		};
-		CDE499BD13E2846700E85424 /* curl */ = {
-			isa = PBXGroup;
-			children = (
-				CDE499BB13E2846400E85424 /* curlbuild.h */,
+				CDB6C80213E2967400CF15B0 /* curl.h */,
+				CDB6C80313E2967400CF15B0 /* curlbuild.h */,
+				CDB6C80413E2967400CF15B0 /* curlrules.h */,
+				CDB6C80513E2967400CF15B0 /* curlver.h */,
+				CDB6C80613E2967400CF15B0 /* easy.h */,
+				CDB6C80713E2967400CF15B0 /* mprintf.h */,
+				CDB6C80813E2967400CF15B0 /* multi.h */,
+				CDB6C80913E2967400CF15B0 /* stdcheaders.h */,
+				CDB6C80A13E2967400CF15B0 /* typecheck-gcc.h */,
 			);
 			name = curl;
 			sourceTree = "<group>";
 		};
-		CDE499E813E28AC100E85424 /* c-ares */ = {
+		CDB6C87813E29B4600CF15B0 /* lib */ = {
 			isa = PBXGroup;
 			children = (
 				CDE49AB813E28C4D00E85424 /* acountry.c */,
@@ -7981,7 +8247,86 @@
 				CDE49AFB13E28C4E00E85424 /* nameser.h */,
 				CDE49AFC13E28C4E00E85424 /* setup_once.h */,
 				CDE49AFD13E28C4E00E85424 /* windows_port.c */,
+			);
+			name = lib;
+			sourceTree = "<group>";
+		};
+		CDB6C87913E29B5300CF15B0 /* include-osx */ = {
+			isa = PBXGroup;
+			children = (
+				CDB6C87A13E29B8100CF15B0 /* ares_build.h */,
+				CDB6C87B13E29B8100CF15B0 /* ares_config.h */,
+			);
+			name = "include-osx";
+			sourceTree = "<group>";
+		};
+		CDD06BD11398824600AB0420 /* luasocket */ = {
+			isa = PBXGroup;
+			children = (
+				CDD06D8E1398838D00AB0420 /* auxiliar.c */,
+				CDD06D8F1398838D00AB0420 /* auxiliar.h */,
+				CDD06D901398838D00AB0420 /* buffer.c */,
+				CDD06D911398838D00AB0420 /* buffer.h */,
+				CDD06D921398838D00AB0420 /* except.c */,
+				CDD06D931398838D00AB0420 /* except.h */,
+				CDD06D941398838D00AB0420 /* inet.c */,
+				CDD06D951398838D00AB0420 /* inet.h */,
+				CDD06D961398838D00AB0420 /* io.c */,
+				CDD06D971398838D00AB0420 /* io.h */,
+				CDD06D981398838D00AB0420 /* luasocket.c */,
+				CDD06D991398838D00AB0420 /* luasocket.h */,
+				CDD06D9B1398838D00AB0420 /* mime.c */,
+				CDD06D9C1398838D00AB0420 /* mime.h */,
+				CDD06D9D1398838D00AB0420 /* options.c */,
+				CDD06D9E1398838D00AB0420 /* options.h */,
+				CDD06D9F1398838D00AB0420 /* select.c */,
+				CDD06DA01398838D00AB0420 /* select.h */,
+				CDD06DA11398838D00AB0420 /* socket.h */,
+				CDD06DA21398838D00AB0420 /* tcp.c */,
+				CDD06DA31398838D00AB0420 /* tcp.h */,
+				CDD06DA41398838D00AB0420 /* timeout.c */,
+				CDD06DA51398838D00AB0420 /* timeout.h */,
+				CDD06DA71398838D00AB0420 /* udp.c */,
+				CDD06DA81398838D00AB0420 /* udp.h */,
+				CDD06DA91398838D00AB0420 /* unix.c */,
+				CDD06DAA1398838D00AB0420 /* unix.h */,
+				CDD06DAC1398838D00AB0420 /* usocket.c */,
+				CDD06DAD1398838D00AB0420 /* usocket.h */,
+			);
+			name = luasocket;
+			sourceTree = "<group>";
+		};
+		CDD06BD21398824F00AB0420 /* luacrypto */ = {
+			isa = PBXGroup;
+			children = (
+				CDD06D881398832300AB0420 /* lcrypto.c */,
+				CDD06D891398832300AB0420 /* lcrypto.h */,
+			);
+			name = luacrypto;
+			sourceTree = "<group>";
+		};
+		CDE499BD13E2846700E85424 /* curl */ = {
+			isa = PBXGroup;
+			children = (
+				CDB6C81413E2969900CF15B0 /* curl.h */,
+				CDB6C81513E2969900CF15B0 /* curlbuild.h */,
+				CDB6C81613E2969900CF15B0 /* curlrules.h */,
+				CDB6C81713E2969900CF15B0 /* curlver.h */,
+				CDB6C81813E2969900CF15B0 /* easy.h */,
+				CDB6C81913E2969900CF15B0 /* mprintf.h */,
+				CDB6C81A13E2969900CF15B0 /* multi.h */,
+				CDB6C81B13E2969900CF15B0 /* stdcheaders.h */,
+				CDB6C81C13E2969900CF15B0 /* typecheck-gcc.h */,
+			);
+			name = curl;
+			sourceTree = "<group>";
+		};
+		CDE499E813E28AC100E85424 /* c-ares */ = {
+			isa = PBXGroup;
+			children = (
+				CDB6C87813E29B4600CF15B0 /* lib */,
 				CDE499E913E28AE400E85424 /* include-ios */,
+				CDB6C87913E29B5300CF15B0 /* include-osx */,
 			);
 			name = "c-ares";
 			sourceTree = "<group>";
@@ -7998,6 +8343,7 @@
 		CDEFEB8413E20865002F6621 /* include-osx */ = {
 			isa = PBXGroup;
 			children = (
+				CDB6C80113E2965400CF15B0 /* curl */,
 				CDEFEB8713E208A2002F6621 /* curl_config.h */,
 			);
 			name = "include-osx";
@@ -8150,7 +8496,6 @@
 				07CC7A8613DF76B100F2DEDE /* physfs_internal.h in Headers */,
 				07CC7A8713DF76B100F2DEDE /* physfs_platforms.h in Headers */,
 				07CC7A8A13DF76B100F2DEDE /* physfs.h in Headers */,
-				CDEFEB8813E208A2002F6621 /* curl_config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8973,15 +9318,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD26D4C813E27D1A006FB33D /* curl.h in Headers */,
-				CD26D4C913E27D1A006FB33D /* curlbuild.h in Headers */,
-				CD26D4CA13E27D1A006FB33D /* curlrules.h in Headers */,
-				CD26D4CB13E27D1A006FB33D /* curlver.h in Headers */,
-				CD26D4CC13E27D1A006FB33D /* easy.h in Headers */,
-				CD26D4CD13E27D1A006FB33D /* mprintf.h in Headers */,
-				CD26D4CE13E27D1A006FB33D /* multi.h in Headers */,
-				CD26D4CF13E27D1A006FB33D /* stdcheaders.h in Headers */,
-				CD26D4D013E27D1A006FB33D /* typecheck-gcc.h in Headers */,
 				CD26D4D113E27D1A006FB33D /* arpa_telnet.h in Headers */,
 				CD26D4D413E27D1A006FB33D /* asyn.h in Headers */,
 				CD26D4D613E27D1A006FB33D /* axtls.h in Headers */,
@@ -9071,7 +9407,151 @@
 				CD26D58613E27D1A006FB33D /* warnless.h in Headers */,
 				CD26D58813E27D1A006FB33D /* wildcard.h in Headers */,
 				CD26D58913E27D1A006FB33D /* curl_config.h in Headers */,
-				CDE499BC13E2846400E85424 /* curlbuild.h in Headers */,
+				CDB6C81D13E2969900CF15B0 /* curl.h in Headers */,
+				CDB6C81E13E2969900CF15B0 /* curlbuild.h in Headers */,
+				CDB6C81F13E2969900CF15B0 /* curlrules.h in Headers */,
+				CDB6C82013E2969900CF15B0 /* curlver.h in Headers */,
+				CDB6C82113E2969900CF15B0 /* easy.h in Headers */,
+				CDB6C82213E2969900CF15B0 /* mprintf.h in Headers */,
+				CDB6C82313E2969900CF15B0 /* multi.h in Headers */,
+				CDB6C82413E2969900CF15B0 /* stdcheaders.h in Headers */,
+				CDB6C82513E2969900CF15B0 /* typecheck-gcc.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDB6C87D13E29BA400CF15B0 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDB6C87E13E29BA400CF15B0 /* ares_data.h in Headers */,
+				CDB6C87F13E29BA400CF15B0 /* ares_dns.h in Headers */,
+				CDB6C88013E29BA400CF15B0 /* ares_getopt.h in Headers */,
+				CDB6C88113E29BA400CF15B0 /* ares_ipv6.h in Headers */,
+				CDB6C88213E29BA400CF15B0 /* ares_library_init.h in Headers */,
+				CDB6C88313E29BA400CF15B0 /* ares_llist.h in Headers */,
+				CDB6C88413E29BA400CF15B0 /* ares_nowarn.h in Headers */,
+				CDB6C88513E29BA400CF15B0 /* ares_private.h in Headers */,
+				CDB6C88613E29BA400CF15B0 /* ares_rules.h in Headers */,
+				CDB6C88713E29BA400CF15B0 /* ares_setup.h in Headers */,
+				CDB6C88813E29BA400CF15B0 /* ares_strcasecmp.h in Headers */,
+				CDB6C88913E29BA400CF15B0 /* ares_strdup.h in Headers */,
+				CDB6C88A13E29BA400CF15B0 /* ares_version.h in Headers */,
+				CDB6C88B13E29BA400CF15B0 /* ares_writev.h in Headers */,
+				CDB6C88C13E29BA400CF15B0 /* ares.h in Headers */,
+				CDB6C88D13E29BA400CF15B0 /* bitncmp.h in Headers */,
+				CDB6C88E13E29BA400CF15B0 /* config-dos.h in Headers */,
+				CDB6C88F13E29BA400CF15B0 /* config-win32.h in Headers */,
+				CDB6C89013E29BA400CF15B0 /* inet_net_pton.h in Headers */,
+				CDB6C89113E29BA400CF15B0 /* inet_ntop.h in Headers */,
+				CDB6C89213E29BA400CF15B0 /* nameser.h in Headers */,
+				CDB6C89313E29BA400CF15B0 /* setup_once.h in Headers */,
+				CDB6C8D013E29C4100CF15B0 /* ares_build.h in Headers */,
+				CDB6C8D113E29C4100CF15B0 /* ares_config.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDCD6BA813E2938700CDFFCE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDCD6BB213E2938700CDFFCE /* arpa_telnet.h in Headers */,
+				CDCD6BB313E2938700CDFFCE /* asyn.h in Headers */,
+				CDCD6BB413E2938700CDFFCE /* axtls.h in Headers */,
+				CDCD6BB513E2938700CDFFCE /* connect.h in Headers */,
+				CDCD6BB613E2938700CDFFCE /* content_encoding.h in Headers */,
+				CDCD6BB713E2938700CDFFCE /* cookie.h in Headers */,
+				CDCD6BB813E2938700CDFFCE /* curl_addrinfo.h in Headers */,
+				CDCD6BB913E2938700CDFFCE /* curl_base64.h in Headers */,
+				CDCD6BBA13E2938700CDFFCE /* curl_fnmatch.h in Headers */,
+				CDCD6BBB13E2938700CDFFCE /* curl_gethostname.h in Headers */,
+				CDCD6BBC13E2938700CDFFCE /* curl_hmac.h in Headers */,
+				CDCD6BBD13E2938700CDFFCE /* curl_ldap.h in Headers */,
+				CDCD6BBE13E2938700CDFFCE /* curl_md4.h in Headers */,
+				CDCD6BBF13E2938700CDFFCE /* curl_md5.h in Headers */,
+				CDCD6BC013E2938700CDFFCE /* curl_memory.h in Headers */,
+				CDCD6BC113E2938700CDFFCE /* curl_memrchr.h in Headers */,
+				CDCD6BC213E2938700CDFFCE /* curl_rand.h in Headers */,
+				CDCD6BC313E2938700CDFFCE /* curl_rtmp.h in Headers */,
+				CDCD6BC413E2938700CDFFCE /* curl_sspi.h in Headers */,
+				CDCD6BC513E2938700CDFFCE /* curl_threads.h in Headers */,
+				CDCD6BC613E2938700CDFFCE /* curlx.h in Headers */,
+				CDCD6BC713E2938700CDFFCE /* cyassl.h in Headers */,
+				CDCD6BC813E2938700CDFFCE /* dict.h in Headers */,
+				CDCD6BC913E2938700CDFFCE /* easyif.h in Headers */,
+				CDCD6BCA13E2938700CDFFCE /* escape.h in Headers */,
+				CDCD6BCB13E2938700CDFFCE /* file.h in Headers */,
+				CDCD6BCC13E2938700CDFFCE /* fileinfo.h in Headers */,
+				CDCD6BCD13E2938700CDFFCE /* formdata.h in Headers */,
+				CDCD6BCE13E2938700CDFFCE /* ftp.h in Headers */,
+				CDCD6BCF13E2938700CDFFCE /* ftplistparser.h in Headers */,
+				CDCD6BD013E2938700CDFFCE /* getinfo.h in Headers */,
+				CDCD6BD113E2938700CDFFCE /* gopher.h in Headers */,
+				CDCD6BD213E2938700CDFFCE /* gtls.h in Headers */,
+				CDCD6BD313E2938700CDFFCE /* hash.h in Headers */,
+				CDCD6BD413E2938700CDFFCE /* hostip.h in Headers */,
+				CDCD6BD513E2938700CDFFCE /* http_chunks.h in Headers */,
+				CDCD6BD613E2938700CDFFCE /* http_digest.h in Headers */,
+				CDCD6BD713E2938700CDFFCE /* http_negotiate.h in Headers */,
+				CDCD6BD813E2938700CDFFCE /* http_ntlm.h in Headers */,
+				CDCD6BD913E2938700CDFFCE /* http_proxy.h in Headers */,
+				CDCD6BDA13E2938700CDFFCE /* http.h in Headers */,
+				CDCD6BDB13E2938700CDFFCE /* if2ip.h in Headers */,
+				CDCD6BDC13E2938700CDFFCE /* imap.h in Headers */,
+				CDCD6BDD13E2938700CDFFCE /* inet_ntop.h in Headers */,
+				CDCD6BDE13E2938700CDFFCE /* inet_pton.h in Headers */,
+				CDCD6BDF13E2938700CDFFCE /* krb4.h in Headers */,
+				CDCD6BE013E2938700CDFFCE /* llist.h in Headers */,
+				CDCD6BE113E2938700CDFFCE /* memdebug.h in Headers */,
+				CDCD6BE213E2938700CDFFCE /* multiif.h in Headers */,
+				CDCD6BE313E2938700CDFFCE /* netrc.h in Headers */,
+				CDCD6BE413E2938700CDFFCE /* non-ascii.h in Headers */,
+				CDCD6BE513E2938700CDFFCE /* nonblock.h in Headers */,
+				CDCD6BE613E2938700CDFFCE /* nssg.h in Headers */,
+				CDCD6BE713E2938700CDFFCE /* parsedate.h in Headers */,
+				CDCD6BE813E2938700CDFFCE /* pingpong.h in Headers */,
+				CDCD6BE913E2938700CDFFCE /* polarssl.h in Headers */,
+				CDCD6BEA13E2938700CDFFCE /* pop3.h in Headers */,
+				CDCD6BEB13E2938700CDFFCE /* progress.h in Headers */,
+				CDCD6BEC13E2938700CDFFCE /* qssl.h in Headers */,
+				CDCD6BED13E2938700CDFFCE /* rawstr.h in Headers */,
+				CDCD6BEE13E2938700CDFFCE /* rtsp.h in Headers */,
+				CDCD6BEF13E2938700CDFFCE /* select.h in Headers */,
+				CDCD6BF013E2938700CDFFCE /* sendf.h in Headers */,
+				CDCD6BF113E2938700CDFFCE /* setup_once.h in Headers */,
+				CDCD6BF213E2938700CDFFCE /* setup.h in Headers */,
+				CDCD6BF313E2938700CDFFCE /* share.h in Headers */,
+				CDCD6BF413E2938700CDFFCE /* slist.h in Headers */,
+				CDCD6BF513E2938700CDFFCE /* smtp.h in Headers */,
+				CDCD6BF613E2938700CDFFCE /* sockaddr.h in Headers */,
+				CDCD6BF713E2938700CDFFCE /* socks.h in Headers */,
+				CDCD6BF813E2938700CDFFCE /* speedcheck.h in Headers */,
+				CDCD6BF913E2938700CDFFCE /* splay.h in Headers */,
+				CDCD6BFA13E2938700CDFFCE /* ssh.h in Headers */,
+				CDCD6BFB13E2938700CDFFCE /* sslgen.h in Headers */,
+				CDCD6BFC13E2938700CDFFCE /* ssluse.h in Headers */,
+				CDCD6BFD13E2938700CDFFCE /* strdup.h in Headers */,
+				CDCD6BFE13E2938700CDFFCE /* strequal.h in Headers */,
+				CDCD6BFF13E2938700CDFFCE /* strerror.h in Headers */,
+				CDCD6C0013E2938700CDFFCE /* strtok.h in Headers */,
+				CDCD6C0113E2938700CDFFCE /* strtoofft.h in Headers */,
+				CDCD6C0213E2938700CDFFCE /* telnet.h in Headers */,
+				CDCD6C0313E2938700CDFFCE /* tftp.h in Headers */,
+				CDCD6C0413E2938700CDFFCE /* timeval.h in Headers */,
+				CDCD6C0513E2938700CDFFCE /* transfer.h in Headers */,
+				CDCD6C0613E2938700CDFFCE /* url.h in Headers */,
+				CDCD6C0713E2938700CDFFCE /* urldata.h in Headers */,
+				CDCD6C0813E2938700CDFFCE /* warnless.h in Headers */,
+				CDCD6C0913E2938700CDFFCE /* wildcard.h in Headers */,
+				CDCD6C7B13E2948900CDFFCE /* curl_config.h in Headers */,
+				CDB6C80B13E2967400CF15B0 /* curl.h in Headers */,
+				CDB6C80C13E2967400CF15B0 /* curlbuild.h in Headers */,
+				CDB6C80D13E2967400CF15B0 /* curlrules.h in Headers */,
+				CDB6C80E13E2967400CF15B0 /* curlver.h in Headers */,
+				CDB6C80F13E2967400CF15B0 /* easy.h in Headers */,
+				CDB6C81013E2967400CF15B0 /* mprintf.h in Headers */,
+				CDB6C81113E2967400CF15B0 /* multi.h in Headers */,
+				CDB6C81213E2967400CF15B0 /* stdcheaders.h in Headers */,
+				CDB6C81313E2967400CF15B0 /* typecheck-gcc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9185,6 +9665,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				CDB6C86313E29A9000CF15B0 /* PBXTargetDependency */,
 				0324E30613564A00000ADC60 /* PBXTargetDependency */,
 			);
 			name = "libmoai-osx";
@@ -9239,6 +9720,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				CDB6C8CF13E29BAD00CF15B0 /* PBXTargetDependency */,
+				CDCD6C7313E2939300CDFFCE /* PBXTargetDependency */,
 				CD07C3A413A182AA00C9386C /* PBXTargetDependency */,
 				CD07C3EC13A1847000C9386C /* PBXTargetDependency */,
 			);
@@ -9282,6 +9765,40 @@
 			name = "libcurl-ios";
 			productName = OpenUSLS;
 			productReference = CD26D3D013E27B6B006FB33D /* libcurl-ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		CDB6C87C13E29BA400CF15B0 /* libc-ares-osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDB6C8C713E29BA400CF15B0 /* Build configuration list for PBXNativeTarget "libc-ares-osx" */;
+			buildPhases = (
+				CDB6C87D13E29BA400CF15B0 /* Headers */,
+				CDB6C89613E29BA400CF15B0 /* Sources */,
+				CDB6C8C613E29BA400CF15B0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "libc-ares-osx";
+			productName = OpenUSLS;
+			productReference = CDB6C8CA13E29BA400CF15B0 /* libc-ares-osx.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		CDCD6BA513E2938700CDFFCE /* libcurl-osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CDCD6C6E13E2938700CDFFCE /* Build configuration list for PBXNativeTarget "libcurl-osx" */;
+			buildPhases = (
+				CDCD6BA813E2938700CDFFCE /* Headers */,
+				CDCD6C0C13E2938700CDFFCE /* Sources */,
+				CDCD6C6D13E2938700CDFFCE /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "libcurl-osx";
+			productName = OpenUSLS;
+			productReference = CDCD6C7113E2938700CDFFCE /* libcurl-osx.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 		CDD06A061398822500AB0420 /* libmoai-ios-luaext */ = {
@@ -9377,6 +9894,8 @@
 				0379C3D51333ECD800E89DDC /* libmoai-ios-3rdparty */,
 				CDD06A061398822500AB0420 /* libmoai-ios-luaext */,
 				CD07C3A313A182AA00C9386C /* libmoai-ios-untz */,
+				CDB6C87C13E29BA400CF15B0 /* libc-ares-osx */,
+				CDCD6BA513E2938700CDFFCE /* libcurl-osx */,
 				0324E2B11356485F000ADC60 /* libmoai-osx */,
 				0324E2A81356485F000ADC60 /* libmoai-osx-3rdparty */,
 				CDD06BD5139882D900AB0420 /* libmoai-osx-luaext */,
@@ -10981,6 +11500,163 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CDB6C89613E29BA400CF15B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDB6C89713E29BA400CF15B0 /* acountry.c in Sources */,
+				CDB6C89813E29BA400CF15B0 /* adig.c in Sources */,
+				CDB6C89913E29BA400CF15B0 /* ahost.c in Sources */,
+				CDB6C89A13E29BA400CF15B0 /* ares__close_sockets.c in Sources */,
+				CDB6C89B13E29BA400CF15B0 /* ares__get_hostent.c in Sources */,
+				CDB6C89C13E29BA400CF15B0 /* ares__read_line.c in Sources */,
+				CDB6C89D13E29BA400CF15B0 /* ares__timeval.c in Sources */,
+				CDB6C89E13E29BA400CF15B0 /* ares_cancel.c in Sources */,
+				CDB6C89F13E29BA400CF15B0 /* ares_data.c in Sources */,
+				CDB6C8A013E29BA400CF15B0 /* ares_destroy.c in Sources */,
+				CDB6C8A113E29BA400CF15B0 /* ares_expand_name.c in Sources */,
+				CDB6C8A213E29BA400CF15B0 /* ares_expand_string.c in Sources */,
+				CDB6C8A313E29BA400CF15B0 /* ares_fds.c in Sources */,
+				CDB6C8A413E29BA400CF15B0 /* ares_free_hostent.c in Sources */,
+				CDB6C8A513E29BA400CF15B0 /* ares_free_string.c in Sources */,
+				CDB6C8A613E29BA400CF15B0 /* ares_gethostbyaddr.c in Sources */,
+				CDB6C8A713E29BA400CF15B0 /* ares_gethostbyname.c in Sources */,
+				CDB6C8A813E29BA400CF15B0 /* ares_getnameinfo.c in Sources */,
+				CDB6C8A913E29BA400CF15B0 /* ares_getopt.c in Sources */,
+				CDB6C8AA13E29BA400CF15B0 /* ares_getsock.c in Sources */,
+				CDB6C8AB13E29BA400CF15B0 /* ares_init.c in Sources */,
+				CDB6C8AC13E29BA400CF15B0 /* ares_library_init.c in Sources */,
+				CDB6C8AD13E29BA400CF15B0 /* ares_llist.c in Sources */,
+				CDB6C8AE13E29BA400CF15B0 /* ares_mkquery.c in Sources */,
+				CDB6C8AF13E29BA400CF15B0 /* ares_nowarn.c in Sources */,
+				CDB6C8B013E29BA400CF15B0 /* ares_options.c in Sources */,
+				CDB6C8B113E29BA400CF15B0 /* ares_parse_a_reply.c in Sources */,
+				CDB6C8B213E29BA400CF15B0 /* ares_parse_aaaa_reply.c in Sources */,
+				CDB6C8B313E29BA400CF15B0 /* ares_parse_mx_reply.c in Sources */,
+				CDB6C8B413E29BA400CF15B0 /* ares_parse_ns_reply.c in Sources */,
+				CDB6C8B513E29BA400CF15B0 /* ares_parse_ptr_reply.c in Sources */,
+				CDB6C8B613E29BA400CF15B0 /* ares_parse_srv_reply.c in Sources */,
+				CDB6C8B713E29BA400CF15B0 /* ares_parse_txt_reply.c in Sources */,
+				CDB6C8B813E29BA400CF15B0 /* ares_process.c in Sources */,
+				CDB6C8B913E29BA400CF15B0 /* ares_query.c in Sources */,
+				CDB6C8BA13E29BA400CF15B0 /* ares_search.c in Sources */,
+				CDB6C8BB13E29BA400CF15B0 /* ares_send.c in Sources */,
+				CDB6C8BC13E29BA400CF15B0 /* ares_strcasecmp.c in Sources */,
+				CDB6C8BD13E29BA400CF15B0 /* ares_strdup.c in Sources */,
+				CDB6C8BE13E29BA400CF15B0 /* ares_strerror.c in Sources */,
+				CDB6C8BF13E29BA400CF15B0 /* ares_timeout.c in Sources */,
+				CDB6C8C013E29BA400CF15B0 /* ares_version.c in Sources */,
+				CDB6C8C113E29BA400CF15B0 /* ares_writev.c in Sources */,
+				CDB6C8C213E29BA400CF15B0 /* bitncmp.c in Sources */,
+				CDB6C8C313E29BA400CF15B0 /* inet_net_pton.c in Sources */,
+				CDB6C8C413E29BA400CF15B0 /* inet_ntop.c in Sources */,
+				CDB6C8C513E29BA400CF15B0 /* windows_port.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CDCD6C0C13E2938700CDFFCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CDCD6C0D13E2938700CDFFCE /* asyn-ares.c in Sources */,
+				CDCD6C0E13E2938700CDFFCE /* asyn-thread.c in Sources */,
+				CDCD6C0F13E2938700CDFFCE /* axtls.c in Sources */,
+				CDCD6C1013E2938700CDFFCE /* base64.c in Sources */,
+				CDCD6C1113E2938700CDFFCE /* connect.c in Sources */,
+				CDCD6C1213E2938700CDFFCE /* content_encoding.c in Sources */,
+				CDCD6C1313E2938700CDFFCE /* cookie.c in Sources */,
+				CDCD6C1413E2938700CDFFCE /* curl_addrinfo.c in Sources */,
+				CDCD6C1513E2938700CDFFCE /* curl_gethostname.c in Sources */,
+				CDCD6C1613E2938700CDFFCE /* curl_memrchr.c in Sources */,
+				CDCD6C1713E2938700CDFFCE /* curl_rand.c in Sources */,
+				CDCD6C1813E2938700CDFFCE /* curl_rtmp.c in Sources */,
+				CDCD6C1913E2938700CDFFCE /* curl_sspi.c in Sources */,
+				CDCD6C1A13E2938700CDFFCE /* curl_threads.c in Sources */,
+				CDCD6C1B13E2938700CDFFCE /* cyassl.c in Sources */,
+				CDCD6C1C13E2938700CDFFCE /* dict.c in Sources */,
+				CDCD6C1D13E2938700CDFFCE /* easy.c in Sources */,
+				CDCD6C1E13E2938700CDFFCE /* escape.c in Sources */,
+				CDCD6C1F13E2938700CDFFCE /* file.c in Sources */,
+				CDCD6C2013E2938700CDFFCE /* fileinfo.c in Sources */,
+				CDCD6C2113E2938700CDFFCE /* formdata.c in Sources */,
+				CDCD6C2213E2938700CDFFCE /* ftp.c in Sources */,
+				CDCD6C2313E2938700CDFFCE /* ftplistparser.c in Sources */,
+				CDCD6C2413E2938700CDFFCE /* getenv.c in Sources */,
+				CDCD6C2513E2938700CDFFCE /* getinfo.c in Sources */,
+				CDCD6C2613E2938700CDFFCE /* gopher.c in Sources */,
+				CDCD6C2713E2938700CDFFCE /* gtls.c in Sources */,
+				CDCD6C2813E2938700CDFFCE /* hash.c in Sources */,
+				CDCD6C2913E2938700CDFFCE /* hmac.c in Sources */,
+				CDCD6C2A13E2938700CDFFCE /* hostasyn.c in Sources */,
+				CDCD6C2B13E2938700CDFFCE /* hostip.c in Sources */,
+				CDCD6C2C13E2938700CDFFCE /* hostip4.c in Sources */,
+				CDCD6C2D13E2938700CDFFCE /* hostip6.c in Sources */,
+				CDCD6C2E13E2938700CDFFCE /* hostsyn.c in Sources */,
+				CDCD6C2F13E2938700CDFFCE /* http_chunks.c in Sources */,
+				CDCD6C3013E2938700CDFFCE /* http_digest.c in Sources */,
+				CDCD6C3113E2938700CDFFCE /* http_negotiate_sspi.c in Sources */,
+				CDCD6C3213E2938700CDFFCE /* http_negotiate.c in Sources */,
+				CDCD6C3313E2938700CDFFCE /* http_ntlm.c in Sources */,
+				CDCD6C3413E2938700CDFFCE /* http_proxy.c in Sources */,
+				CDCD6C3513E2938700CDFFCE /* http.c in Sources */,
+				CDCD6C3613E2938700CDFFCE /* if2ip.c in Sources */,
+				CDCD6C3713E2938700CDFFCE /* imap.c in Sources */,
+				CDCD6C3813E2938700CDFFCE /* inet_ntop.c in Sources */,
+				CDCD6C3913E2938700CDFFCE /* inet_pton.c in Sources */,
+				CDCD6C3A13E2938700CDFFCE /* krb4.c in Sources */,
+				CDCD6C3B13E2938700CDFFCE /* krb5.c in Sources */,
+				CDCD6C3C13E2938700CDFFCE /* ldap.c in Sources */,
+				CDCD6C3D13E2938700CDFFCE /* llist.c in Sources */,
+				CDCD6C3E13E2938700CDFFCE /* md4.c in Sources */,
+				CDCD6C3F13E2938700CDFFCE /* md5.c in Sources */,
+				CDCD6C4013E2938700CDFFCE /* memdebug.c in Sources */,
+				CDCD6C4113E2938700CDFFCE /* mprintf.c in Sources */,
+				CDCD6C4213E2938700CDFFCE /* multi.c in Sources */,
+				CDCD6C4313E2938700CDFFCE /* netrc.c in Sources */,
+				CDCD6C4413E2938700CDFFCE /* non-ascii.c in Sources */,
+				CDCD6C4513E2938700CDFFCE /* nonblock.c in Sources */,
+				CDCD6C4613E2938700CDFFCE /* nss.c in Sources */,
+				CDCD6C4713E2938700CDFFCE /* nwlib.c in Sources */,
+				CDCD6C4813E2938700CDFFCE /* nwos.c in Sources */,
+				CDCD6C4913E2938700CDFFCE /* openldap.c in Sources */,
+				CDCD6C4A13E2938700CDFFCE /* parsedate.c in Sources */,
+				CDCD6C4B13E2938700CDFFCE /* pingpong.c in Sources */,
+				CDCD6C4C13E2938700CDFFCE /* polarssl.c in Sources */,
+				CDCD6C4D13E2938700CDFFCE /* pop3.c in Sources */,
+				CDCD6C4E13E2938700CDFFCE /* progress.c in Sources */,
+				CDCD6C4F13E2938700CDFFCE /* qssl.c in Sources */,
+				CDCD6C5013E2938700CDFFCE /* rawstr.c in Sources */,
+				CDCD6C5113E2938700CDFFCE /* rtsp.c in Sources */,
+				CDCD6C5213E2938700CDFFCE /* security.c in Sources */,
+				CDCD6C5313E2938700CDFFCE /* select.c in Sources */,
+				CDCD6C5413E2938700CDFFCE /* sendf.c in Sources */,
+				CDCD6C5513E2938700CDFFCE /* share.c in Sources */,
+				CDCD6C5613E2938700CDFFCE /* slist.c in Sources */,
+				CDCD6C5713E2938700CDFFCE /* smtp.c in Sources */,
+				CDCD6C5813E2938700CDFFCE /* socks_gssapi.c in Sources */,
+				CDCD6C5913E2938700CDFFCE /* socks_sspi.c in Sources */,
+				CDCD6C5A13E2938700CDFFCE /* socks.c in Sources */,
+				CDCD6C5B13E2938700CDFFCE /* speedcheck.c in Sources */,
+				CDCD6C5C13E2938700CDFFCE /* splay.c in Sources */,
+				CDCD6C5D13E2938700CDFFCE /* ssh.c in Sources */,
+				CDCD6C5E13E2938700CDFFCE /* sslgen.c in Sources */,
+				CDCD6C5F13E2938700CDFFCE /* ssluse.c in Sources */,
+				CDCD6C6013E2938700CDFFCE /* strdup.c in Sources */,
+				CDCD6C6113E2938700CDFFCE /* strequal.c in Sources */,
+				CDCD6C6213E2938700CDFFCE /* strerror.c in Sources */,
+				CDCD6C6313E2938700CDFFCE /* strtok.c in Sources */,
+				CDCD6C6413E2938700CDFFCE /* strtoofft.c in Sources */,
+				CDCD6C6513E2938700CDFFCE /* telnet.c in Sources */,
+				CDCD6C6613E2938700CDFFCE /* tftp.c in Sources */,
+				CDCD6C6713E2938700CDFFCE /* timeval.c in Sources */,
+				CDCD6C6813E2938700CDFFCE /* transfer.c in Sources */,
+				CDCD6C6913E2938700CDFFCE /* url.c in Sources */,
+				CDCD6C6A13E2938700CDFFCE /* version.c in Sources */,
+				CDCD6C6B13E2938700CDFFCE /* warnless.c in Sources */,
+				CDCD6C6C13E2938700CDFFCE /* wildcard.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CDD06AFC1398822500AB0420 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -11128,6 +11804,21 @@
 			isa = PBXTargetDependency;
 			target = 0324E2B11356485F000ADC60 /* libmoai-osx */;
 			targetProxy = CD3A549013995F650034C103 /* PBXContainerItemProxy */;
+		};
+		CDB6C86313E29A9000CF15B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDCD6BA513E2938700CDFFCE /* libcurl-osx */;
+			targetProxy = CDB6C86213E29A9000CF15B0 /* PBXContainerItemProxy */;
+		};
+		CDB6C8CF13E29BAD00CF15B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDB6C87C13E29BA400CF15B0 /* libc-ares-osx */;
+			targetProxy = CDB6C8CE13E29BAD00CF15B0 /* PBXContainerItemProxy */;
+		};
+		CDCD6C7313E2939300CDFFCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CDCD6BA513E2938700CDFFCE /* libcurl-osx */;
+			targetProxy = CDCD6C7213E2939300CDFFCE /* PBXContainerItemProxy */;
 		};
 		CDE4998513E2805900E85424 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -11380,7 +12071,7 @@
 		03B080970F708135005CD8E5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -11457,10 +12148,10 @@
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				"New Setting" = "";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = YES;
+				USE_HEADERMAPS = NO;
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = "-Wall";
 			};
@@ -11499,7 +12190,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -11578,10 +12269,10 @@
 				);
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				"New Setting" = "";
 				PROVISIONING_PROFILE = "";
 				SKIP_INSTALL = YES;
 				STRIP_INSTALLED_PRODUCT = NO;
+				USE_HEADERMAPS = NO;
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = "-Wall";
 			};
@@ -11827,6 +12518,188 @@
 				PRODUCT_NAME = "curl-ios";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "i386 armv6 armv7";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Release;
+		};
+		CDB6C8C813E29BA400CF15B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MACOSX,
+					i386,
+					x86_64,
+					HAVE_CONFIG_H,
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/c-ares-1.7.4/include-osx\"",
+					"\"../../3rdparty/c-ares-1.7.4\"",
+				);
+				PRODUCT_NAME = "c-ares-osx";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Debug;
+		};
+		CDB6C8C913E29BA400CF15B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MACOSX,
+					i386,
+					x86_64,
+					HAVE_CONFIG_H,
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/c-ares-1.7.4/include-osx\"",
+					"\"../../3rdparty/c-ares-1.7.4\"",
+				);
+				PRODUCT_NAME = "c-ares-osx";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Release;
+		};
+		CDCD6C6F13E2938700CDFFCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MACOSX,
+					i386,
+					x86_64,
+					CURL_HAVE_CONFIG_H,
+					HAVE_CONFIG_H,
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/c-ares-1.7.4/include-osx\"",
+					"\"../../3rdparty/c-ares-1.7.4\"",
+					"\"../../3rdparty/openssl-1.0.0d/include\"",
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"\"../../3rdparty/curl-7.21.7/include\"",
+					"\"../../3rdparty/curl-7.21.7/lib\"",
+				);
+				PRODUCT_NAME = "curl-osx";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
+				WARNING_CFLAGS = "-w";
+			};
+			name = Debug;
+		};
+		CDCD6C7013E2938700CDFFCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					MACOSX,
+					i386,
+					x86_64,
+					CURL_HAVE_CONFIG_H,
+					HAVE_CONFIG_H,
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"../../3rdparty/c-ares-1.7.4/include-osx\"",
+					"\"../../3rdparty/c-ares-1.7.4\"",
+					"\"../../3rdparty/openssl-1.0.0d/include\"",
+					"\"../../3rdparty/curl-7.21.7/include-osx\"",
+					"\"../../3rdparty/curl-7.21.7/include\"",
+					"\"../../3rdparty/curl-7.21.7/lib\"",
+				);
+				PRODUCT_NAME = "curl-osx";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64 ppc970 ppc7400 ppc64 ppc";
 				WARNING_CFLAGS = "-w";
 			};
 			name = Release;
@@ -12138,6 +13011,24 @@
 			buildConfigurations = (
 				CD26D3CE13E27B6B006FB33D /* Debug */,
 				CD26D3CF13E27B6B006FB33D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CDB6C8C713E29BA400CF15B0 /* Build configuration list for PBXNativeTarget "libc-ares-osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDB6C8C813E29BA400CF15B0 /* Debug */,
+				CDB6C8C913E29BA400CF15B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CDCD6C6E13E2938700CDFFCE /* Build configuration list for PBXNativeTarget "libcurl-osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CDCD6C6F13E2938700CDFFCE /* Debug */,
+				CDCD6C7013E2938700CDFFCE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -954,7 +954,7 @@
 #define TIME_WITH_SYS_TIME 1
 
 /* Define to enable c-ares support */
-/* #define USE_ARES */
+#define USE_ARES
 
 /* if axTLS is enabled */
 /* #undef USE_AXTLS */

@@ -134,6 +134,20 @@
 			remoteGlobalIDString = CD26D3D013E27B6B006FB33D;
 			remoteInfo = "libmoai-ios copy";
 		};
+		CDC1BA6313E3405500FBA50A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDB6C8CA13E29BA400CF15B0 /* libc-ares-osx.a */;
+			remoteInfo = "libc-ares-osx";
+		};
+		CDC1BA6513E3405500FBA50A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDCD6C7113E2938700CDFFCE /* libcurl-osx.a */;
+			remoteInfo = "libcurl-osx";
+		};
 		CDE4993713E27DAE00E85424 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
@@ -145,7 +159,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = CDE49AB413E28B3000E85424 /* libcurl-ios.a */;
+			remoteGlobalIDString = CDE49AB413E28B3000E85424;
 			remoteInfo = "libcurl-ios copy";
 		};
 /* End PBXContainerItemProxy section */
@@ -226,16 +240,18 @@
 		03CC90AF13B3C39D00B2724C /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				CDE49AB713E28B3000E85424 /* libc-ares-ios.a */,
 				CD26D3D313E27B6B006FB33D /* libcurl-ios.a */,
 				03CC90BD13B3C39D00B2724C /* libmoai-ios.a */,
 				03CC90BF13B3C39D00B2724C /* libmoai-ios-3rdparty.a */,
 				03CC90C113B3C39D00B2724C /* libmoai-ios-luaext.a */,
 				03CC90C313B3C39D00B2724C /* libmoai-ios-untz.a */,
+				CDC1BA6413E3405500FBA50A /* libc-ares-osx.a */,
+				CDC1BA6613E3405500FBA50A /* libcurl-osx.a */,
 				03CC90C513B3C39D00B2724C /* libmoai-osx.a */,
 				03CC90C713B3C39D00B2724C /* libmoai-osx-3rdparty.a */,
 				03CC90C913B3C39D00B2724C /* libmoai-osx-luaext.a */,
 				03CC90CB13B3C39D00B2724C /* libmoai-osx-untz.a */,
-				CDE49AB713E28B3000E85424 /* libcurl-ios.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -457,10 +473,24 @@
 			remoteRef = CD26D3D213E27B6B006FB33D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		CDE49AB713E28B3000E85424 /* libcurl-ios.a */ = {
+		CDC1BA6413E3405500FBA50A /* libc-ares-osx.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libcurl-ios.a";
+			path = "libc-ares-osx.a";
+			remoteRef = CDC1BA6313E3405500FBA50A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDC1BA6613E3405500FBA50A /* libcurl-osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcurl-osx.a";
+			remoteRef = CDC1BA6513E3405500FBA50A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDE49AB713E28B3000E85424 /* libc-ares-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libc-ares-ios.a";
 			remoteRef = CDE49AB613E28B3000E85424 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

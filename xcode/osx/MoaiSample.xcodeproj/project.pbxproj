@@ -23,6 +23,8 @@
 		CD74EA321378080E0093EE68 /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CD74EA311378080E0093EE68 /* libssl.dylib */; };
 		CD7C736B13B95413006CFA19 /* GlutHost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7C736713B95413006CFA19 /* GlutHost.cpp */; };
 		CD7C736C13B95413006CFA19 /* ParticlePresets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7C736913B95413006CFA19 /* ParticlePresets.cpp */; };
+		CDB6C7E013E2957000CF15B0 /* libcurl-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB6C7AC13E294FA00CF15B0 /* libcurl-osx.a */; };
+		CDB6C8EA13E29D7000CF15B0 /* libc-ares-osx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB6C8CD13E29BA400CF15B0 /* libc-ares-osx.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,48 @@
 			remoteGlobalIDString = CDD06BD5139882D900AB0420;
 			remoteInfo = "libmoai-osx-luaext";
 		};
+		CDB6C7A713E294FA00CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDE49AB413E28B3000E85424;
+			remoteInfo = "libc-ares-ios";
+		};
+		CDB6C7A913E294FA00CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CD26D3D013E27B6B006FB33D;
+			remoteInfo = "libcurl-ios";
+		};
+		CDB6C7AB13E294FA00CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDCD6C7113E2938700CDFFCE;
+			remoteInfo = "libcurl-osx";
+		};
+		CDB6C7DE13E2954D00CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CDCD6BA513E2938700CDFFCE;
+			remoteInfo = "libcurl-osx";
+		};
+		CDB6C8CC13E29BA400CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CDB6C8CA13E29BA400CF15B0;
+			remoteInfo = "libc-ares-ios copy";
+		};
+		CDB6C8E813E29D6700CF15B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CDB6C87C13E29BA400CF15B0;
+			remoteInfo = "libc-ares-osx";
+		};
 		CDBDAEBE13A2F6C700FD5641 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0324CC6913564429000ADC60 /* libmoai.xcodeproj */;
@@ -149,6 +193,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDB6C8EA13E29D7000CF15B0 /* libc-ares-osx.a in Frameworks */,
+				CDB6C7E013E2957000CF15B0 /* libcurl-osx.a in Frameworks */,
 				032410EE13565FFD000ADC60 /* OpenGL.framework in Frameworks */,
 				032410EB13565FF6000ADC60 /* GLUT.framework in Frameworks */,
 				0324CC64135643FD000ADC60 /* libSystem.dylib in Frameworks */,
@@ -171,10 +217,14 @@
 		0324CC6A13564429000ADC60 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				CDB6C7A813E294FA00CF15B0 /* libc-ares-ios.a */,
+				CDB6C7AA13E294FA00CF15B0 /* libcurl-ios.a */,
 				0324CC741356442A000ADC60 /* libmoai-ios.a */,
 				0324CC721356442A000ADC60 /* libmoai-ios-3rdparty.a */,
 				CD07C41313A185E200C9386C /* libmoai-ios-luaext.a */,
 				CD07C41513A185E200C9386C /* libmoai-ios-untz.a */,
+				CDB6C8CD13E29BA400CF15B0 /* libc-ares-osx.a */,
+				CDB6C7AC13E294FA00CF15B0 /* libcurl-osx.a */,
 				0324E2C21356485F000ADC60 /* libmoai-osx.a */,
 				0324E2C01356485F000ADC60 /* libmoai-osx-3rdparty.a */,
 				CD07C41713A185E200C9386C /* libmoai-osx-luaext.a */,
@@ -246,6 +296,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				CDB6C8E913E29D6700CF15B0 /* PBXTargetDependency */,
+				CDB6C7DF13E2954D00CF15B0 /* PBXTargetDependency */,
 				0324E2F6135649C6000ADC60 /* PBXTargetDependency */,
 				CD07C42413A1863E00C9386C /* PBXTargetDependency */,
 				CD07C42613A1863E00C9386C /* PBXTargetDependency */,
@@ -349,6 +401,34 @@
 			remoteRef = CD07C41613A185E200C9386C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		CDB6C7A813E294FA00CF15B0 /* libc-ares-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libc-ares-ios.a";
+			remoteRef = CDB6C7A713E294FA00CF15B0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDB6C7AA13E294FA00CF15B0 /* libcurl-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcurl-ios.a";
+			remoteRef = CDB6C7A913E294FA00CF15B0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDB6C7AC13E294FA00CF15B0 /* libcurl-osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcurl-osx.a";
+			remoteRef = CDB6C7AB13E294FA00CF15B0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDB6C8CD13E29BA400CF15B0 /* libc-ares-osx.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libc-ares-osx.a";
+			remoteRef = CDB6C8CC13E29BA400CF15B0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		CDBDAEBF13A2F6C700FD5641 /* libmoai-osx-untz.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -391,6 +471,16 @@
 			isa = PBXTargetDependency;
 			name = "libmoai-osx-luaext";
 			targetProxy = CD07C42513A1863E00C9386C /* PBXContainerItemProxy */;
+		};
+		CDB6C7DF13E2954D00CF15B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libcurl-osx";
+			targetProxy = CDB6C7DE13E2954D00CF15B0 /* PBXContainerItemProxy */;
+		};
+		CDB6C8E913E29D6700CF15B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "libc-ares-osx";
+			targetProxy = CDB6C8E813E29D6700CF15B0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
