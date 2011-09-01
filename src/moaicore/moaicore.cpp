@@ -108,6 +108,7 @@ void moaicore::InitGlobals ( USGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIParticleTimedEmitter )
 	REGISTER_LUA_CLASS ( MOAIPartition )
 	REGISTER_LUA_CLASS ( MOAIPointerSensor )
+	REGISTER_LUA_CLASS ( MOAIPolygonDeck )
 	REGISTER_LUA_CLASS ( MOAIProp )
 	REGISTER_LUA_CLASS ( MOAIProp2D )
 	REGISTER_LUA_CLASS ( MOAIScriptDeck )

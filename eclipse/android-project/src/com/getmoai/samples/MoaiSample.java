@@ -70,6 +70,31 @@ public class MoaiSample extends Activity {
 	    mView.SetDirectory ( mAppRoot.getAbsolutePath ());
     }
     
+    protected void onPause() {
+        super.onPause();
+    }
+    
+    protected void onResume() {
+    	super.onResume();
+    }  
+    
+    protected void onStop() {
+    	super.onStart();
+    }
+    
+    protected void onStart() {
+    	super.onStart();
+    }
+    
+    protected void onRestart() {
+    	super.onRestart();
+    }
+    
+    protected void onDestroy() {
+    	super.onDestroy();
+    	System.exit(0);
+    }
+    
     private boolean detectOpenGLES20() {
         ActivityManager am =
             (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

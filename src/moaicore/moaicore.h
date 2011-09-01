@@ -74,6 +74,7 @@
 #include <moaicore/MOAIPartitionResultBuffer.h>
 #include <moaicore/MOAIPartitionResultMgr.h>
 #include <moaicore/MOAIPointerSensor.h>
+#include <moaicore/MOAIPolygonDeck.h>
 #include <moaicore/MOAIProp.h>
 #include <moaicore/MOAIProp2D.h>
 #include <moaicore/MOAIPvrHeader.h>

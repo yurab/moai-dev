@@ -15,6 +15,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.opengl.GLSurfaceView; 
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.MotionEvent; 
 
 import android.os.Build;
@@ -37,6 +38,8 @@ public class MoaiView extends GLSurfaceView {
 	String mPackageName = null;
 	String mUDID = null;
 	ConnectivityManager mConMan = null;
+	
+	static boolean nInitialized = false;
 	
 	//----------------------------------------------------------------//
 	public void cleanup () {
@@ -74,7 +77,7 @@ public class MoaiView extends GLSurfaceView {
 	public MoaiView ( Context context, int w, int h ) {
 		
 		super ( context );
-				
+		
 		if ( mThread == null ) {
 			mThread = new MoaiThread ();
 		}
