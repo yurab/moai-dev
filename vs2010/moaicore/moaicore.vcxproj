@@ -289,7 +289,6 @@
     <ClCompile Include="..\..\src\moaicore\MOAIPartitionLayer.cpp" />
     <ClCompile Include="..\..\src\moaicore\MOAIPartitionResultBuffer.cpp" />
     <ClCompile Include="..\..\src\moaicore\MOAIPartitionResultMgr.cpp" />
-    <ClCompile Include="..\..\src\moaicore\MOAIPolygon.cpp" />
     <ClCompile Include="..\..\src\moaicore\MOAIPolygonDeck.cpp" />
     <ClCompile Include="..\..\src\moaicore\MOAIProp.cpp" />
     <ClCompile Include="..\..\src\moaicore\MOAIProp2D.cpp" />
@@ -412,7 +411,6 @@
     <ClInclude Include="..\..\src\moaicore\MOAIPartitionLayer.h" />
     <ClInclude Include="..\..\src\moaicore\MOAIPartitionResultBuffer.h" />
     <ClInclude Include="..\..\src\moaicore\MOAIPartitionResultMgr.h" />
-    <ClInclude Include="..\..\src\moaicore\MOAIPolygon.h" />
     <ClInclude Include="..\..\src\moaicore\MOAIPolygonDeck.h" />
     <ClInclude Include="..\..\src\moaicore\MOAIProp.h" />
     <ClInclude Include="..\..\src\moaicore\MOAIProp2D.h" />

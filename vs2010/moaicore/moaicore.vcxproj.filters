@@ -426,9 +426,6 @@
     <ClCompile Include="..\..\src\moaicore\MOAIScriptDeck.cpp">
       <Filter>src\deck</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\moaicore\MOAIPolygon.cpp">
-      <Filter>src\gfx</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\moaicore\MOAIPolygonDeck.cpp">
       <Filter>src\deck</Filter>
     </ClCompile>
@@ -787,9 +784,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\moaicore\MOAIScriptDeck.h">
       <Filter>src\deck</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\moaicore\MOAIPolygon.h">
-      <Filter>src\gfx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\moaicore\MOAIPolygonDeck.h">
       <Filter>src\deck</Filter>

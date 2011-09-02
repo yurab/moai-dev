@@ -71,6 +71,33 @@ int MOAIPolygonDeck::_setRectCallback ( lua_State* L ) {
 	return 0;
 }
 
+int MOAIPolygonDeck::_addVertex ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIPolygonDeck, "UNN" )
+
+	self->mVertices [ self->mCurVertex ]  = state.GetVec2D < float >( 2 );
+
+	++self->mCurVertex;
+
+	return 0;
+}
+
+int MOAIPolygonDeck::_initVertices ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIPolygonDeck, "UN" )
+
+	self->mNumVertices = state.GetValue < int >( 2, 0 );
+	self->mVertices = new USVec2D [ self->mNumVertices ];
+
+	self->mCurVertex = 0;
+
+	return 0;
+}
+
+int MOAIPolygonDeck::_triangulate ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIPolygonDeck, "U" )
+
+	self->InitEdges ();
+}
+
 //================================================================//
 // MOAIPolygonDeck
 //================================================================//
@@ -241,7 +268,7 @@ MOAIPolygonDeck::MOAIPolygonDeck () {
 	mDrawModes |= WIREFRAME;
 	mDrawModes |= OUTLINE;
 	mDrawModes |= MONOTONE;
-	InitTest ( );
+	//InitTest ( );
 }
 
 //----------------------------------------------------------------//
@@ -260,16 +287,19 @@ void MOAIPolygonDeck::RegisterLuaFuncs ( USLuaState& state ) {
 	this->MOAIDeck2D::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {
+		{ "addVertex",				_addVertex },
+		{ "initVertices",			_initVertices },
 		{ "setDrawCallback",		_setDrawCallback },
 		{ "setRect",				_setRect },
 		{ "setRectCallback",		_setRectCallback },
+		{ "triangulate",			_triangulate },
 		{ NULL, NULL }
 	};
 
 	luaL_register ( state, 0, regTable );
 }
 
-void MOAIPolygonDeck::InitTest () {
+void MOAIPolygonDeck::InitEdges () {
 
 	float fMultiplier = 32.0f;
 
@@ -349,7 +379,7 @@ void MOAIPolygonDeck::InitTest () {
 	mVertices [ 5 ].mY = -fMultiplier * 0.75f;*/
 
 	//merge2
-	const int dwVerts = 8;
+	/*const int dwVerts = 8;
 	fMultiplier *= 1.0f;
 	mVertices = new USVec2D [ dwVerts ];
 	mEdges.Clear();
@@ -378,11 +408,10 @@ void MOAIPolygonDeck::InitTest () {
 	mVertices [ 6 ].mY = -fMultiplier * 1.9f;
 
 	mVertices [ 7 ].mX = -fMultiplier * 0.89f;
-	mVertices [ 7 ].mY = -fMultiplier * 0.75f;
-
+	mVertices [ 7 ].mY = -fMultiplier * 0.75f;*/
 
 	//edges
-	mNumVertices = dwVerts;
+	//mNumVertices = dwVerts;
 
 	DebugPrintVertices ();
 
@@ -425,7 +454,7 @@ void MOAIPolygonDeck::InitTest () {
 	mNumTriangles = 0;
 	while( mEdges.Count () > 0 ) {
 
-		printf ( "Triangulating %d\n", mEdges.Count () );
+		printf ( "Triangulating %d\n", mEdges.Count ());
 		Triagulate ();
 
 		printf ( "\nEdges left:\n" );
@@ -739,6 +768,27 @@ MOAIPolygonDeck::Edge2D* MOAIPolygonDeck::FindEdgeAbove ( USList < Edge2D* > &sw
 	return closestEdge;
 }
 
+USVec2D MOAIPolygonDeck::EvaluateCubicBezier ( float t, USVec2D p0, USVec2D p1, USVec2D p2, USVec2D p3 ) {
+
+	float cx = 3.0f * ( p1.mX - p0.mX );
+	float bx = 3.0f * ( p2.mX - p1.mX ) - cx;
+	float ax = p3.mX - p0.mX - cx - bx;
+
+	float cy = 3.0f * ( p1.mY - p0.mY );
+	float by = 3.0f * ( p2.mY - p1.mY ) - cy;
+	float ay = p3.mY - p0.mY - cy - by;
+
+	USVec2D position;
+
+	float t2 = t * t;
+	float t3 = t * t2;
+
+	position.mX = ax * t3 + bx * t2 + cx * t + p0.mX;
+	position.mY = ay * t3 + by * t2 + cy * t + p0.mY;
+
+	return position;
+}
+
 void MOAIPolygonDeck::Sweep () {
 
 	Edge2D **edgePointers = new Edge2D* [ mEdges.Count() ];
@@ -747,6 +797,7 @@ void MOAIPolygonDeck::Sweep () {
 	int i = 0;
 	for ( ; iterator ; iterator = iterator->Next ()) {
 		edgePointers [ i ] = iterator->Data ();
+		edgePointers [ i ]->mHelper = NULL;
 		++i;
 	}
 
@@ -769,6 +820,9 @@ void MOAIPolygonDeck::Sweep () {
 
 		switch ( type ) {
 		case START:
+
+			printf ( "handle START\n" );
+
 			//insert cc edge (this edge) with this as helper
 			edgePointers [ i ]->mPrevious->mHelper = edgePointers [ i ];
 			sweepStatus.PushFront ( edgePointers [ i ]->mPrevious );
@@ -781,8 +835,9 @@ void MOAIPolygonDeck::Sweep () {
 			break;
 		case END:
 
-			printf ( "helper type = %d\n", edgePointers [ i ]->mHelper->mType );
-			if ( edgePointers [ i ]->mHelper->mType == MERGE ) {
+			printf ( "handle END\n" );
+			//printf ( "helper type = %d\n", edgePointers [ i ]->mHelper->mType );
+			if ( edgePointers [ i ]->mHelper && edgePointers [ i ]->mHelper->mType == MERGE ) {
 
 				printf ( "Insert edge, from this to: (%f,%f)->(%f,%f) \n", edgePointers [ i ]->mHelper->mOrigin.mX, 
 				                                                           edgePointers [ i ]->mHelper->mOrigin.mY, 
@@ -799,35 +854,49 @@ void MOAIPolygonDeck::Sweep () {
 			//sweepStatus.Remove( edgePointers [ i ]->mPrevious );
 
 			break;
-		case BOTTOM:
 
+		//case BOTTOM:
+		case TOP:
+
+			printf ( "handle TOP\n" );
 			//will lower ever be inserted?
 			//sweepStatus.Remove( edgePointers [ i ]->mPrevious );
 			
 			edge = FindEdgeAbove ( sweepStatus, edgePointers [ i ]->mOrigin );
 
-			if ( edge->mHelper->mType == MERGE ) {
+			if ( edge->mHelper && edge->mHelper->mType == MERGE ) {
 
 				Edge2D* newEdge =  InsertNewEdge ( edgePointers [ i ], edge->mHelper );
+
+				newEdge->mType = MERGE;
+				edgePointers [ i ] = newEdge;
 			}
+
 
 			edge->mHelper = edgePointers [ i ];
 
 			break;
-		case TOP:
 
+		//case TOP:
+		case BOTTOM:
+			printf ( "handle BOTTOM\n" );
 			sweepStatus.Remove( edgePointers [ i ] );
+
+			if ( edgePointers [ i ]->mHelper && edgePointers [ i ]->mHelper->mType == MERGE ) {
+
+				Edge2D* newEdge = InsertNewEdge ( edgePointers [ i ], edgePointers [ i ]->mHelper );
+
+				newEdge->mType = MERGE;
+				edgePointers [ i ] = newEdge;
+			}
 
 			edgePointers [ i ]->mPrevious->mHelper = edgePointers [ i ];
 			sweepStatus.PushFront ( edgePointers [ i ]->mPrevious );
 
-			if ( edgePointers [ i ]->mHelper->mType == MERGE ) {
-
-				InsertNewEdge ( edgePointers [ i ], edgePointers [ i ]->mHelper );
-			}
-
 			break;
 		case MERGE:
+
+			printf ( "handle MERGE\n" );
 			//will bottom ever be inserted?
 			//sweepStatus.Remove( edgePointers [ i ] );
 
@@ -868,6 +937,7 @@ void MOAIPolygonDeck::Sweep () {
 			break;
 		case SPLIT:
 			
+			printf ( "handle SPLIT\n" );
 			edge = FindEdgeAbove ( sweepStatus, edgePointers [ i ]->mOrigin );
 
 			/*printf ( "split inserting: (%f,%f)->(%f,%f) with this as helper\n", edgePointers [ i ]->mPrevious->mOrigin.mX, 
@@ -883,6 +953,7 @@ void MOAIPolygonDeck::Sweep () {
 			//sweepStatus.PushFront ( edgePointers [ i ] );
 
 			edge->mHelper = edgePointers [ i ];
+
 			break;
 		}
 
@@ -985,13 +1056,19 @@ void MOAIPolygonDeck::Triagulate () {
 
 	while ( sortedVertices.Count () > 0 ) {
 
-		//printf ( " vertex %f, %f\n", sortedVertices.Back ().mPosition.mX, sortedVertices.Back ( ).mPosition.mY );
+		printf ( "\nvertex %f, %f\n", sortedVertices.Back ().mPosition.mX, sortedVertices.Back ( ).mPosition.mY );
 		ChainVertex curVertex = sortedVertices.Back ();
 		sortedVertices.PopBack ();
 
+		if ( stackChain == CHAINBOTTOM ) {
+			printf (  "stack chain = BOTTOM\n" );
+		}
+		else {
+			printf (  "stack chain = TOP\n" );
+		}
 		if ( curVertex.mChain != stackChain ) {
 			
-			//printf ( "Does not match stack chain\n" );
+			printf ( "Does not match stack chain\n" );
 			ChainVertex first; 
 			ChainVertex second;
 
@@ -1008,27 +1085,40 @@ void MOAIPolygonDeck::Triagulate () {
 		}
 		else {
 
-			//TODO, guessing there is another bug here, needs to recalculate the angle 
-			//printf ( "Matches stack chain\n" );
+			//TODO, clean this up
+			printf ( "Matches stack chain\n" );
 			ChainVertex last = reflexVertices.Head ()->Data ();
 			ChainVertex secondToLast = reflexVertices.Head ()->Next ()->Data ();	 
 			
 			float angle;
 			if ( curVertex.mChain == CHAINBOTTOM ) {
 				angle = GetAngle( curVertex.mPosition, last.mPosition, secondToLast.mPosition );
+				printf ( "angle = %f \nbetween %f, %f, %f\n", ( angle / PI ) * 180, curVertex.mPosition.mX, last.mPosition.mX, secondToLast.mPosition.mX );
 			}
 			else {
 				angle = GetAngle( secondToLast.mPosition, last.mPosition, curVertex.mPosition );
+				printf ( "angle = %f \n", ( angle / PI ) * 180 );
 			}
 
-			//printf ( "angle = %f \n", angle );
+			
 			while ( abs ( angle ) < PI && reflexVertices.Count () > 1 ) {
-
-				last = reflexVertices.Head ()->Data ();
-				secondToLast = reflexVertices.Head ()->Next ()->Data ();
 
 				AddTriangle ( last.mPosition, secondToLast.mPosition, curVertex.mPosition );
 				reflexVertices.PopFront ();
+
+				if ( reflexVertices.Count () > 1 ) {
+					last = reflexVertices.Head ()->Data ();
+					secondToLast = reflexVertices.Head ()->Next ()->Data ();
+
+					if ( curVertex.mChain == CHAINBOTTOM ) {
+						angle = GetAngle( curVertex.mPosition, last.mPosition, secondToLast.mPosition );
+						printf ( "angle = %f \nbetween %f, %f, %f\n", ( angle / PI ) * 180, curVertex.mPosition.mX, last.mPosition.mX, secondToLast.mPosition.mX );
+					}
+					else {
+						angle = GetAngle( secondToLast.mPosition, last.mPosition, curVertex.mPosition );
+						printf ( "angle = %f \n", ( angle / PI ) * 180 );
+					}
+				}
 			}
 			reflexVertices.PushFront ( curVertex );
 		}

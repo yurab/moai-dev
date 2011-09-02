@@ -62,6 +62,7 @@ private:
 
 	USList < Edge2D* >	mEdges;
 	USVec2D*			mVertices;
+	int					mCurVertex;
 	int					mNumVertices;
 
 	USList < Edge2D* >	mDebugEdges;
@@ -82,15 +83,23 @@ private:
 	bool LineLineIntersect ( USVec2D p1Start, USVec2D p1End, USVec2D p2Start, USVec2D p2End, USVec2D& pOut );
 	bool LineRayIntersect ( USVec2D p1Start, USVec2D p1End, USVec2D p2Start, USVec2D p2End, USVec2D& pOut );
 
+	USVec2D EvaluateCubicBezier ( float t, USVec2D p0, USVec2D p1, USVec2D p2, USVec2D p3 );
+
 	USRect			mRect;
 
 	USLuaRef		mOnDraw;
 	USLuaRef		mOnRect;
 
 	//----------------------------------------------------------------//
+	static int		_addVertex			( lua_State* L );
+	static int		_initVertices		( lua_State* L );
+
 	static int		_setDrawCallback	( lua_State* L );
+	
 	static int		_setRect			( lua_State* L );
 	static int		_setRectCallback	( lua_State* L );
+
+	static int		_triangulate		( lua_State* L );
 
 public:
 	
@@ -107,7 +116,7 @@ public:
 	void			RegisterLuaFuncs		( USLuaState& state );
 
 	//----------------------------------------------------------------//
-	void InitTest ();
+	void InitEdges ();
 	void Sweep ();
 	void Triagulate ( );
 
