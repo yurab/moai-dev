@@ -31,7 +31,29 @@ public:
 
 private:
 
+	//curve-----------------------------------------------------------//
+	class QuadraticBezier {
+	public:
+		QuadraticBezier ();
+
+		USVec2D start;
+		USVec2D control;
+		USVec2D end;
+
+		int mNumCurvePoints;
+		USVec2D *mCurvePoints;
+
+		void addCurvePoint ( USVec2D point );
+
+		static const int MAX_CURVE_POINTS = 250;
+	};
+
+	USVec2D EvaluateCubicBezier ( float t, USVec2D p0, USVec2D p1, USVec2D p2, USVec2D p3 );
+
+	void DivideQuadBezier ( QuadraticBezier &curve, USVec2D start, USVec2D control, USVec2D end );
+
 	//----------------------------------------------------------------//
+
 	struct Triangle {
 		USVec2D mVerts [ 3 ];
 	};	
@@ -67,6 +89,10 @@ private:
 
 	USList < Edge2D* >	mDebugEdges;
 
+	int					mCurCurve;
+	int					mNumCurves;
+	QuadraticBezier *	mCurves;
+
 	enum {
 		TRIANGLES = 0x000001,
 		WIREFRAME = 0x000002,
@@ -79,11 +105,10 @@ private:
 	int GetVertexType ( Edge2D& vertex );
 	float GetAngle ( USVec2D vBegin, USVec2D vMid, USVec2D vEnd );
 	void AddTriangle ( USVec2D point1, USVec2D point2, USVec2D point3 );
+	void DivideBezier ( USVec2D p0, USVec2D p1, USVec2D p2, USVec2D p3 );
 
 	bool LineLineIntersect ( USVec2D p1Start, USVec2D p1End, USVec2D p2Start, USVec2D p2End, USVec2D& pOut );
 	bool LineRayIntersect ( USVec2D p1Start, USVec2D p1End, USVec2D p2Start, USVec2D p2End, USVec2D& pOut );
-
-	USVec2D EvaluateCubicBezier ( float t, USVec2D p0, USVec2D p1, USVec2D p2, USVec2D p3 );
 
 	USRect			mRect;
 
@@ -91,9 +116,10 @@ private:
 	USLuaRef		mOnRect;
 
 	//----------------------------------------------------------------//
-	static int		_addVertex			( lua_State* L );
-	static int		_initVertices		( lua_State* L );
+	static int		_addEdge			( lua_State* L );
+	static int		_initEdges		( lua_State* L );
 
+	//remove, calculate rect
 	static int		_setDrawCallback	( lua_State* L );
 	
 	static int		_setRect			( lua_State* L );
