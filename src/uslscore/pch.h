@@ -87,6 +87,12 @@
 
 #include <assert.h>
 
+#ifdef MOAI_OS_NACL
+	//#include <stdlib.h>
+	//#include <string.h>
+	#define PATH_MAX FILENAME_MAX
+#endif
+
 // stl
 #include <memory>
 #include <limits>

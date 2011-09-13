@@ -4,6 +4,21 @@
 #ifndef USLSEXT_H
 #define USLSEXT_H
 
+#ifdef MOAI_OS_NACL
+	#define USE_BOX2D 0
+	#define USE_CHIPMUNK 0
+	#define USE_FREETYPE 0
+	#define USE_CURL 0
+	#define USE_SQL 0
+	#define USE_EXPAT 0
+	#define USE_OPENGLES1 0
+#else
+	#define USE_CURL 1
+	#define USE_SQL 1
+	#define USE_EXPAT 1
+	#define USE_OPENGLES1 1
+#endif
+
 #include <uslsext/pch.h>
 
 #include <uslsext/USAdapterInfo.h>
@@ -23,8 +38,10 @@
 #include <uslsext/USDistance.h>
 #include <uslsext/USFsm.h>
 #include <uslsext/USFsmStateFactory.h>
+#if USE_CURL
 #include <uslsext/USHttpTask.h>
 #include <uslsext/USHttpTask_impl.h>
+#endif
 #include <uslsext/USInterpolate.h>
 #include <uslsext/USIntersect.h>
 #include <uslsext/USLexStream.h>
@@ -62,7 +79,9 @@
 #include <uslsext/USTrig.h>
 #include <uslsext/USTypedPtr.h>
 #include <uslsext/USUrlMgr.h>
+//#if USE_EXPAT
 #include <uslsext/USXmlReader.h>
+//#endif
 
 //================================================================//
 // uslsext

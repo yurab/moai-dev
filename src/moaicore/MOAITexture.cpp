@@ -315,6 +315,7 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 	USColor::Format colorFormat = image.GetColorFormat ();
 
 	// generate mipmaps if set up to use them
+#if USE_OPENGLES1
 	if (	( this->mMinFilter == GL_LINEAR_MIPMAP_LINEAR ) ||
 			( this->mMinFilter == GL_LINEAR_MIPMAP_NEAREST ) ||
 			( this->mMinFilter == GL_NEAREST_MIPMAP_LINEAR ) ||
@@ -322,6 +323,7 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 		
 		glTexParameteri ( GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE );
 	}
+#endif
 
 	if ( pixelFormat == USPixel::TRUECOLOR ) {
 
@@ -740,10 +742,12 @@ void MOAITexture::OnBind () {
 
 	glBindTexture ( GL_TEXTURE_2D, this->mGLTexID );
 	glEnable ( GL_TEXTURE_2D );
-	
+
+#if USE_OPENGLES1
 	if ( !MOAIGfxDevice::Get ().IsProgrammable ()) {
 		glTexEnvf ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 	}
+#endif
 	
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->mWrap );
 	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->mWrap );

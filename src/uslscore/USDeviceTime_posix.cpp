@@ -32,10 +32,17 @@
 //----------------------------------------------------------------//
 static long _getTimerInfo () {
 	
+#if defined( NACL )
+	double seconds = clock () / ( double ) CLOCKS_PER_SEC;
+	long nanoSec = ( long ) ( seconds * ( 1000 * 1000 * 1000 ) );
+	
+	return nanoSec;
+#else
 	struct timespec ts;
 	clock_gettime ( CLOCK_MONOTONIC, &ts );
-	
+
 	return ts.tv_nsec;
+#endif
 }
 
 //================================================================//

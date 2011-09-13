@@ -120,6 +120,7 @@ void MOAIGfxDevice::BeginDrawing () {
 	this->mVertexTransforms [ VTX_PROJ_TRANSFORM ] = projMtx;
 	
 	// fixed function reset
+#if USE_OPENGLES1
 	if ( !this->IsProgrammable ()) {
 		
 		// load identity matrix
@@ -138,6 +139,7 @@ void MOAIGfxDevice::BeginDrawing () {
 		// reset the point size
 		glPointSize (( GLfloat )this->mPointSize );
 	}
+	#endif
 }
 
 //----------------------------------------------------------------//
@@ -348,8 +350,10 @@ cc8* MOAIGfxDevice::GetErrorString ( int error ) const {
 		case GL_INVALID_ENUM:		return "GL_INVALID_ENUM";
 		case GL_INVALID_VALUE:		return "GL_INVALID_VALUE";
 		case GL_INVALID_OPERATION:	return "GL_INVALID_OPERATION";
+#if USE_OPENGLES1
 		case GL_STACK_OVERFLOW:		return "GL_STACK_OVERFLOW";
 		case GL_STACK_UNDERFLOW:	return "GL_STACK_UNDERFLOW";
+#endif
 		case GL_OUT_OF_MEMORY:		return "GL_OUT_OF_MEMORY";
 	}
 	return "";
@@ -509,14 +513,16 @@ USMatrix4x4 MOAIGfxDevice::GetWorldToWndMtx ( float xScale, float yScale ) const
 
 //----------------------------------------------------------------//
 void MOAIGfxDevice::GpuLoadMatrix ( const USMatrix4x4& mtx ) const {
-
+#if USE_OPENGLES1
 	glLoadMatrixf ( mtx.m );
+#endif
 }
 
 //----------------------------------------------------------------//
 void MOAIGfxDevice::GpuMultMatrix ( const USMatrix4x4& mtx ) const {
-
+#if USE_OPENGLES1
 	glMultMatrixf ( mtx.m );
+#endif
 }
 
 //----------------------------------------------------------------//
@@ -699,6 +705,7 @@ void MOAIGfxDevice::ResetState () {
 	this->mScissorRect = scissorRect;
 	
 	// fixed function reset
+#if USE_OPENGLES1
 	if ( !this->IsProgrammable ()) {
 		
 		// reset the current vertex color
@@ -707,6 +714,7 @@ void MOAIGfxDevice::ResetState () {
 		// reset the point size
 		glPointSize (( GLfloat )this->mPointSize );
 	}
+#endif
 }
 
 //----------------------------------------------------------------//
@@ -793,12 +801,13 @@ void MOAIGfxDevice::SetPenWidth ( float penWidth ) {
 
 //----------------------------------------------------------------//
 void MOAIGfxDevice::SetPointSize ( float pointSize ) {
-
+#if USE_OPENGLES1
 	if ( this->mPointSize != pointSize ) {
 		this->Flush ();
 		this->mPointSize = pointSize;
 		glPointSize (( GLfloat )pointSize );
 	}
+#endif
 }
 
 //----------------------------------------------------------------//
@@ -1116,6 +1125,7 @@ void MOAIGfxDevice::UpdateGpuVertexMtx () {
 
 	if ( this->IsProgrammable ()) return;
 
+#if USE_OPENGLES1
 	this->Flush ();
 
 	// update the gpu matrices
@@ -1162,6 +1172,7 @@ void MOAIGfxDevice::UpdateGpuVertexMtx () {
 		
 			break;
 	}
+#endif
 }
 
 //----------------------------------------------------------------//
@@ -1170,24 +1181,27 @@ void MOAIGfxDevice::UpdateUVMtx () {
 	if ( this->mUVMtxOutput == UV_STAGE_TEXTURE ) {
 		
 		this->mCpuUVTransform = !this->mUVTransform.IsIdent ();
-		
+#if USE_OPENGLES1
 		// flush and load gl UV transform
 		if ( !this->mIsProgrammable ) {
 			this->Flush ();
 			glMatrixMode ( GL_TEXTURE );
 			glLoadIdentity ();
 		}
+#endif
 	}
 	else {
 		
 		this->mCpuUVTransform = false;
-		
+
+#if USE_OPENGLES1
 		// flush and load gl UV transform
 		if ( !this->mIsProgrammable ) {
 			this->Flush ();
 			glMatrixMode ( GL_TEXTURE );
 			this->GpuLoadMatrix ( this->mUVTransform );
 		}
+#endif
 	}
 }
 
