@@ -13,24 +13,24 @@ class USFileStream :
 	public USStream {
 protected:
 
-	FILE*		mFile;
-	u32			mLength;
+	ZIPFSFILE*		mFile;
+	u32				mLength;
 
 public:
 
 	//----------------------------------------------------------------//
-	void		Close				();
-	void		Flush				();
-	u32			GetCursor			();
-	FILE*		GetFile				();
-	u32			GetLength			();
-	bool		OpenRead			( cc8* filename );
-	bool		OpenWrite			( cc8* filename, bool affirmPath = true );
-	u32			ReadBytes			( void* buffer, u32 size );
-	void		Seek				( long offset, int origin );
-				USFileStream		();
-				~USFileStream		();
-	u32			WriteBytes			( const void* buffer, u32 size );
+	void			Close				();
+	void			Flush				();
+	u32				GetCursor			();
+	ZIPFSFILE*		GetFile				();
+	u32				GetLength			();
+	bool			OpenRead			( cc8* filename );
+	bool			OpenWrite			( cc8* filename, bool affirmPath = true );
+	u32				ReadBytes			( void* buffer, u32 size );
+	void			Seek				( long offset, int origin );
+					USFileStream		();
+					~USFileStream		();
+	u32				WriteBytes			( const void* buffer, u32 size );
 };
 
 #endif

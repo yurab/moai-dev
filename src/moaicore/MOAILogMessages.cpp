@@ -27,7 +27,7 @@ bool MOAILogMessages::CheckFileExists ( cc8* filename, lua_State* L ) {
 		return true;
 	}
 	
-	STLString expand = USFileSys::Expand ( filename );
+	STLString expand = USFileSys::GetAbsoluteFilePath ( filename );
 	MOAILog ( L, MOAILogMessages::MOAI_FileNotFound_S, expand.str ());
 	
 	return false;

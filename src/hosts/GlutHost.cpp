@@ -2,6 +2,7 @@
 // http://getmoai.com
 
 #include <stdio.h>
+#include <aku/AKU.h>
 #include <GlutHost.h>
 
 #ifdef GLUTHOST_USE_FMOD

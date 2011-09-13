@@ -4,10 +4,16 @@
 #include "pch.h"
 #include <uslscore/uslscore.h>
 
+extern "C" {
+	#include <zlib.h>
+	#include <zipfs/ZIPFSZipFile.h>
+}
+
 //----------------------------------------------------------------//
 static void _cleanup () {
 
 	USGlobalsMgr::Finalize ();
+	zipfs_cleanup ();
 }
 
 //----------------------------------------------------------------//
@@ -37,7 +43,7 @@ static void _typeCheck () {
 void uslscore::InitGlobals ( USGlobals* globals ) {
 
 	static bool sysInit = true;
-	if ( sysInit ) {;
+	if ( sysInit ) {
 
 		_typeCheck ();
 
@@ -47,7 +53,8 @@ void uslscore::InitGlobals ( USGlobals* globals ) {
 		
 		srand (( u32 )time ( 0 ));
 		atexit ( _cleanup );
-
+		
+		zipfs_init ();
 		sysInit = false;
 	}
 
