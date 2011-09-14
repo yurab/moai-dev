@@ -407,7 +407,7 @@ int zipfs_fputc ( int c, ZIPFSFILE* fp ) {
 
 	FILE* file = is_file ( fp );
 	if ( file ) {
-		return fputc ( c, fp );
+		return fputc ( c, file );
 	}
 	return EOF;
 }
@@ -417,7 +417,7 @@ int zipfs_fputs ( const char* string, ZIPFSFILE* fp ) {
 
 	FILE* file = is_file ( fp );
 	if ( file ) {
-		return fputs ( string, fp );
+		return fputs ( string, file );
 	}
 	return EOF;
 }
@@ -890,7 +890,11 @@ int zipfs_dir_read_entry ( ZIPFSDIR* dir ) {
 		struct dirent* entry;
 		if ( entry = readdir ( self->mHandle )) {
 			self->mName = entry->d_name;
+#ifndef NACL
 			self->mIsDir = ( entry->d_type == DT_DIR ) ? 1 : 0;
+#else
+			self->mIsDir = 1;
+#endif
 			return 1;
 		}
 	}
@@ -1080,10 +1084,12 @@ void zipfs_init () {
 
 	ZIPFSFile* file;
 
+#ifndef NACL
 	sWorkingPath = ZIPFSString_New ();
 	sBuffer = ZIPFSString_New ();
 	
 	zipfs_get_working_path ();
+#endif
 	
 	file = ( ZIPFSFile* )calloc ( 1, sizeof ( ZIPFSFile ));
 	file->mPtr.mFile = stderr;

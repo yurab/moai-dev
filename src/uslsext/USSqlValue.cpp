@@ -9,6 +9,8 @@
 // USSqlValue
 //================================================================//
 
+SUPPRESS_EMPTY_FILE_WARNING
+#ifdef USE_SQL
 //----------------------------------------------------------------//
 bool USSqlValue::Bind ( sqlite3_stmt* statement, int idx ) {
 
@@ -228,3 +230,4 @@ USSqlValue::USSqlValue ( cc8* value ) {
 USSqlValue::~USSqlValue () {
 }
 
+#endif

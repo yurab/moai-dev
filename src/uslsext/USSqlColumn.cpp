@@ -8,6 +8,8 @@
 // USSqlColumn
 //================================================================//
 
+SUPPRESS_EMPTY_FILE_WARNING
+#ifdef USE_SQL
 //----------------------------------------------------------------//
 void USSqlColumn::Clear () {
 
@@ -157,3 +159,5 @@ USSqlColumn::USSqlColumn () :
 //----------------------------------------------------------------//
 USSqlColumn::~USSqlColumn () {
 }
+
+#endif

@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include <uslsext/uslsext.h>
+#ifndef MOAI_OS_NACL
 #include <openssl/conf.h>
 #include <openssl/crypto.h>
 
@@ -15,10 +16,12 @@
 #endif
 
 #include <openssl/ssl.h>
+#endif
 
 //----------------------------------------------------------------//
 static void _cleanup () {
 
+#ifndef MOAI_OS_NACL
 	curl_global_cleanup ();
 	
 	#ifndef OPENSSL_NO_ENGINE
@@ -33,6 +36,7 @@ static void _cleanup () {
 	
 	EVP_cleanup ();
 	CRYPTO_cleanup_all_ex_data ();
+#endif
 }
 
 //================================================================//
@@ -47,10 +51,12 @@ void uslsext::InitGlobals ( USGlobals* globals ) {
 	static bool sysInit = true;
 	if ( sysInit ) {;
 
+#ifndef MOAI_OS_NACL
 		SSL_load_error_strings ();
 		SSL_library_init (); 
 
 		curl_global_init ( CURL_GLOBAL_WIN32 | CURL_GLOBAL_SSL );
+#endif
 
 		atexit ( _cleanup );
 		sysInit = false;

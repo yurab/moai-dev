@@ -8,6 +8,8 @@
 //================================================================//
 // USSqlConnection
 //================================================================//
+SUPPRESS_EMPTY_FILE_WARNING
+#ifdef USE_SQL
 
 //----------------------------------------------------------------//
 void USSqlConnection::Close () {
@@ -58,3 +60,5 @@ USSqlConnection::~USSqlConnection () {
 
 	this->Close ();
 }
+
+#endif

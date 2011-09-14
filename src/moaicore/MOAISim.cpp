@@ -52,10 +52,11 @@ int MOAISim::_enterFullscreenMode ( lua_State* L ) {
 
 	USLuaState state ( L );
 
-	AKUEnterFullscreenModeFunc enterFullscreenMode = AKUGetFunc_EnterFullscreenMode ();
+	//AJV TODO, this
+	/*AKUEnterFullscreenModeFunc enterFullscreenMode = AKUGetFunc_EnterFullscreenMode ();
 	if ( enterFullscreenMode ) {
 		enterFullscreenMode ();
-	}
+	}*/
 
 	return 0;
 }
@@ -70,10 +71,11 @@ int MOAISim::_exitFullscreenMode ( lua_State* L ) {
 
 	USLuaState state ( L );
 
-	AKUEnterFullscreenModeFunc exitFullscreenMode = AKUGetFunc_ExitFullscreenMode ();
+	//AJV TODO, this
+	/*AKUEnterFullscreenModeFunc exitFullscreenMode = AKUGetFunc_ExitFullscreenMode ();
 	if ( exitFullscreenMode ) {
 		exitFullscreenMode ();
-	}
+	}*/
 
 	return 0;
 }
@@ -283,10 +285,11 @@ int MOAISim::_openWindow ( lua_State* L ) {
 	
 	MOAIGfxDevice::Get ().SetSize ( width, height );
 
-	AKUOpenWindowFunc openWindow = AKUGetFunc_OpenWindow ();
+	//AJV TODO, this
+	/*AKUOpenWindowFunc openWindow = AKUGetFunc_OpenWindow ();
 	if ( openWindow ) {
 		openWindow ( title, width, height );
-	}
+	}*/
 
 	return 0;
 }
@@ -722,10 +725,11 @@ void MOAISim::RunFile ( cc8* filename ) {
 	
 	state.DebugCall ( 0, 0 );
 
-	AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
+	//AJV TODO, this
+	/*AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
 	if ( startGameLoop ) {
 		startGameLoop ();
-	}
+	}*/
 }
 
 //----------------------------------------------------------------//
@@ -743,10 +747,11 @@ void MOAISim::RunString ( cc8* script ) {
 	
 	state.DebugCall ( 0, 0 );
 
-	AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
+	//AJV TODO, this
+	/*AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
 	if ( startGameLoop ) {
 		startGameLoop ();
-	}
+	}*/
 }
 
 //----------------------------------------------------------------//

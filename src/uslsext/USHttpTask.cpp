@@ -3,12 +3,15 @@
 
 #include "pch.h"
 
-#if USE_CURL
-
 #include <uslsext/USDataIOTask.h>
 #include <uslsext/USHttpTask.h>
-#include <uslsext/USHttpTask_impl.h>
 #include <uslsext/USUrlMgr.h>
+
+#ifdef MOAI_OS_NACL
+	#include <uslsext/USHttpTaskInfo_nacl.h>
+#else
+	#include <uslsext/USHttpTaskInfo_curl.h>
+#endif
 
 //================================================================//
 // USHttpTask
@@ -36,6 +39,7 @@ void USHttpTask::Clear () {
 //----------------------------------------------------------------//
 void USHttpTask::Finish () {
 
+#ifndef MOAI_OS_NACL
 	this->mInfo->Finish ();
 	
 	this->mBytes = this->mInfo->mData;
@@ -46,6 +50,7 @@ void USHttpTask::Finish () {
 
 	this->Clear ();
 	this->Release ();
+#endif
 }
 
 //----------------------------------------------------------------//
@@ -112,5 +117,3 @@ USHttpTask::~USHttpTask () {
 
 	this->Clear ();
 }
-
-#endif

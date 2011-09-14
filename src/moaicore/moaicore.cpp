@@ -27,7 +27,10 @@ void moaicore::InitGlobals ( USGlobals* globals ) {
 
 	static bool sysInit = true;
 	if ( sysInit ) {
+
+#if USE_CHIPMUNK
 		cpInitChipmunk ();
+#endif
 		
 		sysInit = false;
 	}

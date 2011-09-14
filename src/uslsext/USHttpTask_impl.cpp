@@ -3,7 +3,7 @@
 
 #include "pch.h"
 
-#if USE_CURL
+//#if USE_CURL
 
 #include <uslsext/USData.h>
 #include <uslsext/USHttpTask.h>
@@ -220,4 +220,4 @@ USHttpTaskInfo::~USHttpTaskInfo () {
 
 	this->Clear ();
 }
-#endif
+//#endif
