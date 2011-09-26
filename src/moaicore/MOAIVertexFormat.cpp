@@ -223,8 +223,13 @@ void MOAIVertexFormat::DeclareAttribute ( GLint index, GLenum type, GLint size, 
 	attr.mOffset = offset;
 	
 	this->mVertexSize += MOAIVertexFormat::GetComponentSize ( size, type );
-	
+
+#if USE_OPENGLES1	
 	u32 useIdx = MOAIVertexFormat::GetIndexForUse ( use );
+#else
+	u32 useIdx = use;
+#endif
+
 	if ( useIdx < TOTAL_ARRAY_TYPES ) {
 		this->mAttributeUseTable [ useIdx ].mAttrID = attrID;
 	}

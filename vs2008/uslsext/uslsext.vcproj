@@ -780,6 +780,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\uslsext\USHttpTaskInfo_curl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\uslsext\USUrlMgr.cpp"
 				>
 			</File>

@@ -21,11 +21,19 @@ private:
 	USRef < MOAIFmodSound > mSound;
 	FMOD::Channel* mChannel;
 	
+	typedef enum {
+		STOPPED = 0,
+		PLAYING,
+		PAUSED,
+	} PlayState;
+
 	float	mVolume;
 	bool	mPaused;
+	PlayState mPlayState;
 
 	//----------------------------------------------------------------//'
 	static int	_getVolume			( lua_State* L );
+	static int  _isPlaying			( lua_State* L );
 	static int	_moveVolume			( lua_State* L );
 	static int	_play				( lua_State* L );
 	static int	_seekVolume			( lua_State* L );

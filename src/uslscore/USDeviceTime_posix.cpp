@@ -52,7 +52,8 @@ static long _getTimerInfo () {
 	//----------------------------------------------------------------//
 	
 	double USDeviceTime::GetTimeInSeconds () {
-			
+		
+#ifndef NACL
 		#ifndef ANDROID
 			
 			static long last_time = _getTimerInfo (); // in nanoseconds
@@ -78,5 +79,9 @@ static long _getTimerInfo () {
 			return time;
 
 		#endif
+#else
+
+		return  ( clock () / ( double ) CLOCKS_PER_SEC );
+#endif
 	}
 #endif

@@ -268,8 +268,13 @@ void MOAIGfxDevice::DrawPrims () {
 		u32 vertexSize = this->mVertexFormat->GetVertexSize ();
 
 		if ( vertexSize ) {
+			
 			u32 count = this->mPrimSize ? this->mPrimCount * this->mPrimSize : ( u32 )( this->mTop / vertexSize );
-			glDrawArrays ( this->mPrimType, 0, count );
+
+			if ( count  ) {
+
+				glDrawArrays ( this->mPrimType, 0, count );
+			}
 		}
 	}
 }
@@ -547,9 +552,9 @@ bool MOAIGfxDevice::IsProgrammable () {
 u32 MOAIGfxDevice::LogErrors () {
 
 	u32 count = 0;
-	for ( int error = glGetError (); error != GL_NO_ERROR; error = glGetError (), ++count ) {
+	/*for ( int error = glGetError (); error != GL_NO_ERROR; error = glGetError (), ++count ) {
 		MOAILog ( 0, MOAILogMessages::MOAIGfxDevice_OpenGLError_S, this->GetErrorString ( error ));
-	}
+	}*/
 	return count;
 }
 
@@ -1215,7 +1220,7 @@ void MOAIGfxDevice::WriteQuad ( USVec2D* vtx, USVec2D* uv ) {
 	if ( this->mCpuUVTransform ) {
 		this->mUVTransform.TransformQuad ( uv );
 	}
-	
+
 	this->BeginPrim ();
 	
 		this->Write ( vtx[ 3 ]);
@@ -1247,4 +1252,5 @@ void MOAIGfxDevice::WriteQuad ( USVec2D* vtx, USVec2D* uv ) {
 		this->WritePenColor4b ();
 		
 	this->EndPrim ();
+
 }

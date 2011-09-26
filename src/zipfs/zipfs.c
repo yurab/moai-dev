@@ -17,11 +17,17 @@
 #endif
 
 #include <errno.h>
-#include <sys/stat.h>
+
 #include <time.h>
 
 #ifdef _WIN32
 	#define S_ISDIR(B) (((B)&_S_IFDIR)!=0)
+#endif
+
+#include <sys/stat.h>
+
+#ifdef NACL
+#include "NaClFile.h"
 #endif
 
 //================================================================//
@@ -357,8 +363,12 @@ ZIPFSFILE* zipfs_fopen ( const char* filename, const char* mode ) {
 	ZIPFSFile* file = 0;
 	ZIPFSVirtualPath* mount;
 
+#ifndef NACL
 	filename = zipfs_get_abs_filepath ( filename );
 	mount = find_best_virtual_path ( filename );
+#else
+	mount = NULL;
+#endif
 
 	if ( mount ) {
 		
@@ -986,15 +996,26 @@ char* zipfs_get_rel_path ( char const* path ) {
 //----------------------------------------------------------------//
 int zipfs_get_stat ( char const* path, zipfs_stat* filestat ) {
 
+#ifdef NACL
+#define stat stat
+#endif
 	struct stat s;
+#ifdef NACL
+#define stat nacl_stat
+#endif
+
 	int result;
 	ZIPFSVirtualPath* mount;
 	char* abspath;
 
 	filestat->mExists = 0;
 
+#ifndef NACL
 	abspath = zipfs_get_abs_filepath ( path );
 	mount = find_best_virtual_path ( abspath );
+#else
+	mount = NULL;
+#endif
 
 	if ( mount ) {
 

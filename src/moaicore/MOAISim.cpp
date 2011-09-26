@@ -53,10 +53,12 @@ int MOAISim::_enterFullscreenMode ( lua_State* L ) {
 	USLuaState state ( L );
 
 	//AJV TODO, this
-	/*AKUEnterFullscreenModeFunc enterFullscreenMode = AKUGetFunc_EnterFullscreenMode ();
+#ifndef MOAI_OS_NACL
+	AKUEnterFullscreenModeFunc enterFullscreenMode = AKUGetFunc_EnterFullscreenMode ();
 	if ( enterFullscreenMode ) {
 		enterFullscreenMode ();
-	}*/
+	}
+#endif
 
 	return 0;
 }
@@ -72,10 +74,12 @@ int MOAISim::_exitFullscreenMode ( lua_State* L ) {
 	USLuaState state ( L );
 
 	//AJV TODO, this
-	/*AKUEnterFullscreenModeFunc exitFullscreenMode = AKUGetFunc_ExitFullscreenMode ();
+#ifndef MOAI_OS_NACL
+	AKUEnterFullscreenModeFunc exitFullscreenMode = AKUGetFunc_ExitFullscreenMode ();
 	if ( exitFullscreenMode ) {
 		exitFullscreenMode ();
-	}*/
+	}
+#endif
 
 	return 0;
 }
@@ -285,11 +289,10 @@ int MOAISim::_openWindow ( lua_State* L ) {
 	
 	MOAIGfxDevice::Get ().SetSize ( width, height );
 
-	//AJV TODO, this
-	/*AKUOpenWindowFunc openWindow = AKUGetFunc_OpenWindow ();
+	AKUOpenWindowFunc openWindow = AKUGetFunc_OpenWindow ();
 	if ( openWindow ) {
 		openWindow ( title, width, height );
-	}*/
+	}
 
 	return 0;
 }
@@ -696,7 +699,7 @@ void MOAISim::Render () {
 		MOAIGfxDevice::Get ().BeginDrawing ();
 		renderPass->Draw ();
 	}
-	
+
 	MOAIGfxDevice::Get ().Flush ();
 }
 
@@ -725,11 +728,10 @@ void MOAISim::RunFile ( cc8* filename ) {
 	
 	state.DebugCall ( 0, 0 );
 
-	//AJV TODO, this
-	/*AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
+	AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
 	if ( startGameLoop ) {
 		startGameLoop ();
-	}*/
+	}
 }
 
 //----------------------------------------------------------------//
@@ -747,11 +749,10 @@ void MOAISim::RunString ( cc8* script ) {
 	
 	state.DebugCall ( 0, 0 );
 
-	//AJV TODO, this
-	/*AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
+	AKUStartGameLoopFunc startGameLoop = AKUGetFunc_StartGameLoop ();
 	if ( startGameLoop ) {
 		startGameLoop ();
-	}*/
+	}
 }
 
 //----------------------------------------------------------------//

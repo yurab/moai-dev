@@ -767,6 +767,7 @@ void MOAITexture::OnBind () {
 //----------------------------------------------------------------//
 void MOAITexture::OnClear () {
 
+	printf ( "MOAITexture OnClear %p\n", this );
 	this->OnUnload ();
 	
 	this->mWidth = 0;
@@ -787,10 +788,46 @@ void MOAITexture::OnClear () {
 	
 	this->mIsRenewable = false;
 }
+#ifdef MOAI_OS_NACL
+#include "moai_nacl.h"
 
 //----------------------------------------------------------------//
+void MOAITexture::NaClLoadTexture ( void* userData, int32_t result ) {
+
+	MOAITexture *texture = ( MOAITexture * ) userData;
+	switch ( texture->mLoader->mType ) {
+			
+		case MOAITextureLoader::TYPE_MOAI_IMAGE: {
+			texture->CreateTextureFromImage ( texture->mLoader->mImage );
+			break;
+		}
+		case MOAITextureLoader::TYPE_PVR: {
+			texture->CreateTextureFromPVR ( texture->mLoader->mFileData, texture->mLoader->mFileDataSize );
+			break;
+		}
+		default:
+			delete texture->mLoader;
+			texture->mLoader = 0;
+			texture->SetError ();
+	}
+
+	g_blockOnMainThread = false;
+}
+
+//----------------------------------------------------------------//
+void MOAITexture::NaClUnLoadTexture ( void* userData, int32_t result ) {
+
+	MOAITexture *texture = ( MOAITexture * ) userData;
+	glDeleteTextures ( 1, &texture->mGLTexID );
+
+	g_blockOnMainThread = false;
+}
+
+#endif
+
 void MOAITexture::OnLoad () {
 
+	printf ( "MOAITexture OnLoad %p\n", this );
 	if ( this->mFrameBuffer ) {
 		
 		this->mFrameBuffer->Bind ();
@@ -809,6 +846,15 @@ void MOAITexture::OnLoad () {
 		//}
 		this->mLoader->Load ();
 		
+#ifdef MOAI_OS_NACL
+		g_blockOnMainThread = true;
+		pp::CompletionCallback cc ( NaClLoadTexture, this );
+		g_core->CallOnMainThread ( 0, cc , 0 );
+
+		while ( g_blockOnMainThread ) {
+			sleep ( 0.0001f );
+		}
+#else
 		switch ( this->mLoader->mType ) {
 			
 			case MOAITextureLoader::TYPE_MOAI_IMAGE: {
@@ -824,12 +870,13 @@ void MOAITexture::OnLoad () {
 				this->mLoader = 0;
 				this->SetError ();
 		}
+#endif
 
 		if ( this->mGLTexID ) {
 
 			if ( this->mFilename.size() == 0 && this->mLoader ) {
 				// Loader's filename doesn't seem to be copied in all code paths...
-				MOAIGfxDevice::Get ().ReportTextureAlloc ( this->mLoader->mFilename, this->mDataSize );
+				MOAIGfxDevice::Get ().ReportTextureAlloc ( "", this->mDataSize );
 			}
 			else {
 				MOAIGfxDevice::Get ().ReportTextureAlloc ( this->mFilename, this->mDataSize );
@@ -845,6 +892,7 @@ void MOAITexture::OnLoad () {
 //----------------------------------------------------------------//
 void MOAITexture::OnRenew () {
 
+	printf ( "MOAITexture OnRenew %p\n", this );
 	if ( !this->mFrameBuffer ) {
 		STLString filename = this->mFilename;
 		this->Init ( filename, this->mTransform );
@@ -854,12 +902,25 @@ void MOAITexture::OnRenew () {
 //----------------------------------------------------------------//
 void MOAITexture::OnUnload () {
 
+	printf ( "MOAITexture OnUnload %p\n", this );
 	if ( this->mGLTexID ) {
 	
 		if ( MOAIGfxDevice::IsValid ()) {
 			MOAIGfxDevice::Get ().ReportTextureFree ( this->mFilename, this->mDataSize );
 		}
-		glDeleteTextures ( 1, &this->mGLTexID );
+
+#ifdef MOAI_OS_NACL
+		g_blockOnMainThread = true;
+		pp::CompletionCallback cc ( NaClUnLoadTexture, this );
+		g_core->CallOnMainThread ( 0, cc , 0 );
+
+		while ( g_blockOnMainThread ) {
+			sleep ( 0.0001f );
+		}
+#else
+			glDeleteTextures ( 1, &this->mGLTexID );
+#endif
+
 		this->mGLTexID = 0;
 	}
 }

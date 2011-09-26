@@ -26,6 +26,30 @@ int MOAIFmodChannel::_getVolume ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	getVolume
+ @text	Returns the current volume of the channel.
+ 
+ @in	MOAIFmodChannel self
+ @out	float Volume - the volume currently set in this channel.
+ */
+int MOAIFmodChannel::_isPlaying ( lua_State* L ) {
+	
+	printf ( "is playing\n" );
+	MOAI_LUA_SETUP ( MOAIFmodChannel, "U" )
+	
+	bool isPlaying = self->mPlayState == PLAYING;
+
+	printf ( "is playing 2\n" );
+	if ( self->mSound ) {
+		printf ( "is playing 3\n" );
+		lua_pushboolean ( state, isPlaying );
+		return 1; 
+	}
+	printf ( "is playing 4\n" );
+	return 0;
+}
+
+//----------------------------------------------------------------//
 /**	@name	moveVolume
 	@text	Creates a new MOAIAction that will move the volume from it's current value to the value specified.
 
@@ -66,6 +90,7 @@ int MOAIFmodChannel::_moveVolume ( lua_State* L ) {
 int MOAIFmodChannel::_play ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIFmodChannel, "UU" )
 
+	self->mPlayState = PLAYING;
 	MOAIFmodSound* sound = state.GetLuaObject < MOAIFmodSound >( 2 );
 	if ( !sound ) return 0;
 
@@ -116,6 +141,7 @@ int MOAIFmodChannel::_seekVolume ( lua_State* L ) {
 int MOAIFmodChannel::_setPaused ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIFmodChannel, "UB" )
 
+	self->mPlayState = PAUSED;
 	bool paused = state.GetValue < bool >( 2, false );
 	self->SetPaused ( paused );
 
@@ -149,6 +175,7 @@ int MOAIFmodChannel::_setVolume ( lua_State* L ) {
 int MOAIFmodChannel::_stop ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIFmodChannel, "U" )
 	
+	self->mPlayState = STOPPED;
 	self->Stop ();
 
 	return 0;
@@ -229,6 +256,7 @@ void MOAIFmodChannel::RegisterLuaFuncs ( USLuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "getVolume",		_getVolume },
+		{ "isPlaying",		_isPlaying },
 		{ "moveVolume",		_moveVolume },
 		{ "play",			_play },
 		{ "seekVolume",		_seekVolume },

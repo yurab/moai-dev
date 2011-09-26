@@ -5,7 +5,7 @@
 #define USLSEXT_H
 
 #ifdef MOAI_OS_NACL
-	#define USE_BOX2D 0
+	#define USE_BOX2D 1
 	#define USE_CHIPMUNK 0
 	#define USE_FREETYPE 0
 	#define USE_CURL 0

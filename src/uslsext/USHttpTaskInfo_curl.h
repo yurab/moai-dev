@@ -3,6 +3,10 @@
 
 #ifndef USHTTPTASKINFO_CURL_H
 #define USHTTPTASKINFO_CURL_H
+#ifndef MOAI_OS_NACL
+#define USE_CURL 1
+#endif
+
 #ifdef USE_CURL
 
 #define  CURL_STATICLIB

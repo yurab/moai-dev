@@ -8,8 +8,10 @@
 #include <string>
 #include "ppapi/cpp/completion_callback.h"
 #include "ppapi/cpp/url_loader.h"
+#include "ppapi/cpp/url_response_info.h"
 #include "ppapi/cpp/url_request_info.h"
 #include "ppapi/cpp/instance.h"
+
 
 // GetURLHandler is used to download data from |url|. When download is
 // finished or when an error occurs, it posts a message back to the browser
@@ -19,20 +21,23 @@
 // GetURLHandler* handler* = GetURLHandler::Create(instance,url);
 // handler->Start();
 
+class NaClFile;
+
 typedef void (* GetURLCallback )( void *instance, const char *buffer, int32_t size );
 
 class GetURLHandler {
  public:
 
-  // Creates instance of GetURLHandler on the heap.
-  // GetURLHandler objects shall be created only on the heap (they
-  // self-destroy when all data is in).
-  static GetURLHandler* Create(pp::Instance* instance_,
-                               const std::string& url);
+	 enum {
+		 GET,
+		 HEAD,
+	 };
 
-  // Initiates page (URL) download.
-  // Returns false in case of internal error, and self-destroys.
-  bool Start ( GetURLCallback callback, void *file );
+	static GetURLHandler* Create ( pp::Instance* instance_, const std::string& url );
+
+	bool Start ( GetURLCallback callback, NaClFile *file );
+
+	void SetMethod ( int method );
 
  private:
   static const int kBufferSize = 4096;
@@ -67,23 +72,25 @@ class GetURLHandler {
                           const std::string& text,
                           bool success);
 
-  GetURLCallback mCallback;
-  void * mURLCallbackData;
+	GetURLCallback mCallback;
 
-  pp::Instance* mInstance;  // Weak pointer.
+	NaClFile * mFile;
 
-  std::string url_;  // URL to be downloaded.
+	pp::Instance* mInstance;  // Weak pointer.
 
-  pp::URLRequestInfo url_request_;
-  pp::URLLoader url_loader_;  // URLLoader provides an API to download URLs.
+	std::string url_;  // URL to be downloaded.
 
-  char buffer_[kBufferSize];  // buffer for pp::URLLoader::ReadResponseBody().
+	pp::URLRequestInfo url_request_;
+	pp::URLLoader mUrlLoader;  // URLLoader provides an API to download URLs.
 
-  std::string url_response_body_;  // Contains downloaded data.
-  pp::CompletionCallbackFactory<GetURLHandler> cc_factory_;
+	char buffer_[kBufferSize];  // buffer for pp::URLLoader::ReadResponseBody().
+	int mMethod;
 
-  GetURLHandler(const GetURLHandler&);
-  void operator=(const GetURLHandler&);
+	std::string url_response_body_;  // Contains downloaded data.
+	pp::CompletionCallbackFactory<GetURLHandler> cc_factory_;
+
+	GetURLHandler(const GetURLHandler&);
+	void operator=(const GetURLHandler&);
 };
 
 #endif  // EXAMPLES_GETURL_GETURL_HANDLER_H_

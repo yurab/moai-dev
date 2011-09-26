@@ -229,6 +229,7 @@
     <ClCompile Include="..\..\src\uslsext\USAttrMap.cpp" />
     <ClCompile Include="..\..\src\uslsext\USAttrOp.cpp" />
     <ClCompile Include="..\..\src\uslsext\USColor.cpp" />
+    <ClCompile Include="..\..\src\uslsext\USHttpTaskInfo_curl.cpp" />
     <ClCompile Include="..\..\src\uslsext\USLexStream.cpp" />
     <ClCompile Include="..\..\src\uslsext\USParser.cpp" />
     <ClCompile Include="..\..\src\uslsext\USSyntaxNode.cpp" />

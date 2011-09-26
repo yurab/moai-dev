@@ -114,6 +114,11 @@ public:
 	void					RegisterLuaClass		( USLuaState& state );
 	void					RegisterLuaFuncs		( USLuaState& state );
 	STLString				ToString				();
+
+#ifdef MOAI_OS_NACL
+	static void NaClLoadTexture ( void* userData, int32_t result );
+	static void NaClUnLoadTexture ( void* userData, int32_t result );
+#endif
 };
 
 #endif

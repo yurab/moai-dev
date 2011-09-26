@@ -186,6 +186,9 @@
     <ClCompile Include="..\..\src\uslsext\uslsext-pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\uslsext\USHttpTaskInfo_curl.cpp">
+      <Filter>src\web</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\uslsext\USAnimCurve.h">
