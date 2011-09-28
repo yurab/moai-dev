@@ -200,6 +200,10 @@ int MOAITexture::_load ( lua_State* L ) {
 	else if ( state.IsType( 2, LUA_TSTRING ) ) {
 
 		cc8* filename = lua_tostring ( state, 2 );
+
+		printf ( " MOAITexture::_load file %s\n", filename );
+		memcpy( self->mFileName, filename, strlen ( filename ));
+
 		if ( MOAILogMessages::CheckFileExists ( filename, L )) {
 			self->Init ( filename, transform );
 		}
@@ -217,6 +221,7 @@ int MOAITexture::_load ( lua_State* L ) {
 int MOAITexture::_release ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAITexture, "U" )
 	
+	printf ( " MOAITexture::_release file %s\n", self->mFileName );
 	self->MOAITexture::Clear ();
 	
 	return 0;
@@ -735,11 +740,14 @@ MOAITexture::MOAITexture () :
 		RTTI_EXTEND ( USLuaObject )
 		RTTI_EXTEND ( MOAIGfxResource )
 	RTTI_END
+
+	memset ( mFileName, 0, 128 );
 }
 
 //----------------------------------------------------------------//
 MOAITexture::~MOAITexture () {
 
+	printf ( " ~MOAITexture file %s\n", mFileName );
 	this->Clear ();
 }
 
@@ -767,7 +775,7 @@ void MOAITexture::OnBind () {
 //----------------------------------------------------------------//
 void MOAITexture::OnClear () {
 
-	printf ( "MOAITexture OnClear %p\n", this );
+	printf ( " MOAITexture OnClear %p\n", this );
 	this->OnUnload ();
 	
 	this->mWidth = 0;
@@ -827,7 +835,6 @@ void MOAITexture::NaClUnLoadTexture ( void* userData, int32_t result ) {
 
 void MOAITexture::OnLoad () {
 
-	printf ( "MOAITexture OnLoad %p\n", this );
 	if ( this->mFrameBuffer ) {
 		
 		this->mFrameBuffer->Bind ();
@@ -892,7 +899,6 @@ void MOAITexture::OnLoad () {
 //----------------------------------------------------------------//
 void MOAITexture::OnRenew () {
 
-	printf ( "MOAITexture OnRenew %p\n", this );
 	if ( !this->mFrameBuffer ) {
 		STLString filename = this->mFilename;
 		this->Init ( filename, this->mTransform );
@@ -902,7 +908,7 @@ void MOAITexture::OnRenew () {
 //----------------------------------------------------------------//
 void MOAITexture::OnUnload () {
 
-	printf ( "MOAITexture OnUnload %p\n", this );
+	printf ( " MOAITexture OnUnload %p\n", this );
 	if ( this->mGLTexID ) {
 	
 		if ( MOAIGfxDevice::IsValid ()) {
@@ -918,7 +924,7 @@ void MOAITexture::OnUnload () {
 			sleep ( 0.0001f );
 		}
 #else
-			glDeleteTextures ( 1, &this->mGLTexID );
+		glDeleteTextures ( 1, &this->mGLTexID );
 #endif
 
 		this->mGLTexID = 0;

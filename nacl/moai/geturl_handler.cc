@@ -142,13 +142,11 @@ void GetURLHandler::ReportResult(const std::string& fname,
                                  const std::string& text,
                                  bool success) {
 	if ( success ) {
-		printf( "GetURLHandler::ReportResult(Ok).\n" );
+		//printf( "GetURLHandler::ReportResult(Ok).\n" );
 	}
 	else {
 		printf( "GetURLHandler::ReportResult(Err). %s\n", text.c_str ());
 	}
-
-	fflush ( stdout );
 
 	if ( mInstance ) {
 

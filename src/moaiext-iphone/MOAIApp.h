@@ -71,8 +71,14 @@ private:
 		DOMAIN_APP_SUPPORT = NSApplicationSupportDirectory,
 	};
 	
+	enum {
+		SESSION_START,
+		SESSION_END
+	};
+	
 	UIApplication*			mApplication;
 	USLuaRef				mListeners [ TOTAL ];
+	NSDictionary*			mAppNotificationPayload;
 	MOAIStoreKitListener*	mStoreKitListener;
 
 	int						mNumRequests;
@@ -84,7 +90,9 @@ private:
 	static int		_canMakePayments						( lua_State* L );
 	static int		_getAppIconBadgeNumber					( lua_State* L );
 	static int		_getDirectoryInDomain					( lua_State* L );
+	static int		_getNotificationThatStartedApp			( lua_State* L );
 	static int		_openURL								( lua_State* L );
+	static int		_presentLocalNotification				( lua_State* L );
 	static int		_registerForRemoteNotifications			( lua_State* L );
 	static int		_restoreCompletedTransactions			( lua_State* L );
 	static int		_requestPaymentForProduct				( lua_State* L );
@@ -109,6 +117,7 @@ public:
 	void		DidReceiveRemoteNotification								( NSDictionary* userInfo );
 	void		DidRegisterForRemoteNotificationsWithDeviceToken			( NSData* deviceToken );
 	void		DidResolveHostName											( NSString* hostname, cc8* ipAddress );
+	void		DidStartSession												();
 	void		InitStoreKit												();
 				MOAIApp														();
 				~MOAIApp													();
@@ -117,6 +126,8 @@ public:
 	void		ProductsRequestDidReceiveResponse							( SKProductsRequest* request, SKProductsResponse* response );
 	void		RegisterLuaClass											( USLuaState& state );
 	void		Reset														();
+	void		SetRemoteNotificationPayload								( NSDictionary* remoteNotificationPayload );
+	void		WillEndSession												();
 };
 
 #endif

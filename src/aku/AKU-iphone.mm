@@ -33,6 +33,18 @@ void AKUAppDidRegisterForRemoteNotificationsWithDeviceToken ( NSData* deviceToke
 }
 
 //-----------------------------------------------------------------//
+void AKUAppDidStartSession () {
+
+	MOAIApp::Get ().DidStartSession ();
+}
+
+//-----------------------------------------------------------------//
+void AKUAppWillEndSession () {
+
+	MOAIApp::Get ().WillEndSession ();
+}
+
+//-----------------------------------------------------------------//
 const char* AKUGetGUID ( ) {
 
 	CFUUIDRef uuid = CFUUIDCreate( NULL );
@@ -129,4 +141,13 @@ void AKUSetConnectionType ( long type ) {
 void AKUSetDefaultFrameBuffer ( GLuint frameBuffer ) {
 
 	MOAIGfxDevice::Get ().SetDefaultFrameBuffer ( frameBuffer );
+}
+
+//-----------------------------------------------------------------//
+void AKUWasLaunchedWithRemoteNotification ( NSDictionary* remoteNotificationPayload ) {
+
+	if ( remoteNotificationPayload ) {
+	
+		MOAIApp::Get ().SetRemoteNotificationPayload ( remoteNotificationPayload );
+	}
 }

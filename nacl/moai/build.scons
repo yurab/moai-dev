@@ -259,8 +259,17 @@ moai_sources = [ os.path.join('moaicore', src_file) for src_file in [
 				'MOAIBox2DArbiter.cpp'           ,
 				'MOAIBox2DBody.cpp'              ,
 				'MOAIBox2DDebugDraw.cpp'         ,
+				'MOAIBox2DDistanceJoint.cpp'	 ,
 				'MOAIBox2DFixture.cpp'           ,
-				'MOAIBox2DJoint.cpp'             ,
+				'MOAIBox2DFrictionJoint.cpp'	 ,
+				'MOAIBox2DGearJoint.cpp'		 ,
+				'MOAIBox2DJoint.cpp'          	 ,
+				'MOAIBox2DLineJoint.cpp'         ,
+				'MOAIBox2DMouseJoint.cpp'        ,
+				'MOAIBox2DPrismaticJoint.cpp'    ,
+				'MOAIBox2DPulleyJoint.cpp'       ,
+				'MOAIBox2DRevoluteJoint.cpp'     ,
+				'MOAIBox2DWeldJoint.cpp'         ,
 				'MOAIBox2DWorld.cpp'             ,
 				'MOAIButtonSensor.cpp'           ,
 				'MOAICameraAnchor2D.cpp'         ,
@@ -384,7 +393,7 @@ nacl_moai_sources = [ 'moai.cc',
 
 sources = lua_sources + zlib_sources + tinyxml_sources + jansson_sources + expat_sources + libpng_sources + contrib_sources + zipfs_sources + box2d_sources + uslcore_sources + uslext_sources + aku_sources + moaiextfmod_sources + moai_sources + nacl_moai_sources
 
-nacl_env.Append ( LIBS=['ppapi_gles2','libnosys','libfmodexL', 'ppapi_cpp'] )
+nacl_env.Append ( LIBS=['ppapi_gles2','libnosys','libfmodex', 'ppapi_cpp'] )
 
 nacl_env.Append ( CPPDEFINES=['MOAI_OS_NACL','HAVE_MEMMOVE','__linux', 'NACL'] )
 

@@ -164,7 +164,24 @@ int MOAIApp::_getDirectoryInDomain ( lua_State* L ) {
 	}
 	return 1;
 }
+//----------------------------------------------------------------//
+/**	@name	getNotificationThatStartedApp
+	@text	Returns the notification payload of a remote notification that launched the app.
+ 
+	@in		nil
+	@out	dictionary	The notification payload that started the app
+*/
+int MOAIApp::_getNotificationThatStartedApp ( lua_State* L ) {
 
+	if ( MOAIApp::Get ().mAppNotificationPayload == NULL ) {
+		lua_pushnil ( L );
+	}
+	else {
+		[ MOAIApp::Get ().mAppNotificationPayload toLua:L ];
+	}
+	
+	return 1;
+}
 //----------------------------------------------------------------//
 /**	@name	openURL
 	@text	See UIApplication documentation.
@@ -182,6 +199,32 @@ int MOAIApp::_openURL ( lua_State* L ) {
 	}
 	
 	return 1;
+}
+
+//----------------------------------------------------------------//
+/**	@name	presentLocalNotification
+	@text	Presents a local notification.
+ 
+	@in		string alerBody
+	@out	nil
+*/
+int MOAIApp::_presentLocalNotification ( lua_State* L ) {
+	USLuaState state ( L );
+	
+	cc8* alertBody					  = state.GetValue < cc8* >( 1, "" );
+	cc8* alertAction				  = state.GetValue < cc8* >( 2, "" );
+	
+	UILocalNotification* notification = [[[ UILocalNotification alloc ] init ] autorelease ];
+	if ( notification ) {
+	
+		notification.alertBody			  = [ NSString stringWithUTF8String:alertBody ];
+		notification.alertAction		  = [ NSString stringWithUTF8String:alertAction ];
+		
+		UIApplication* application		  = [ UIApplication sharedApplication ];
+		[ application presentLocalNotificationNow:notification ];
+	}
+	
+	return 0;
 }
 
 //----------------------------------------------------------------//
@@ -301,8 +344,8 @@ int MOAIApp::_scheduleLocalNotification ( lua_State* L ) {
 	notification.fireDate			= [ NSDate dateFromISO8601String:[ NSString stringWithUTF8String:fireDate ]];
 	notification.timeZone			= [ NSString stringWithUTF8String:timeZone ];
 	
-	notification.alertBody			= [ NSString stringWithUTF8String:alertAction ];
-	notification.alertAction		= [ NSString stringWithUTF8String:alertBody ];
+	notification.alertBody			= [ NSString stringWithUTF8String:alertBody ];
+	notification.alertAction		= [ NSString stringWithUTF8String:alertAction ];	
 	notification.hasAction			= hasAction;
 	notification.alertLaunchImage	= [ NSString stringWithUTF8String:alertLaunchImage ];
 	
@@ -455,9 +498,23 @@ void MOAIApp::DidResolveHostName( NSString* hostname, cc8* ipAddress ) {
 }
 
 //----------------------------------------------------------------//
+void MOAIApp::DidStartSession( ) {
+
+	USLuaRef& callback = this->mListeners [ SESSION_START ];
+	
+	if ( callback ) {
+		USLuaStateHandle state = callback.GetSelf ();
+		
+		state.DebugCall ( 0, 0 );
+	}
+}
+
+//----------------------------------------------------------------//
 MOAIApp::MOAIApp () {
 
 	RTTI_SINGLE ( USLuaObject )
+	
+	mAppNotificationPayload = NULL;
 	
 	this->mStoreKitListener = [[ MOAIStoreKitListener alloc ] init ];
 	[[ SKPaymentQueue defaultQueue ] addTransactionObserver:this->mStoreKitListener ];
@@ -637,7 +694,7 @@ void MOAIApp::RegisterLuaClass ( USLuaState& state ) {
 	
 	state.SetField ( -1, "ERROR",						( u32 )ERROR );
 	state.SetField ( -1, "DID_REGISTER",				( u32 )DID_REGISTER );
-	//state.SetField ( -1, "LOCAL_NOTIFICATION",		( u32 )LOCAL_NOTIFICATION );
+	state.SetField ( -1, "LOCAL_NOTIFICATION",			( u32 )LOCAL_NOTIFICATION );
 	state.SetField ( -1, "PAYMENT_QUEUE_TRANSACTION",	( u32 )PAYMENT_QUEUE_TRANSACTION );
 	state.SetField ( -1, "PRODUCT_REQUEST_RESPONSE",	( u32 )PRODUCT_REQUEST_RESPONSE );
 	state.SetField ( -1, "PAYMENT_QUEUE_ERROR",			( u32 )PAYMENT_QUEUE_ERROR );
@@ -652,13 +709,18 @@ void MOAIApp::RegisterLuaClass ( USLuaState& state ) {
 	state.SetField ( -1, "TRANSACTION_STATE_FAILED",    ( u32 )TRANSACTION_STATE_FAILED );
 	state.SetField ( -1, "TRANSACTION_STATE_RESTORED",  ( u32 )TRANSACTION_STATE_RESTORED );
 	state.SetField ( -1, "TRANSACTION_STATE_CANCELLED", ( u32 )TRANSACTION_STATE_CANCELLED );
+		
+	state.SetField ( -1, "SESSION_START",	( u32 )SESSION_START );
+	state.SetField ( -1, "SESSION_END",		( u32 )SESSION_END );
 	
 	luaL_Reg regTable[] = {
 		{ "alert",								_alert },
 		{ "canMakePayments",					_canMakePayments },
 		{ "getAppIconBadgeNumber",				_getAppIconBadgeNumber },
 		{ "getDirectoryInDomain",				_getDirectoryInDomain },
+		{ "getNotificationThatStartedApp",		_getNotificationThatStartedApp },
 		{ "openURL",							_openURL },
+		{ "presentLocalNotification",			_presentLocalNotification },
 		{ "registerForRemoteNotifications",		_registerForRemoteNotifications },
 		{ "restoreCompletedTransactions",		_restoreCompletedTransactions },
 		{ "requestPaymentForProduct",			_requestPaymentForProduct },
@@ -676,6 +738,24 @@ void MOAIApp::RegisterLuaClass ( USLuaState& state ) {
 void MOAIApp::Reset () {
 	for ( int i = 0 ; i < TOTAL; i++ ) {
 		mListeners [ i ].Clear ();
+	}
+}
+
+//----------------------------------------------------------------//
+void MOAIApp::SetRemoteNotificationPayload ( NSDictionary* remoteNotificationPayload ) {
+
+	mAppNotificationPayload = remoteNotificationPayload;
+}
+
+//----------------------------------------------------------------//
+void MOAIApp::WillEndSession( ) {
+
+	USLuaRef& callback = this->mListeners [ SESSION_END ];
+	
+	if ( callback ) {
+		USLuaStateHandle state = callback.GetSelf ();
+		
+		state.DebugCall ( 0, 0 );
 	}
 }
 

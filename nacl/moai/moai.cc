@@ -35,14 +35,12 @@ extern "C" {
 
 #include <aku/AKU-fmod.h>
 
+#include "moaicore/pch.h"
+#include "moaicore/MOAIGfxDevice.h"
+
 namespace {
 
-const char* const kHelloString = "hello";
-const char* const kReplyString = "hello from NaCl";
-
 pthread_t gThreadId;
-
-
 bool g_swapping = false;
 
 }
@@ -71,24 +69,15 @@ namespace NaClInputDeviceSensorID {
 	};
 }
 
-void luaDoFile ( const char *path ) {
+//----------------------------------------------------------------//
+void RenderMainThread ( void* userData, int32_t result ) {
 
-	NaClFile *file = g_FileSystem->fopen ( path, "r" );
-	printf ( "loaded %s\n", file->mData );
+	AKUFmodUpdate ();
 
-	lua_State *L = AKUGetLuaState ();
-	//luaL_openlibs ( L );
+	g_instance->DrawSelf ();
 
-	luaL_loadbuffer ( L, file->mData, file->mSize, "line" );
-	lua_pcall ( L, 0, 0, 0 );
-
-	printf ( "loading done\n" );
-	//lua_close ( L );
-
-	g_FileSystem->fclose ( file );
+	g_swapping = false;
 }
-
-void RenderMainThread ( void* userData, int32_t result );
 
 //----------------------------------------------------------------//
 void NaClRender () {
@@ -98,20 +87,11 @@ void NaClRender () {
 	pp::CompletionCallback cc ( RenderMainThread, g_instance );
 	g_core->CallOnMainThread ( 0, cc , 0 );
 
-	//block while waiting for filesys
+	//sleep lock while waiting for filesys
 	while ( g_swapping ) {
 
 		sleep ( 0.01f );
 	}
-}
-
-//----------------------------------------------------------------//
-void RenderMainThread ( void* userData, int32_t result ) {
-
-	AKUFmodUpdate ();
-
-	g_instance->DrawSelf ();
-	g_swapping = false;
 }
 
 //================================================================//
@@ -123,9 +103,10 @@ void	_AKUExitFullscreenModeFunc		();
 void	_AKUOpenWindowFunc				( const char* title, int width, int height );
 void	_AKUStartGameLoopFunc			();
 
+int g_LuaMem = 0;
+int g_TexMem = 0;
 void* moai_main ( void *_instance ) {
 
-	printf ( "begin main\n" );
 	g_instance = ( MoaiInstance * ) _instance;
 	g_FileSystem->Init ();
 
@@ -133,19 +114,19 @@ void* moai_main ( void *_instance ) {
 	AKURunScript ( "config.lua" );
 	AKURunScript ( "game.lua" );
 
-	printf ( "Done Running Script\n" );
-
 	while ( true ) {
 
-		//printf ( "Update\n" );
+		lua_State *L = AKUGetLuaState ();
+		if ( lua_getgccount ( L ) != g_LuaMem || MOAIGfxDevice::Get ().GetTextureMemoryUsage () != g_TexMem ) {
+			g_LuaMem = lua_getgccount ( L );
+			g_TexMem = MOAIGfxDevice::Get ().GetTextureMemoryUsage ();
+			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
+		}
 
 		AKUUpdate ();
 
-		//printf ( "Render\n" );
-
 		NaClRender ();
 
-		//printf ( "Render Done\n" );
 	}
 
 	return NULL;
@@ -154,28 +135,25 @@ void* moai_main ( void *_instance ) {
 //----------------------------------------------------------------//
 void _AKUEnterFullscreenModeFunc () {
 
-	//wut?
-	printf ( " _AKUEnterFullscreenModeFunc\n" );
+	printf ( "Moai_NaCl: unimplemented _AKUEnterFullscreenModeFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUExitFullscreenModeFunc () {
 
-	//wut?
-	printf ( " _AKUExitFullscreenModeFunc\n" );
+	printf ( "Moai_NaCl: unimplemented _AKUExitFullscreenModeFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUOpenWindowFunc ( const char* title, int width, int height ) {
 	
-	printf ( " _AKUOpenWindowFunc\n" );
-	//AKUDetectGfxContext ();
+	printf ( "Moai_NaCl: unimplemented _AKUOpenWindowFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUStartGameLoopFunc () {
 
-	printf ( " _AKUStartGameLoopFunc\n" );
+	printf ( "Moai_NaCl: unimplemented _AKUStartGameLoopFunc\n" );
 }
 
 //----------------------------------------------------------------//
@@ -215,7 +193,6 @@ bool MoaiInstance::Init ( uint32_t /* argc */, const char* /* argn */[], const c
 
 	AKUFmodInit ();
 
-	//AJV TODO - should go to run script
 	//needs to block for context creation as well
 	pthread_create( &gThreadId, NULL, moai_main, g_instance );
 
@@ -272,7 +249,7 @@ bool MoaiInstance::HandleInputEvent	( const pp::InputEvent & event ) {
 			break;
 		}
 		default:
-			printf ( "NaclHost: unHandled event %d\n", event.GetType() );
+			printf ( "Moai_NaCl: unHandled event %d\n", event.GetType() );
 			return false;
 	}
 
@@ -294,7 +271,6 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 
 	if ( opengl_context == NULL ) {
 
-		printf ( "new OpenGLContext\n" );
 		opengl_context = new OpenGLContext ( this );
 	}
 		 
@@ -334,9 +310,10 @@ void MoaiInstance::HandleMessage ( const pp::Var& var_message ) {
 
 	pp::Var var_reply;
 
-	if ( message == kHelloString ) {
+	//Java Script messages
+	/*if ( message == "" ) {
 		 
-	}
+	}*/
 }
 
 //----------------------------------------------------------------//

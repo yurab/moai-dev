@@ -21,6 +21,7 @@ private:
 
 	FMOD::Sound* mSound;
 	int mLoopCount;
+	char mFileName[128];
 
 	//----------------------------------------------------------------//
 	static int	_load				( lua_State* L );

@@ -38,19 +38,19 @@ int MOAIFmodSound::_load ( lua_State* L ) {
 	bool streaming	= state.GetValue < bool >( 3, false );
 	bool async		= state.GetValue < bool >( 4, false );
 
-	printf ( " MOAIFmodSound::_load\n" );
-
 	MOAIDataBuffer* data = state.GetLuaObject < MOAIDataBuffer >( 2 );
 
 	if ( data ) {
 
-		printf ( " MOAIFmodSound::_load data\n" );
 		self->Load( *data, streaming );
 	}
 	else if ( state.IsType( 2, LUA_TSTRING ) ) {
 
 		cc8* filename	= state.GetValue < cc8* >( 2, "" );
+
 		printf ( " MOAIFmodSound::_load file %s\n", filename );
+		memcpy( self->mFileName, filename, strlen ( filename ));
+
 		self->Load ( filename, streaming, async );
 	}
 
@@ -136,11 +136,14 @@ MOAIFmodSound::MOAIFmodSound () :
 	mLoopCount ( 0 ) {
 
 	RTTI_SINGLE ( USLuaObject )
+
+	memset ( mFileName, 0, 128 );
 }
 
 //----------------------------------------------------------------//
 MOAIFmodSound::~MOAIFmodSound () {
 
+	printf ( " ~MOAIFmodSound file %s\n", mFileName );
 	this->Release ();
 }
 
@@ -200,11 +203,8 @@ void MOAIFmodSound::Load ( cc8* filename, bool streaming, bool async ) {
 		info.audioqueuepolicy = FMOD_AUDIOQUEUE_CODECPOLICY_SOFTWAREONLY;
 	#endif
 
-	printf ( " MOAIFmodSound::Load streaming %d, async %d\n", streaming, async );
-
 #ifdef MOAI_OS_NACL
 
-	printf ( " MOAIFmodSound::Load from mem\n" );
 	mode = FMOD_OPENMEMORY;
 	NaClFile *file = g_FileSystem->fopen ( filename, "r" );
 
@@ -224,11 +224,7 @@ void MOAIFmodSound::Load ( cc8* filename, bool streaming, bool async ) {
 	}
 #endif
 	
-	printf ( " MOAIFmodSound::Load 4\n" );
-	
 	if ( result != FMOD_OK ) return;
-	
-	printf ( " MOAIFmodSound::Load 5\n" );
 
 	this->mSound = sound;
 }

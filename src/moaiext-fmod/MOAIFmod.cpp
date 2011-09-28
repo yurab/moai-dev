@@ -95,7 +95,7 @@ void MOAIFmod::OpenSoundSystem () {
 
 	FMOD_RESULT result;
 
-	FMOD::Debug_SetLevel(FMOD_DEBUG_ALL);
+	//FMOD::Debug_SetLevel(FMOD_DEBUG_ALL);
 
 	result = FMOD::System_Create ( &this->mSoundSys ); // Create the main system object.
 	if ( result != FMOD_OK ) return;

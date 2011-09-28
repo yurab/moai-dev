@@ -1,18 +1,18 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#include <aku/AKU-luaext.h>
-#include <moaicore/moaicore.h>
-
-#include <moaiext-harness/MOAIHarness.h>
+#include <aku/AKU-debugger.h>
+#include <moaiext-debugger/MOAIHarness.h>
 
 //================================================================//
-// AKU-fmod
+// AKU-debugger
 //================================================================//
 
 //----------------------------------------------------------------//
-void AKUExtLoadHarness () {
-
-	//lua_State* state = AKUGetLuaState ();
-	//... bind harness to lua state
+void AKUDebugHarnessInit () {
+	
+	lua_State* L = AKUGetLuaState ();
+	
+	// Hook lua debug callbacks here
+	MOAIHarness::HookLua(L, "127.0.0.1", 7018);
 }

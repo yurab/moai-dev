@@ -65,6 +65,8 @@ private:
 	bool				mIsRenewable;
 	u32					mTransform;
 
+	char				mFileName[128];
+
 	//----------------------------------------------------------------//
 	static int		_bind					( lua_State* L );
 	static int		_getSize				( lua_State* L );

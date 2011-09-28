@@ -49,7 +49,12 @@ void NaClFileSystem::Init () {
 void NaClFileSystem::OpenFileSystemMainThread ( void* userData, int32_t result ) {
 
 	pp::CompletionCallback cc = Get ()->mCCFactory.NewCallback ( &NaClFileSystem::OpenFileSystemCallback );
-	Get ()->mFileSystem.Open ( 1024, cc );
+
+	int32_t res = Get ()->mFileSystem.Open ( 1024, cc );
+
+	if ( PP_OK_COMPLETIONPENDING != res ) {
+		cc.Run ( res );
+	}
 }
 
 //----------------------------------------------------------------//
@@ -100,7 +105,6 @@ void NaClFileSystem::RequestURLMainThread ( void * userData, int32_t result ) {
 
 	if (handler != NULL) {
 
-		printf ( "with file1 %p\n", file );
 		handler->Start( HttpLoaded, file );
 	}
 }
@@ -111,13 +115,9 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 	NaClFile * newFile = new NaClFile ();
 	newFile->mPath = path;
 
-	printf ( " stats 1\n" );
-
 	//TODO, check if file is cached
 	pp::CompletionCallback cc ( RequestURLStatsMainThread, newFile );
 	mCore->CallOnMainThread ( 0, cc , 0 );
-
-	printf ( " stats 2\n" );
 
 	while ( !newFile->mHttpLoaded ) {
 
@@ -152,6 +152,7 @@ void NaClFileSystem::RequestURLStatsMainThread ( void * userData, int32_t result
 //----------------------------------------------------------------//
 int NaClFileSystem::fclose ( NaClFile *file ) {
 
+	printf ( "NaClFileSystem::fclose %s \n\n", file->mPath );
 	delete file;
 	return 0;
 }
@@ -195,7 +196,7 @@ void NaClFileSystem::HttpLoaded ( void *_file, const char *buffer, int32_t size 
 
 	if ( file->mExists && size ) {
 
-		printf ( "with file2 %p, size: %d\n", _file, size );
+		printf ( "NaClFileSystem::HttpLoaded file %s, size: %d\n", file->mPath, size );
 
 		file->mSize = size;
 		file->mData = new char [ size ];
