@@ -683,7 +683,7 @@ void MOAIGfxDevice::ResetState () {
 	this->mPrimCount = 0;
 
 	// turn off texture
-	glDisable ( GL_TEXTURE_2D );
+	//glDisable ( GL_TEXTURE_2D );
 	this->mTexture = 0;
 	
 	// turn off blending
@@ -934,14 +934,14 @@ bool MOAIGfxDevice::SetTexture ( MOAITexture* texture ) {
 	
 	if ( texture ) {
 		if ( !this->mTexture ) {
-			glEnable ( GL_TEXTURE_2D );
+			//glEnable ( GL_TEXTURE_2D );
 		}
 		this->mTexture = texture;
 		return texture->Bind ();
 	}
 
 	if ( this->mTexture ) {
-		glDisable ( GL_TEXTURE_2D );
+		//glDisable ( GL_TEXTURE_2D );
 		this->mTexture = 0;
 	}
 	return false;

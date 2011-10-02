@@ -11,22 +11,19 @@
 /// with a @a pp::Instance instance.
 ///
 
+#include <assert.h>
 #include <pthread.h>
 
 #include <algorithm>
 #include <string>
 
-#include "ppapi/c/dev/ppb_opengles_dev.h"
-#include "ppapi/cpp/dev/context_3d_dev.h"
-#include "ppapi/cpp/dev/graphics_3d_client_dev.h"
-#include "ppapi/cpp/dev/graphics_3d_dev.h"
-#include "ppapi/cpp/dev/surface_3d_dev.h"
+#include "ppapi/c/ppb_opengles2.h"
+#include "ppapi/cpp/graphics_3d_client.h"
+#include "ppapi/cpp/graphics_3d.h"
 #include "ppapi/cpp/instance.h"
+#include "ppapi/cpp/size.h"
 
-
-/// OpenGLContext manages an OpenGL rendering context in the browser.
-///
-class OpenGLContext : public pp::Graphics3DClient_Dev {
+class OpenGLContext : public pp::Graphics3DClient {
  public:
   explicit OpenGLContext(pp::Instance* instance);
 
@@ -34,9 +31,8 @@ class OpenGLContext : public pp::Graphics3DClient_Dev {
   /// context invalid.
   virtual ~OpenGLContext();
 
-  /// The Graphics3DClient interfcace.
   virtual void Graphics3DContextLost() {
-    assert(!"Unexpectedly lost graphics context"); 
+    assert(!"Unexpectedly lost graphics context");
   }
 
   /// Make @a this the current 3D context in @a instance.
@@ -55,8 +51,11 @@ class OpenGLContext : public pp::Graphics3DClient_Dev {
   /// example, when resizing the context's viewing area.
   void InvalidateContext(pp::Instance* instance);
 
+  /// Resize the context.
+  void ResizeContext(const pp::Size& size);
+
   /// The OpenGL ES 2.0 interface.
-  const struct PPB_OpenGLES2_Dev* gles2() const {
+  const struct PPB_OpenGLES2* gles2() const {
     return gles2_interface_;
   }
 
@@ -75,13 +74,12 @@ class OpenGLContext : public pp::Graphics3DClient_Dev {
   }
 
  private:
-  pp::Context3D_Dev context_;
-  pp::Surface3D_Dev surface_;
+  pp::Size size_;
+  pp::Graphics3D context_;
   bool flush_pending_;
 
-  const struct PPB_OpenGLES2_Dev* gles2_interface_;
+  const struct PPB_OpenGLES2* gles2_interface_;
 };
-
 
 #endif  // EXAMPLES_TUMBLER_OPENGL_CONTEXT_H_
 

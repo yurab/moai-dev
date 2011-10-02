@@ -8,7 +8,8 @@ import make_nacl_env
 import nacl_utils
 import os
 
-nacl_env = make_nacl_env.NaClEnvironment(use_c_plus_plus_libs=True)
+nacl_env = make_nacl_env.NaClEnvironment(
+    use_c_plus_plus_libs=True, nacl_platform=os.getenv('NACL_TARGET_PLATFORM'))
 
 Repository ( "../../3rdparty", "../../src" )
 
@@ -393,7 +394,7 @@ nacl_moai_sources = [ 'moai.cc',
 
 sources = lua_sources + zlib_sources + tinyxml_sources + jansson_sources + expat_sources + libpng_sources + contrib_sources + zipfs_sources + box2d_sources + uslcore_sources + uslext_sources + aku_sources + moaiextfmod_sources + moai_sources + nacl_moai_sources
 
-nacl_env.Append ( LIBS=['ppapi_gles2','libnosys','libfmodex', 'ppapi_cpp'] )
+nacl_env.Append ( LIBS=['ppapi_gles2','libnosys','libfmodex', 'ppapi_cpp', 'libpthread' ] )
 
 nacl_env.Append ( CPPDEFINES=['MOAI_OS_NACL','HAVE_MEMMOVE','__linux', 'NACL'] )
 

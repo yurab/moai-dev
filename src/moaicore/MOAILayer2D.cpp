@@ -425,7 +425,6 @@ void MOAILayer2D::Draw () {
 		for ( u32 i = 0; i < totalResults; ++i ) {
 			MOAIProp* prop = buffer.GetResultUnsafe ( i );
 			prop->Draw ();
-			prop->DrawDebug ();
 		}
 	}
 	
@@ -433,6 +432,7 @@ void MOAILayer2D::Draw () {
 	if ( this->mShowDebugLines ) {
 		MOAIDebugLines::Get ().Draw ();
 	}
+
 	gfxDevice.Flush ();
 }
 

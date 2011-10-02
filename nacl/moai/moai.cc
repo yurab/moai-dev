@@ -163,38 +163,9 @@ MoaiInstance::~MoaiInstance() {
 //----------------------------------------------------------------//
 bool MoaiInstance::Init ( uint32_t /* argc */, const char* /* argn */[], const char* /* argv */[] ) {
 
-	g_FileSystem = new NaClFileSystem ( g_core, this );
-
 	g_instance = this;
 
-	AKUCreateContext ();
-
 	opengl_context = NULL;
-
-	AKUSetInputConfigurationName ( "AKUNaCl" );
-
-	AKUReserveInputDevices			( NaClInputDeviceID::TOTAL );
-	AKUSetInputDevice				( NaClInputDeviceID::DEVICE, "device" );
-	
-	AKUReserveInputDeviceSensors	( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::TOTAL );
-	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD,		"keyboard" );
-	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER,		"pointer" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT,	"mouseLeft" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE,	"mouseMiddle" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT,	"mouseRight" );
-
-	RequestInputEvents ( PP_INPUTEVENT_CLASS_MOUSE );
-	RequestInputEvents ( PP_INPUTEVENT_CLASS_KEYBOARD );
-
-	AKUSetFunc_EnterFullscreenMode ( _AKUEnterFullscreenModeFunc );
-	AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
-	AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
-	AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
-
-	AKUFmodInit ();
-
-	//needs to block for context creation as well
-	pthread_create( &gThreadId, NULL, moai_main, g_instance );
 
 	return true;
 }
@@ -269,20 +240,48 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 	g_width = position.size ().width ();
 	g_height = position.size ().height ();
 
-	if ( opengl_context == NULL ) {
+	printf ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );
 
-		opengl_context = new OpenGLContext ( this );
+	if (opengl_context == NULL) {
+	opengl_context = new OpenGLContext ( this );
 	}
-		 
-	opengl_context->InvalidateContext ( this );
+	opengl_context->InvalidateContext(this);
+	
+	opengl_context->ResizeContext(position.size());
 
 	if ( !opengl_context->MakeContextCurrent ( this )) {
 		return;
 	}
 
+	g_FileSystem = new NaClFileSystem ( g_core, this );
+
+	AKUCreateContext ();
+
+	AKUSetInputConfigurationName ( "AKUNaCl" );
+
+	AKUReserveInputDevices			( NaClInputDeviceID::TOTAL );
+	AKUSetInputDevice				( NaClInputDeviceID::DEVICE, "device" );
+	
+	AKUReserveInputDeviceSensors	( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::TOTAL );
+	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD,		"keyboard" );
+	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER,		"pointer" );
+	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT,	"mouseLeft" );
+	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE,	"mouseMiddle" );
+	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT,	"mouseRight" );
+
+	RequestInputEvents ( PP_INPUTEVENT_CLASS_MOUSE );
+	RequestInputEvents ( PP_INPUTEVENT_CLASS_KEYBOARD );
+
+	AKUSetFunc_EnterFullscreenMode ( _AKUEnterFullscreenModeFunc );
+	AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
+	AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
+	AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
+
+	AKUFmodInit ();
+
 	AKUDetectGfxContext ();
 
-	printf ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );
+	pthread_create( &gThreadId, NULL, moai_main, g_instance );	
 }
 
 //----------------------------------------------------------------//

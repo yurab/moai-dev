@@ -757,7 +757,7 @@ void MOAITexture::OnBind () {
 	if ( !this->mGLTexID ) return;
 
 	glBindTexture ( GL_TEXTURE_2D, this->mGLTexID );
-	glEnable ( GL_TEXTURE_2D );
+	//glEnable ( GL_TEXTURE_2D );
 
 #if USE_OPENGLES1
 	if ( !MOAIGfxDevice::Get ().IsProgrammable ()) {
