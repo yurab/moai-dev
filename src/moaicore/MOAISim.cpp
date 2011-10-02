@@ -744,6 +744,7 @@ void MOAISim::RegisterLuaClass ( USLuaState& state ) {
 		{ "framesToTime",				_framesToTime },
 		{ "getDeviceSize",				_getDeviceSize },
 		{ "getDeviceTime",				_getDeviceTime },
+		{ "getTime",					_getDeviceTime }, //register for crimson
 		{ "getElapsedFrames",			_getElapsedFrames },
 		{ "getElapsedTime",				_getElapsedTime },
 		{ "getFrameSize",				_getFrameSize },
