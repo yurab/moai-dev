@@ -311,6 +311,7 @@ MOAITexture* MOAITexture::AffirmTexture ( USLuaState& state, int idx ) {
 void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 
 	if ( !image.IsOK ()) return;
+	if ( !MOAIGfxDevice::Get ().GetHasContext ()) return;
 
 	MOAIGfxDevice::Get ().ClearErrors ();
 
@@ -467,6 +468,7 @@ void MOAITexture::CreateTextureFromPVR ( void* data, size_t size ) {
 
 	#ifdef MOAI_TEST_PVR
 
+		if ( !MOAIGfxDevice::Get ().GetHasContext ()) return;
 		MOAIGfxDevice::Get ().ClearErrors ();
 
 		MOAIPvrHeader* header = MOAIPvrHeader::GetHeader ( data, size );
