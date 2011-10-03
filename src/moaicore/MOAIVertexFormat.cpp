@@ -339,13 +339,6 @@ void MOAIVertexFormat::RegisterLuaFuncs ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-STLString MOAIVertexFormat::ToString () {
-
-	STLString repr;
-	return repr;
-}
-
-//----------------------------------------------------------------//
 void MOAIVertexFormat::UnbindFixed () const {
 
 #if USE_OPENGLES1

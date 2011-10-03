@@ -865,15 +865,3 @@ void MOAIParticleScript::Run ( MOAIParticleSystem& system, MOAIParticle& particl
 		this->PushSprite ( system, spriteRegisters );
 	}
 }
-
-//----------------------------------------------------------------//
-STLString MOAIParticleScript::ToString () {
-
-	STLString repr;
-
-	PRETTY_PRINT ( repr, mCompiled )
-
-	// TODO print instructions
-
-	return repr;
-}

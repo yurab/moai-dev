@@ -123,6 +123,7 @@ void* moai_main ( void *_instance ) {
 			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
 		}
 
+		printf ( "Updating...\n" );
 		AKUUpdate ();
 
 		NaClRender ();

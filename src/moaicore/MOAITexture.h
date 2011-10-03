@@ -115,7 +115,6 @@ public:
 	void					SetWrap					( int wrap );
 	void					RegisterLuaClass		( USLuaState& state );
 	void					RegisterLuaFuncs		( USLuaState& state );
-	STLString				ToString				();
 
 #ifdef MOAI_OS_NACL
 	static void NaClLoadTexture ( void* userData, int32_t result );

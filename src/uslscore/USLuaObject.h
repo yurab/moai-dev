@@ -14,21 +14,47 @@ class USLuaState;
 class USLuaStateHandle;
 
 //================================================================//
+// USLuaPrivateRef
+//================================================================//
+class USLuaPrivateRef {
+private:
+
+	friend class USLuaObject;
+	int mRef;
+
+public:
+	
+	//----------------------------------------------------------------//
+			USLuaPrivateRef		();
+			~USLuaPrivateRef	();
+	
+	//----------------------------------------------------------------//
+	inline operator bool () {
+		return ( this->mRef != LUA_NOREF );
+	}
+};
+
+//================================================================//
 // USLuaObject
 //================================================================//
 class USLuaObject :
 	public virtual USObject {
+private:
+
+	USLuaPrivateRef		mContain;
+
 protected:
 
 	USLuaRef		mInstanceTable;		// weak ref to instance table stack
-	USLuaRef		mUserdata;			// weak/strong ref to handle userdata 
-		
+	USLuaRef		mPrivateTable;		// weak ref to private local reference table
+	USLuaRef		mUserdata;			// weak/strong ref to userdata
+	
 
 	//----------------------------------------------------------------//
 	static int				_gc						( lua_State* L );
 	static int				_getClass				( lua_State* L );
 	static int				_getClassName			( lua_State* L );
-	//static int			_tostring				( lua_State* L );
+	static int				_tostring				( lua_State* L );
 
 	//----------------------------------------------------------------//
 	void					OnRelease				( u32 refCount );
@@ -39,21 +65,23 @@ public:
 	friend class USLuaClass;
 
 	//----------------------------------------------------------------//
-	void					DebugDump				();
-	virtual STLString		ToString				();
-	STLString				ToStringWithType		();
+	void					BindToLuaWithTable		( USLuaState& state ); // push table at top of stack!
 	virtual USLuaClass*		GetLuaClass				();
 	USLuaStateHandle		GetSelf					();
+	void					InsertObject			( USLuaObject& object );
 	bool					IsBound					();
 	void					LuaUnbind				( USLuaState& state );
 	void					PushLuaClassTable		( USLuaState& state );
 	void					PushLuaUserdata			( USLuaState& state );
+	bool					PushPrivateRef			( USLuaState& state, USLuaPrivateRef& ref );
 	virtual void			RegisterLuaClass		( USLuaState& state );
 	virtual void			RegisterLuaFuncs		( USLuaState& state );
+	void					RemoveObject			( USLuaObject& object );
 	static void             ReportLeaks				( FILE *f, bool clearAfter );
 	virtual	void			SerializeIn				( USLuaState& state, USLuaSerializer& serializer );
 	virtual	void			SerializeOut			( USLuaState& state, USLuaSerializer& serializer );
 	void					SetLuaInstanceTable		( USLuaState& state, int idx );
+	void					SetPrivateRef			( USLuaState& state, int idx, USLuaPrivateRef& ref );
 							USLuaObject				();
 	virtual					~USLuaObject			();
 };
@@ -70,8 +98,8 @@ protected:
 
 	//----------------------------------------------------------------//
 	void				InitLuaFactoryClass			( USLuaObject& data, USLuaState& state );
-	void				InitLuaInstanceTable		( USLuaObject* data, USLuaState& state, int idx );
 	void				InitLuaSingletonClass		( USLuaObject& data, USLuaState& state );
+	void				PushMemberTable				( USLuaState& state );
 	virtual void		RegisterLuaClass			( USLuaState& state ) = 0;
 
 public:
