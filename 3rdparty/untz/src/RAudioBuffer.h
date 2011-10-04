@@ -20,7 +20,7 @@ public:
 		mChannels = channels;
 		mFrames = frames;
 		mOwnsBuffer = true;
-		resize(mChannels, mFrames);
+		mBuffer.reserve(mChannels * mFrames);
 	}
 	RAudioBuffer(UInt32 channels, UInt32 frames, float* buffer, bool ownsBuffer)
 	{
@@ -29,7 +29,7 @@ public:
 		mOwnsBuffer = ownsBuffer;
 		if(mOwnsBuffer)
 		{
-			resize(mChannels, mFrames, true);
+			resize(mChannels, mFrames);
 			memcpy(mBufferPtr, buffer, sizeof(float) * mBuffer.size());
 		}
 		else		
@@ -37,26 +37,15 @@ public:
 	}
 	~RAudioBuffer() {};
 
-	void resize(UInt32 channels, UInt32 frames, bool allocate = true)
+	void resize(UInt32 channels, UInt32 frames)
 	{
 		if(mOwnsBuffer)
 		{
 			mChannels = channels;
 			mFrames = frames;
-			if(allocate)
-			{
-				mBuffer.resize(mChannels * mFrames, 0);
-				mBufferPtr = &mBuffer[0];
-			}
-			else
-				mBuffer.reserve(mChannels * mFrames);
+			mBuffer.resize(mChannels * mFrames, 0);
+			mBufferPtr = &mBuffer[0];
 		}
-	}
-
-	void resize(int frames)
-	{
-		if(mOwnsBuffer)
-			resize(1, frames);
 	}
 
 	void clear()
@@ -67,6 +56,8 @@ public:
 
 	UInt32 size() const
 	{
+		if(mOwnsBuffer)
+			return mBuffer.size();
 		return mChannels * mFrames;
 	}
 

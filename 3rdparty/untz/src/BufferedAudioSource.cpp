@@ -22,12 +22,13 @@ BufferedAudioSource::~BufferedAudioSource()
 
 bool BufferedAudioSource::init(float* interleavedData, Int64 numSamples)
 {
+/*
 	mLoadedInMemory = true;
     mEOF = false;
     
     mBuffer.resize(numSamples);
     memcpy(mBuffer.getData(), interleavedData, sizeof(float) * numSamples);
-
+*/
     return true;
 }
 
@@ -53,7 +54,7 @@ bool BufferedAudioSource::init(const RString& path, bool loadIntoMemory)
 	else
 	{
         RScopedLock l(&mLock);
-		mBuffer.resize(getNumChannels(), getNumChannels() * getSampleRate() * SECONDS_TO_BUFFER, false);
+		mBuffer = RAudioBuffer(getNumChannels(), getSampleRate() * SECONDS_TO_BUFFER);
 		BufferedAudioSourceThread::getInstance()->addSource(this);
 	}
 
