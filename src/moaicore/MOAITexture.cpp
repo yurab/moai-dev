@@ -202,7 +202,9 @@ int MOAITexture::_load ( lua_State* L ) {
 		cc8* filename = lua_tostring ( state, 2 );
 
 		printf ( " MOAITexture::_load file %s\n", filename );
-		memcpy( self->mFileName, filename, strlen ( filename ));
+		if ( strlen ( filename ) <  128 ) {
+			memcpy( self->mFileName, filename, strlen ( filename ));
+		}
 
 		if ( MOAILogMessages::CheckFileExists ( filename, L )) {
 			self->Init ( filename, transform );
@@ -777,7 +779,7 @@ void MOAITexture::OnBind () {
 //----------------------------------------------------------------//
 void MOAITexture::OnClear () {
 
-	printf ( " MOAITexture OnClear %p\n", this );
+	printf ( " MOAITexture::OnClear file %s\n", mFileName );
 	this->OnUnload ();
 	
 	this->mWidth = 0;
@@ -910,7 +912,7 @@ void MOAITexture::OnRenew () {
 //----------------------------------------------------------------//
 void MOAITexture::OnUnload () {
 
-	printf ( " MOAITexture OnUnload %p\n", this );
+	printf ( " MOAITexture::OnUnload file %s\n", mFileName );
 	if ( this->mGLTexID ) {
 	
 		if ( MOAIGfxDevice::IsValid ()) {

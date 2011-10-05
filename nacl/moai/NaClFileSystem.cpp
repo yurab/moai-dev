@@ -78,7 +78,15 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 
 		//TODO, check if file is cached
 		pp::CompletionCallback cc ( RequestURLMainThread, newFile );
-		mCore->CallOnMainThread ( 0, cc , 0 );
+
+		if ( !mCore->IsMainThread ()) {
+			mCore->CallOnMainThread ( 0, cc , 0 );
+		}
+		else {
+			printf( "ERROR: Cannot load files on main thread\n" );
+			RequestURLMainThread ( newFile, 0 );
+			newFile->mHttpLoaded = true;
+		}
 
 		while ( !newFile->mHttpLoaded ) {
 
@@ -117,7 +125,15 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 
 	//TODO, check if file is cached
 	pp::CompletionCallback cc ( RequestURLStatsMainThread, newFile );
-	mCore->CallOnMainThread ( 0, cc , 0 );
+
+	if ( !mCore->IsMainThread ()) {
+		mCore->CallOnMainThread ( 0, cc , 0 );
+	}
+	else {
+		printf( "ERROR: Cannot load files on main thread\n" );
+		RequestURLStatsMainThread ( newFile, 0 );
+		newFile->mHttpLoaded = true;
+	}
 
 	while ( !newFile->mHttpLoaded ) {
 

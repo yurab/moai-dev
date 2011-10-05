@@ -113,6 +113,7 @@ libpng_sources = [ os.path.join( 'lpng140', src_file ) for src_file in [
 
 contrib_sources = [ os.path.join( 'contrib', src_file ) for src_file in [
 					'utf8.c' ,
+					'Triangulator.cpp',
 ]]
 
 zipfs_sources = [ os.path.join( 'zipfs', src_file ) for src_file in [

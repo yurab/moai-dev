@@ -311,6 +311,12 @@ int MOAISim::_getPerformance ( lua_State* L ) {
 	return 1;
 }
 
+int MOAISim::_getSimTime( lua_State* L )
+{
+	lua_pushnumber(L, MOAISim::Get().mSimTime);
+	return 1;
+}
+
 //----------------------------------------------------------------//
 /**	@name	openWindow
 	@text	Opens a new window for the application to render on.  This must be called before any rendering can be done, and it must only be called once.
@@ -751,6 +757,7 @@ void MOAISim::RegisterLuaClass ( USLuaState& state ) {
 		{ "getLuaObjectCount",			_getLuaObjectCount },
 		{ "getMemoryUsage",				_getMemoryUsage },
 		{ "getPerformance",				_getPerformance },
+		{ "getSimTime",					_getSimTime},
 		{ "openWindow",					_openWindow },
 		{ "pauseTimer",					_pauseTimer },
 		{ "popRenderPass",				_popRenderPass },

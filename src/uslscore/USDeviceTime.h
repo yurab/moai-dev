@@ -11,6 +11,7 @@ namespace USDeviceTime {
 
 	//----------------------------------------------------------------//
 	double		GetTimeInSeconds		();
+	void		SetClocksPerSecond		( int clocksPerSecond );
 }
 
 #endif

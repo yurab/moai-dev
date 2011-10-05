@@ -123,7 +123,6 @@ void* moai_main ( void *_instance ) {
 			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
 		}
 
-		printf ( "Updating...\n" );
 		AKUUpdate ();
 
 		NaClRender ();
@@ -241,14 +240,30 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 	g_width = position.size ().width ();
 	g_height = position.size ().height ();
 
+	//AJV extremely ugly hack to 'detect' unix systems or any other system where the default clock is wrong
+	//check out "clock() issues with beta SDK, chrome 15 vs 16" in the native client discuss Google group
+	//NOTE: After talking with google, stay tuned new timer coming soon!
+	double beforeClock = USDeviceTime::GetTimeInSeconds ();
+
+	sleep ( 1.0f );
+
+	double afterClock = USDeviceTime::GetTimeInSeconds ();
+
+	printf ( "clocks per second %f, %f\n", beforeClock, afterClock );
+	//if ( afterClock - beforeClock > 2.0f ) {
+		//USDeviceTime::SetClocksPerSecond ( 1000000 );
+	//}
+	//AJV End extremely ugly hack
+
 	printf ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );
 
 	if (opengl_context == NULL) {
-	opengl_context = new OpenGLContext ( this );
+		opengl_context = new OpenGLContext ( this );
 	}
-	opengl_context->InvalidateContext(this);
+
+	opengl_context->InvalidateContext ( this );
 	
-	opengl_context->ResizeContext(position.size());
+	opengl_context->ResizeContext ( position.size ());
 
 	if ( !opengl_context->MakeContextCurrent ( this )) {
 		return;

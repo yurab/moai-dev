@@ -77,6 +77,7 @@ bool GetURLHandler::Start ( GetURLCallback callback, NaClFile *file ) {
 }
 
 void GetURLHandler::OnOpen ( int32_t result ) {
+
 	if ( result < 0 ) {
 		ReportResultAndDie ( url_, "pp::URLLoader::Open() failed", false );
 	}

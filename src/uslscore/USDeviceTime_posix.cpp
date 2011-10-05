@@ -25,6 +25,10 @@
 #include <uslscore/USDeviceTime.h>
 #include <time.h>
 
+namespace {
+	int g_CLOCKS_PER_SECOND = CLOCKS_PER_SEC;
+}
+
 //================================================================//
 // local
 //================================================================//
@@ -49,6 +53,9 @@ static long _getTimerInfo () {
 // USDeviceTime
 //================================================================//
 
+	void USDeviceTime::SetClocksPerSecond	( int clocksPerSecond ) {
+		g_CLOCKS_PER_SECOND = clocksPerSecond;
+	}
 	//----------------------------------------------------------------//
 	
 	double USDeviceTime::GetTimeInSeconds () {
@@ -80,8 +87,7 @@ static long _getTimerInfo () {
 
 		#endif
 #else
-
-		return  ( clock () / ( double ) CLOCKS_PER_SEC );
+		return  ( clock () / ( double ) ( g_CLOCKS_PER_SECOND ) );
 #endif
 	}
 #endif

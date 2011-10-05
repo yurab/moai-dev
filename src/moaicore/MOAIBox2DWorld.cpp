@@ -25,6 +25,137 @@
 SUPPRESS_EMPTY_FILE_WARNING
 #if USE_BOX2D
 
+#include <contrib/Triangulator.h>
+
+#define lua_table_append(L, idx) do { \
+	int n = luaL_getn(L, idx) + 1; \
+	luaL_setn(L, idx, n); \
+	lua_rawseti(L, idx, n); \
+	} while(0)
+
+
+static int DecomposePolygon( lua_State* L ) {
+	USLuaState state(L);
+	
+	if( !state.IsType(-1, LUA_TTABLE) )
+	{
+		return 0;
+	}
+	
+	Triangulator * triangulator = createTriangulator();
+	float x;
+	
+	// TODO: Accept several forms of polygon point lists. Either
+	// 1. { { x=x1, y=y1 }, ... }
+	// 2. { { x1,y1 }, ... }
+	// 3. { x1,y1, ...
+	
+	int itr = state.PushTableItr ( -1 );
+	int idx = 0;
+	
+	u32 verts = 0;
+	for ( ; state.TableItrNext ( itr ); ++idx ) {
+		
+		float val = state.GetValue < float >( -1, 0 );
+		
+		if ( idx & 0x01 ) {
+			triangulator->addPoint(x, val, 0);
+			verts++;
+		}
+		else {
+			x = val;
+		}
+	}
+
+	if( verts < 3 )
+	{
+		return 0;
+	}
+
+	unsigned int triCount = 0;
+	unsigned int* indices = triangulator->triangulate(triCount, 0.001);
+	
+	if( indices == NULL && verts > 3 )
+	{
+		// Couldn't triangulate
+		releaseTriangulator(triangulator);
+		return 0;
+	}
+
+	// For some reason triangulator doesn't work with a single tri.
+	if( verts == 3 && triCount == 0 )
+		triCount = 1;
+	
+	int npolys = 0;
+	
+	for( unsigned int t = 0; t < triCount*3; t += 3 )
+	{
+		// TODO: recombine triangles into bigger polys rather than just have tris
+		
+		float ax, ay, az;
+		float bx, by, bz;
+		float cx, cy, cz;
+		triangulator->getPoint(indices[t  ], ax, ay, az);
+		triangulator->getPoint(indices[t+1], bx, by, bz);
+		triangulator->getPoint(indices[t+2], cx, cy, cz);
+
+		// Skip degenerate triangles
+		b2Vec2 edge1;
+		edge1.x = bx - ax;
+		edge1.y = by - ay;
+
+		b2Vec2 edge2;
+		edge2.x = cx - bx;
+		edge2.y = cy - by;
+
+		float area = b2Cross(edge1, edge2);
+		if( area < 0 )
+		{
+			// Polygon was CW defined, not CCW, so flip the normal
+			triangulator->getPoint(indices[t+2], ax, ay, az);
+			triangulator->getPoint(indices[t+1], bx, by, bz);
+			triangulator->getPoint(indices[t  ], cx, cy, cz);
+			area = -area;
+		}
+
+		if( area > 0.0f )
+		{
+			if( npolys == 0 )
+			{
+				// Table to hold all the polys
+				lua_newtable(L);
+			}
+
+			npolys++;
+
+			lua_newtable(L);
+
+			lua_pushnumber(L, ax);
+			lua_table_append(L, -2);
+			lua_pushnumber(L, ay);
+			lua_table_append(L, -2);
+		
+			lua_pushnumber(L, bx);
+			lua_table_append(L, -2);
+			lua_pushnumber(L, by);
+			lua_table_append(L, -2);
+		
+			lua_pushnumber(L, cx);
+			lua_table_append(L, -2);
+			lua_pushnumber(L, cy);
+			lua_table_append(L, -2);
+		
+			// Add the poly to the list of polys
+			lua_table_append(L, -2);
+		}
+	}
+	
+	
+	releaseTriangulator(triangulator);
+	
+	return npolys > 0;
+}
+
 //================================================================//
 // MOAIBox2DPrim
 //================================================================//
@@ -671,6 +802,13 @@ void MOAIBox2DWorld::OnUpdate ( float step ) {
 void MOAIBox2DWorld::RegisterLuaClass ( USLuaState& state ) {
 
 	MOAIAction::RegisterLuaClass ( state );
+
+	luaL_Reg regTable [] = {
+		{ "decomposePolygon",		DecomposePolygon },
+		{ NULL, NULL }
+	};
+	
+	luaL_register ( state, 0, regTable );
 }
 
 //----------------------------------------------------------------//
