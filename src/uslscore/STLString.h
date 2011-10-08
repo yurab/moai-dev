@@ -58,9 +58,9 @@ public:
 	}
 
 	//----------------------------------------------------------------//
-	inline operator char* () {
+	/*inline operator char* () {
 		return &( *( string* )this )[ 0 ];
-	}
+	}*/
 
 	//----------------------------------------------------------------//
 	inline operator const char* () const {

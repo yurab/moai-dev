@@ -83,20 +83,34 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 			mCore->CallOnMainThread ( 0, cc , 0 );
 		}
 		else {
-			printf( "ERROR: Cannot load files on main thread\n" );
+			printf( "ERROR: Cannot open file for reading on main thread\n" );
 			RequestURLMainThread ( newFile, 0 );
-			newFile->mHttpLoaded = true;
+			newFile->mIsHttpLoaded = true;
 		}
 
-		while ( !newFile->mHttpLoaded ) {
+		while ( !newFile->mIsHttpLoaded ) {
 
 			sleep ( 0.01f );
 		}
 
 	} 
 	else if ( mode[0] == 'w' ) {
-		//TODO writing
 
+		pp::CompletionCallback cc ( OpenFileMainThread, newFile );
+
+		if ( !mCore->IsMainThread ()) {
+			mCore->CallOnMainThread ( 0, cc , 0 );
+		}
+		else {
+			printf( "ERROR: Cannot open file for writing on main thread\n" );
+			OpenFileMainThread ( newFile, 0 );
+			newFile->mIsFileOpen = true;
+		}
+
+		while ( !newFile->mIsFileOpen ) {
+
+			sleep ( 0.01f );
+		}
 	}
 	else {
 		printf ( "NaClFileSystem::fopen - Unsupported mode %s\n", mode );
@@ -118,6 +132,27 @@ void NaClFileSystem::RequestURLMainThread ( void * userData, int32_t result ) {
 }
 
 //----------------------------------------------------------------//
+void NaClFileSystem::OpenFileMainThread ( void * userData, int32_t result ) {
+  
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+	
+	pp::CompletionCallback cc ( OpenFileCallback, file );
+
+	file->mFileRef = new pp::FileRef ( mSingletonInstance->mFileSystem, file->mPath );
+	file->mFileIO = new pp::FileIO ( mSingletonInstance->mInstance );
+
+	file->mFileIO->Open ( *( file->mFileRef ), PP_FILEOPENFLAG_WRITE | PP_FILEOPENFLAG_CREATE | PP_FILEOPENFLAG_TRUNCATE , cc );
+}
+
+//----------------------------------------------------------------//
+void NaClFileSystem::OpenFileCallback ( void * userData, int32_t result ) {
+  
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+	
+	file->mIsFileOpen = true;
+}
+
+//----------------------------------------------------------------//
 int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 
 	NaClFile * newFile = new NaClFile ();
@@ -132,10 +167,10 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 	else {
 		printf( "ERROR: Cannot load files on main thread\n" );
 		RequestURLStatsMainThread ( newFile, 0 );
-		newFile->mHttpLoaded = true;
+		newFile->mIsHttpLoaded = true;
 	}
 
-	while ( !newFile->mHttpLoaded ) {
+	while ( !newFile->mIsHttpLoaded ) {
 
 		sleep ( 0.01f );
 	}
@@ -174,21 +209,21 @@ int NaClFileSystem::fclose ( NaClFile *file ) {
 }
 
 //----------------------------------------------------------------//
-size_t NaClFileSystem::fread ( void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *a_file ) {
+size_t NaClFileSystem::fread ( void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *file ) {
 
-	if( a_file && a_file->mHttpLoaded ) {
+	if( file && file->mIsHttpLoaded ) {
 
 		int readSize = size_of_elements * number_of_elements;
-		int remainingSize = a_file->mSize - a_file->mOffset;
+		int remainingSize = file->mSize - file->mOffset;
 
 		if ( readSize <= remainingSize ) {
-			memcpy ( ptr, a_file->mData + a_file->mOffset, readSize );
-			a_file->mOffset += readSize;
+			memcpy ( ptr, file->mData + file->mOffset, readSize );
+			file->mOffset += readSize;
 			return readSize;
 		}
 		else {
-			memcpy ( ptr, a_file->mData + a_file->mOffset, remainingSize );
-			a_file->mOffset += remainingSize;
+			memcpy ( ptr, file->mData + file->mOffset, remainingSize );
+			file->mOffset += remainingSize;
 			return remainingSize;
 		}
 	}
@@ -199,10 +234,49 @@ size_t NaClFileSystem::fread ( void *ptr, size_t size_of_elements, size_t number
 	return 0;
 }
 
-size_t fwrite ( const void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *a_file ) {
+size_t NaClFileSystem::fwrite ( const void *ptr, size_t size, size_t count, NaClFile *file ) {
 
-	printf ( "NaClFileSystem::fwrite - unimplemented" );
+	if( file && file->mIsFileOpen ) {
+
+		file->mIsFileLocked = true;
+		file->mData = ( char* ) ptr;
+		file->mSize = size *  count;
+
+		pp::CompletionCallback cc ( WriteFileMainThread, file );
+		
+		if ( !mCore->IsMainThread ()) {
+			mCore->CallOnMainThread ( 0, cc , 0 );
+		}
+		else {
+			printf( "ERROR: Cannot write files on main thread\n" );
+			WriteFileMainThread ( file, 0 );
+			file->mIsFileLocked = false;
+		}
+
+		while ( file->mIsFileLocked ) {
+			sleep ( 0.01f );
+		}
+
+		file->mOffset += size *  count;
+	}
+
 	return 0;
+}
+
+//----------------------------------------------------------------//
+void NaClFileSystem::WriteFileMainThread ( void * userData, int32_t result ) {
+
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+
+	pp::CompletionCallback cc ( WriteFileDone, file );
+	file->mFileIO->Write ( file->mOffset, file->mData, file->mSize, cc );
+}
+
+void NaClFileSystem::WriteFileDone ( void * userData, int32_t result )  {
+
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+
+	file->mIsFileLocked = false;
 }
 
 //----------------------------------------------------------------//
@@ -220,7 +294,7 @@ void NaClFileSystem::HttpLoaded ( void *_file, const char *buffer, int32_t size 
 		memcpy ( file->mData, buffer, size );
 	}
 
-	file->mHttpLoaded = true;
+	file->mIsHttpLoaded = true;
 }
 
 //----------------------------------------------------------------//
@@ -230,19 +304,30 @@ NaClFileSystem * NaClFileSystem::Get () {
 }
 
 NaClFile::NaClFile () {
-	mHttpLoaded = false;
+	mIsHttpLoaded = false;
 	mSize = 0;
 	mData = NULL;
 	mOffset = 0;
 	mExists = false;
+	mFileRef = NULL;
+	mFileIO = NULL;
 }
 
 NaClFile::~NaClFile () {
-	mHttpLoaded = false;
+	mIsHttpLoaded = false;
 	mSize = 0;
 	if ( mData ) {
 		delete [] mData;
 	}
+
+	if ( mFileRef ) {
+		delete mFileRef;
+	}
+
+	if ( mFileIO ) {
+		delete mFileIO;
+	}
+
 	mOffset = 0;
 	mExists = false;
 }

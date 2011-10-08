@@ -124,6 +124,7 @@ public:
 		INHERIT_BLEND_MODE		= 0x00000080,
 	};
 	
+	static const u32 PARENT_MASK    = 0x00000042;
 	static const u32 DEFAULT_MASK	= 0x00000046;
 	static const u32 ALL_TRAITS		= 0xffffffff;
 	

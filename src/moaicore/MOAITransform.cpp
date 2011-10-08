@@ -794,7 +794,7 @@ void MOAITransform::SetLoc ( float x, float y ) {
 //----------------------------------------------------------------//
 void MOAITransform::SetParent ( MOAITransformBase* parent ) {
 
-	this->SetTraitSource ( parent, DEFAULT_MASK );
+	this->SetTraitSource ( parent, PARENT_MASK );
 }
 
 //----------------------------------------------------------------//

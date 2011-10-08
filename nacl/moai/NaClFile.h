@@ -8,6 +8,7 @@
 #undef fopen 
 #undef fclose
 #undef fread 
+#undef fwrite 
 #undef feof 
 #undef ferror
 #undef clearerr
@@ -26,6 +27,7 @@ extern "C" {
 FILE * nacl_fopen ( const char * path, const char *mode );
 int nacl_fclose ( FILE *file );
 int nacl_fread ( void *ptr, int size_of_elements, int number_of_elements, FILE *file );
+int nacl_fwrite ( const void * ptr, int size, int count, FILE *file );
 int nacl_feof ( FILE * file );
 int nacl_ferror ( FILE * file );
 void nacl_clearerr ( FILE * stream );
@@ -43,6 +45,7 @@ int nacl_stat ( const char *path, struct stat *buf );
 #define fopen nacl_fopen
 #define fclose nacl_fclose
 #define fread nacl_fread
+#define fwrite nacl_fwrite
 #define feof nacl_feof
 #define ferror nacl_ferror
 #define clearerr nacl_clearerr

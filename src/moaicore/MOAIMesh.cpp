@@ -7,6 +7,7 @@
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIMesh.h>
 #include <moaicore/MOAIProp.h>
+#include <moaicore/MOAIShaderMgr.h>
 #include <moaicore/MOAITexture.h>
 #include <moaicore/MOAIVertexBuffer.h>
 #include <moaicore/MOAIVertexFormat.h>
@@ -71,9 +72,14 @@ void MOAIMesh::Draw ( const USAffine2D& transform, u32 idx, MOAIDeckRemapper* re
 	
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
 	
-	gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_MODEL );
-	gfxDevice.SetTexture ( this->mTexture );
 	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );
+	gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_PROJ );
+	gfxDevice.SetTexture ( this->mTexture );
+	gfxDevice.SetUVMtxMode ( MOAIGfxDevice::UV_STAGE_MODEL, MOAIGfxDevice::UV_STAGE_TEXTURE );
+
+	/*gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_MODEL );
+	gfxDevice.SetTexture ( this->mTexture );
+	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );*/
 
 	this->mVertexBuffer->Draw ();
 }
@@ -99,6 +105,17 @@ USRect MOAIMesh::GetBounds ( u32 idx, MOAIDeckRemapper* remapper ) {
 	USRect bounds;
 	bounds.Init ( 0.0f, 0.0f, 0.0f, 0.0f );
 	return bounds;
+}
+
+//----------------------------------------------------------------//
+void MOAIMesh::LoadShader () {
+
+	if ( this->mShader ) {
+		MOAIGfxDevice::Get ().SetShader ( this->mShader );
+	}
+	else {
+		MOAIShaderMgr::Get ().BindShader ( MOAIShaderMgr::MESH_SHADER );
+	}
 }
 
 //----------------------------------------------------------------//

@@ -617,10 +617,7 @@ MOAIOverlapPrim2D* MOAIProp2D::IsOverlapPrim2D () {
 //----------------------------------------------------------------//
 void MOAIProp2D::LoadShader () {
 
-	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
-
-	gfxDevice.SetPenColor ( this->mColor );
-	gfxDevice.SetBlendMode ( this->mBlendMode );
+	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();	
 
 	if ( this->mShader ) {
 		gfxDevice.SetShader ( this->mShader );
@@ -628,6 +625,9 @@ void MOAIProp2D::LoadShader () {
 	else if ( this->mDeck ) {
 		this->mDeck->LoadShader ();
 	}
+
+	gfxDevice.SetPenColor ( this->mColor );
+	gfxDevice.SetBlendMode ( this->mBlendMode );
 	
 	// TODO
 	//MOAILayoutFrame* parent = USCast < MOAILayoutFrame >( this->mParent );

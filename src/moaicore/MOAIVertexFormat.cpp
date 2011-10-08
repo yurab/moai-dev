@@ -45,11 +45,13 @@ int	MOAIVertexFormat::_declareAttribute ( lua_State* L ) {
 int MOAIVertexFormat::_declareColor ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIVertexFormat, "UNN" )
 
-#if USE_OPENGLES1
 	u32 index			= state.GetValue < u32 >( 2, 1 ) - 1;
 	u32 type			= state.GetValue < u32 >( 3, 0 );
-	
+
+#if USE_OPENGLES1	
 	self->DeclareAttribute ( index, type, COLOR_SIZE, GL_COLOR_ARRAY, true );
+#else
+	self->DeclareAttribute ( index, type, COLOR_SIZE, ARRAY_COLOR, true );
 #endif
 
 	return 0;
@@ -67,12 +69,14 @@ int MOAIVertexFormat::_declareColor ( lua_State* L ) {
 int MOAIVertexFormat::_declareCoord ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIVertexFormat, "UNNN" )
 
-#if USE_OPENGLES1
 	u32 index			= state.GetValue < u32 >( 2, 1 ) - 1;
 	u32 type			= state.GetValue < u32 >( 3, 0 );
 	u32 size			= state.GetValue < u32 >( 4, 0 );
-	
+
+#if USE_OPENGLES1
 	self->DeclareAttribute ( index, type, size, GL_VERTEX_ARRAY, false );
+#else
+	self->DeclareAttribute ( index, type, size, ARRAY_VERTEX, false );
 #endif
 
 	return 0;
@@ -89,11 +93,13 @@ int MOAIVertexFormat::_declareCoord ( lua_State* L ) {
 int MOAIVertexFormat::_declareNormal ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIVertexFormat, "UNN" )
 
-#if USE_OPENGLES1
 	u32 index			= state.GetValue < u32 >( 2, 1 ) - 1;
 	u32 type			= state.GetValue < u32 >( 3, 0 );
-	
+
+#if USE_OPENGLES1
 	self->DeclareAttribute ( index, type, NORMAL_SIZE, GL_NORMAL_ARRAY, false );
+#else
+	self->DeclareAttribute ( index, type, NORMAL_SIZE, ARRAY_NORMAL, false );
 #endif
 
 	return 0;
@@ -111,12 +117,14 @@ int MOAIVertexFormat::_declareNormal ( lua_State* L ) {
 int MOAIVertexFormat::_declareUV ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIVertexFormat, "UNNN" )
 
-#if USE_OPENGLES1
 	u32 index			= state.GetValue < u32 >( 2, 1 ) - 1;
 	u32 type			= state.GetValue < u32 >( 3, 0 );
 	u32 size			= state.GetValue < u32 >( 4, 0 );
-	
+
+#if USE_OPENGLES1
 	self->DeclareAttribute ( index, type, size, GL_TEXTURE_COORD_ARRAY, false );
+#else
+	self->DeclareAttribute ( index, type, size, ARRAY_TEX_COORD, false );
 #endif
 
 	return 0;

@@ -16,9 +16,14 @@ int nacl_fclose ( FILE *file ) {
 	return NaClFileSystem::Get ()->fclose ((NaClFile *) file );
 }
 
-int nacl_fread ( void *ptr, int size_of_elements, int number_of_elements, FILE *file ) {
+int nacl_fread ( void *ptr, int size, int count, FILE *file ) {
 
-	return NaClFileSystem::Get ()->fread ( ptr, size_of_elements, number_of_elements, (NaClFile *) file );
+	return NaClFileSystem::Get ()->fread ( ptr, size, count, (NaClFile *) file );
+}
+
+int nacl_fwrite ( const void * ptr, int size, int count, FILE *file ) {
+
+	return NaClFileSystem::Get ()->fwrite ( ptr, size, count, (NaClFile *) file );
 }
 
 int nacl_feof ( FILE * void_file ) {
@@ -41,7 +46,7 @@ int nacl_fgetc ( FILE * void_file ) {
 
 	NaClFile * file = ( NaClFile * ) void_file;
 
-	if( file && file->mHttpLoaded ) {
+	if( file && file->mIsHttpLoaded ) {
 
 		int remainingSize = file->mSize - file->mOffset;
 
@@ -61,7 +66,7 @@ int nacl_ungetc (int c, FILE *void_file) {
 
 	NaClFile * file = ( NaClFile * ) void_file;
 
-	if( file && file->mHttpLoaded ) {
+	if( file && file->mIsHttpLoaded ) {
 
 		if ( file->mOffset ) {
 			file->mOffset -= 1;

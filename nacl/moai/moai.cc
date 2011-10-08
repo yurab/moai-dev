@@ -242,17 +242,21 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 
 	//AJV extremely ugly hack to 'detect' unix systems or any other system where the default clock is wrong
 	//check out "clock() issues with beta SDK, chrome 15 vs 16" in the native client discuss Google group
-	//NOTE: After talking with google, stay tuned new timer coming soon!
+	//NOTE: After talking with google, stay tuned, new timer coming soon!
 	double beforeClock = USDeviceTime::GetTimeInSeconds ();
+	double beforeTime = g_core->GetTime ();
 
-	sleep ( 1.0f );
+	while (( g_core->GetTime () - beforeTime ) < 1.0f ) {
+		sleep ( 0.1f );
+	}
 
 	double afterClock = USDeviceTime::GetTimeInSeconds ();
+	double afterTime = g_core->GetTime ();
 
 	printf ( "clocks per second %f, %f\n", beforeClock, afterClock );
-	//if ( afterClock - beforeClock > 2.0f ) {
-		//USDeviceTime::SetClocksPerSecond ( 1000000 );
-	//}
+	if (( afterClock - beforeClock ) < 0.1f ) {
+		USDeviceTime::SetClocksPerSecond ( 1000 );
+	}
 	//AJV End extremely ugly hack
 
 	printf ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );

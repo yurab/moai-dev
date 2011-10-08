@@ -36,10 +36,12 @@ public:
 	void			Draw					( const USAffine2D& transform, u32 idx, MOAIDeckRemapper* remapper );
     void            Draw					( const USAffine2D& transform, MOAIGrid& grid, MOAIDeckRemapper* remapper, USVec2D& gridScale, MOAICellCoord& c0, MOAICellCoord& c1 );
     USRect			GetBounds				( u32 idx, MOAIDeckRemapper* remapper );
+	virtual void	LoadShader				();
 					MOAIMesh				();
 					~MOAIMesh				();
 	void			RegisterLuaClass		( USLuaState& state );
 	void			RegisterLuaFuncs		( USLuaState& state );
+
 };
 
 #endif

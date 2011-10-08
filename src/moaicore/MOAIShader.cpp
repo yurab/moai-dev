@@ -97,6 +97,17 @@ void MOAIShaderUniform::BindPipelineTransforms ( const USMatrix4x4& world, const
 	}
 }
 
+void MOAIShaderUniform::BindColor ( float r, float g, float b, float a ) {
+
+	switch ( this->mType ) {
+
+		case UNIFORM_COLOR: {
+			glUniform4f ( this->mAddr, r, g, b, a );
+			break;
+		}
+	}
+}
+
 //----------------------------------------------------------------//
 MOAIShaderUniform::MOAIShaderUniform () :
 	mType ( UNIFORM_NONE ) {
@@ -559,6 +570,16 @@ void MOAIShader::UpdatePipelineTransforms ( const USMatrix4x4& world, const USMa
 	// reload the uniform values
 	for ( u32 i = 0; i < this->mUniforms.Size (); ++i ) {
 		this->mUniforms [ i ].BindPipelineTransforms ( world, view, proj );
+	}
+}
+
+//----------------------------------------------------------------//
+void MOAIShader::UpdateColor ( float r, float g, float b, float a ) {
+
+	// reload the uniform values
+	for ( u32 i = 0; i < this->mUniforms.Size (); ++i ) {
+		printf ( "shader update col %f, %f, %f, %f\n", r, g, b, a );
+		this->mUniforms [ i ].BindColor ( r, g, b, a );
 	}
 }
 

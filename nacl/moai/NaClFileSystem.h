@@ -15,11 +15,19 @@ public:
 	~NaClFile ();
 
 	const char * mPath;
-	bool mHttpLoaded;
+
+	bool mIsHttpLoaded;
+
+	bool mIsFileOpen;
+	bool mIsFileLocked;
+
 	char * mData;
 	int mSize;
 	int mOffset;
 	bool mExists;
+
+	pp::FileRef *mFileRef;
+	pp::FileIO *mFileIO;
 };
 
 
@@ -38,17 +46,27 @@ public:
 
 	int fclose ( NaClFile *file );
 
-	size_t fread ( void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *a_file );
-	size_t fwrite ( const void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *a_file );
+	size_t fread ( void *ptr, size_t size, size_t count, NaClFile *a_file );
+	size_t fwrite ( const void *ptr, size_t size, size_t count, NaClFile *a_file );
 
 	int stat ( const char *path, struct stat *buf );
 
 private:
 	
 	//main thread callback functions, C API since callback factory does not work on bg thread
+
+	//URL
 	static void RequestURLMainThread ( void* userData, int32_t result );
 	static void RequestURLStatsMainThread ( void * userData, int32_t result );
 
+	//File
+	static void OpenFileMainThread ( void * userData, int32_t result );
+	static void OpenFileCallback ( void * userData, int32_t result );
+
+	static void WriteFileMainThread ( void * userData, int32_t result );
+	static void WriteFileDone ( void * userData, int32_t result );
+
+	//pp Filesystem
 	static void OpenFileSystemMainThread ( void* userData, int32_t result );
 
 	void OpenFileSystemCallback ( int32_t result );

@@ -20,16 +20,6 @@ private:
 
 	friend class MOAIShader;
 
-	enum {
-		UNIFORM_NONE,
-		UNIFORM_INT,
-		UNIFORM_FLOAT,
-		UNIFORM_TRANSFORM,
-		UNIFORM_VIEW_PROJ,
-		UNIFORM_WORLD,
-		UNIFORM_WORLD_VIEW_PROJ,
-	};
-
 	u32		mAddr;
 	u32		mType;
 	u32		mSize;
@@ -42,11 +32,24 @@ private:
 	void		BindAttributes				( const float* attributes );
 	void		BindMatrix					( const USMatrix4x4& matrix );
 	void		BindPipelineTransforms		( const USMatrix4x4& world, const USMatrix4x4& view, const USMatrix4x4& proj );
+	void		BindColor					( float r, float g, float b, float a );
 
 public:
 
 	//----------------------------------------------------------------//
-				MOAIShaderUniform	();
+
+	enum {
+		UNIFORM_NONE,
+		UNIFORM_INT,
+		UNIFORM_FLOAT,
+		UNIFORM_TRANSFORM,
+		UNIFORM_VIEW_PROJ,
+		UNIFORM_WORLD,
+		UNIFORM_WORLD_VIEW_PROJ,
+		UNIFORM_COLOR,
+	};
+
+	MOAIShaderUniform	();
 
 };
 
@@ -91,6 +94,7 @@ protected:
 	void			OnLoad						();
 	void			OnRenew						();
 	void			OnUnload					();
+	void			UpdateColor					( float r, float g, float b, float a );
 	void			UpdatePipelineTransforms	( const USMatrix4x4& world, const USMatrix4x4& view, const USMatrix4x4& proj );
 	bool			Validate					();
 

@@ -26,7 +26,7 @@
 #include <time.h>
 
 namespace {
-	int g_CLOCKS_PER_SECOND = CLOCKS_PER_SEC;
+	int g_CLOCKS_PER_SECOND = 1000000;
 }
 
 //================================================================//
