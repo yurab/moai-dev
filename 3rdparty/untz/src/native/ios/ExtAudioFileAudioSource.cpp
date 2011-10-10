@@ -19,8 +19,8 @@ void printCode(const char *tag, OSStatus s)
     } else
         // no, format it as an integer
         sprintf(str, "%d", (int)s);
-    fprintf(stderr, "%s%s\n", tag, str);
-    
+    //fprintf(stderr, "%s%s\n", tag, str);
+	RPRINT("%s%s\n", tag, str);
 }
 
 ExtAudioFileAudioSource::ExtAudioFileAudioSource()
@@ -29,6 +29,7 @@ ExtAudioFileAudioSource::ExtAudioFileAudioSource()
 
 ExtAudioFileAudioSource::~ExtAudioFileAudioSource()
 {
+	close();
 }
 
 double ExtAudioFileAudioSource::getLength() 
@@ -48,6 +49,9 @@ UInt32 ExtAudioFileAudioSource::getNumChannels()
 
 bool ExtAudioFileAudioSource::init(const RString& path, bool loadIntoMemory)
 {
+	if(mLoadedInMemory && loadIntoMemory)
+		return true;
+	
     // FIXME: query the file to find out how many channels instead of hardcoding.
     
     CFURLRef path_url = CFURLCreateFromFileSystemRepresentation (kCFAllocatorDefault,
@@ -88,14 +92,17 @@ bool ExtAudioFileAudioSource::init(const RString& path, bool loadIntoMemory)
 
 void ExtAudioFileAudioSource::close()
 {
+	RPRINT("closing...\n");
     BufferedAudioSource::close();
     
     ExtAudioFileDispose(mAudioFile);
     free (mpBufferList);    
+	RPRINT("done closing.\n");
 }
  
 void ExtAudioFileAudioSource::setDecoderPosition(Int64 startFrame)
 {
+	RPRINT("setting decoder position\n");
     ExtAudioFileSeek(mAudioFile, startFrame);  
 	if(startFrame < getLength() * getSampleRate())
 		mEOF = false;
@@ -103,6 +110,7 @@ void ExtAudioFileAudioSource::setDecoderPosition(Int64 startFrame)
 
 Int64 ExtAudioFileAudioSource::decodeData(float* buffer, UInt32 numFrames)
 {
+	RPRINT("decoding data\n");
     UInt32 numChannels = getNumChannels();
     OSStatus err = noErr;
     
@@ -117,6 +125,7 @@ Int64 ExtAudioFileAudioSource::decodeData(float* buffer, UInt32 numFrames)
     if(err || framesRead == 0)
     {
         mEOF = true;
+		RPRINT("done decoding data\n");
         return 0;
     }
     
@@ -132,6 +141,7 @@ Int64 ExtAudioFileAudioSource::decodeData(float* buffer, UInt32 numFrames)
         }
     }
     
+	RPRINT("done decoding data\n");
     return framesRead;    
 }
 

@@ -16,7 +16,7 @@
 
 #include <unistd.h>
 #include <stdio.h>
-
+ 
 extern "C" {
 #include <lua.h>
 #include <lauxlib.h>
@@ -123,7 +123,11 @@ void* moai_main ( void *_instance ) {
 			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
 		}
 
+		printf ( "update\n" );
+
 		AKUUpdate ();
+
+		printf ( "render\n" );
 
 		NaClRender ();
 

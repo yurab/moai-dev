@@ -71,7 +71,7 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 	NaClFile * newFile = new NaClFile ();
 	newFile->mPath = path;
 	
-	printf ( "NaClFileSystem::fopen %s \n", path );
+	printf ( "NaClFileSystem::fopen %s, mode %s \n", path, mode );
 
 	//reading modes
 	if ( mode[0] == 'r' ) {
@@ -111,6 +111,8 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 
 			sleep ( 0.01f );
 		}
+
+		printf ("opened file for writing.\n" );
 	}
 	else {
 		printf ( "NaClFileSystem::fopen - Unsupported mode %s\n", mode );
