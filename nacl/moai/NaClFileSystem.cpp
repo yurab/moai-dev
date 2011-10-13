@@ -13,6 +13,12 @@
 
 #include "geturl_handler.h"
 
+//AJV TODO - this needs to be refactored, decision needs to be made on whether
+// to force binary package for NaCl apps, or to allow seemless Local/Remote File I/O
+// Pros for binary: Clear downloading time for user, consistent speeds
+// Pros for seemless: Easily move files local <-> remote, little work to move hosted <-> packaged app.
+// auto-caching will double disk space for packages apps though...
+
 NaClFileSystem *NaClFileSystem::mSingletonInstance = NULL;
 
 //----------------------------------------------------------------//
@@ -38,7 +44,6 @@ void NaClFileSystem::Init () {
 	pp::CompletionCallback cc ( OpenFileSystemMainThread, this );
 	mCore->CallOnMainThread ( 0, cc , 0 );
 
-	//block while waiting for filesys
 	while ( !mFileSystemOpened ) {
 
 		sleep ( 0.01f );
@@ -60,65 +65,151 @@ void NaClFileSystem::OpenFileSystemMainThread ( void* userData, int32_t result )
 //----------------------------------------------------------------//
 void NaClFileSystem::OpenFileSystemCallback ( int32_t result ) {
 
-	mFileSystemOpened = true;
+	if ( result != PP_OK ) {
+		printf ( "ERROR: NaClFileSystem Open File system result %d\n", result );
+	}
+	else {
+		mFileSystemOpened = true;
+	}
 }
 
 //----------------------------------------------------------------//
 NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 
+	//AJV support binary and text read/write? nacl file system makes no distinction, until then...
 	//int modeLen = strlen ( mode );
 
-	NaClFile * newFile = new NaClFile ();
-	newFile->mPath = path;
-	
-	printf ( "NaClFileSystem::fopen %s, mode %s \n", path, mode );
+	//AJV hack to differentiate local files from hosted
+	char *NaClFilePath = strstr ( path, "NaClFileSys" );
+	const char *redirectPath = path;
+	bool isOnDisk = false;
 
-	//reading modes
+	if ( NaClFilePath ) {
+		redirectPath = path + strlen ( "NaClFileSys" );
+		isOnDisk = true;
+
+	}
+
+	NaClFile * newFile = new NaClFile ();
+	newFile->mPath = redirectPath;
+	
+	printf ( "NaClFileSystem::fopen %s, mode %s, is on disk %d \n", newFile->mPath, mode, isOnDisk );
+
+	if ( mCore->IsMainThread () ) {
+		printf( "ERROR: Cannot perform blocking file I/O on main thread\n" );
+	}
+
 	if ( mode[0] == 'r' ) {
 
-		//TODO, check if file is cached
-		pp::CompletionCallback cc ( RequestURLMainThread, newFile );
-
-		if ( !mCore->IsMainThread ()) {
-			mCore->CallOnMainThread ( 0, cc , 0 );
+		if ( isOnDisk ) {
+			newFile->mFlags = PP_FILEOPENFLAG_READ;
 		}
 		else {
-			printf( "ERROR: Cannot open file for reading on main thread\n" );
-			RequestURLMainThread ( newFile, 0 );
-			newFile->mIsHttpLoaded = true;
+			pp::CompletionCallback cc ( RequestURLMainThread, newFile );
+
+			if ( !mCore->IsMainThread ()) {
+				mCore->CallOnMainThread ( 0, cc , 0 );
+			}
+			else {
+				RequestURLMainThread ( newFile, 0 );
+				newFile->mIsHttpLoaded = true;
+			}
+
+			while ( !newFile->mIsHttpLoaded ) {
+
+				sleep ( 0.01f );
+			}
 		}
-
-		while ( !newFile->mIsHttpLoaded ) {
-
-			sleep ( 0.01f );
-		}
-
 	} 
 	else if ( mode[0] == 'w' ) {
 
-		pp::CompletionCallback cc ( OpenFileMainThread, newFile );
-
-		if ( !mCore->IsMainThread ()) {
-			mCore->CallOnMainThread ( 0, cc , 0 );
+		if ( isOnDisk ) {
+			newFile->mFlags = PP_FILEOPENFLAG_WRITE | PP_FILEOPENFLAG_CREATE | PP_FILEOPENFLAG_TRUNCATE;
 		}
 		else {
-			printf( "ERROR: Cannot open file for writing on main thread\n" );
-			OpenFileMainThread ( newFile, 0 );
-			newFile->mIsFileOpen = true;
+			printf ( "ERROR: Cannot write to file not on local file system\n" );
 		}
 
-		while ( !newFile->mIsFileOpen ) {
-
-			sleep ( 0.01f );
-		}
-
-		printf ("opened file for writing.\n" );
 	}
 	else {
 		printf ( "NaClFileSystem::fopen - Unsupported mode %s\n", mode );
 	}
 
-	return newFile;
+	if ( isOnDisk ) {
+
+		pp::CompletionCallback cc ( OpenFileMainThread, newFile );
+
+		newFile->mIsFileLocked = true;
+
+		if ( !mCore->IsMainThread ()) {
+			mCore->CallOnMainThread ( 0, cc , 0 );
+		}
+		else {
+			OpenFileMainThread ( newFile, 0 );
+		}
+
+		while ( newFile->mIsFileLocked ) {
+
+			sleep ( 0.01f );
+		}
+
+		if ( newFile->mIsFileOpen ) {
+			newFile->mIsFileExist = true;
+		}
+
+		//AJV read the entire file into memory :(
+		//TODO not this.
+		if ( newFile->mIsFileOpen && newFile->mFlags == PP_FILEOPENFLAG_READ ) {
+
+			//get the size
+			newFile->mIsFileLocked = true;
+
+			pp::CompletionCallback ccSetSize ( SetSizeFileMainThread, newFile );
+
+			if ( !mCore->IsMainThread ()) {
+				mCore->CallOnMainThread ( 0, ccSetSize , 0 );
+			}
+			else {
+				SetSizeFileMainThread ( newFile, 0 );
+			}
+
+			while ( newFile->mIsFileLocked ) {
+				sleep ( 0.01f );
+			}
+
+			newFile->mSize = newFile->mFileInfo.size;
+
+			//now actually read it in
+			newFile->mIsFileLocked = true;
+			newFile->mData = new char [ newFile->mSize ];
+
+			pp::CompletionCallback ccRead ( ReadFileMainThread, newFile );
+		
+			if ( !mCore->IsMainThread ()) {
+				mCore->CallOnMainThread ( 0, ccRead , 0 );
+			}
+			else {
+				ReadFileMainThread ( newFile, 0 );
+				newFile->mIsFileLocked = false;
+			}
+
+			while ( newFile->mIsFileLocked ) {
+				sleep ( 0.01f );
+			}
+
+			newFile->mOffset = 0;
+
+			printf ( "NaClFileSystem Read in file %s with %d bytes\n", path, newFile->mSize );
+		}
+
+	}
+
+	if ( newFile->mIsFileExist ) {
+		return newFile;
+	}
+	else {
+		return NULL;
+	}
 }
 
 //----------------------------------------------------------------//
@@ -143,7 +234,7 @@ void NaClFileSystem::OpenFileMainThread ( void * userData, int32_t result ) {
 	file->mFileRef = new pp::FileRef ( mSingletonInstance->mFileSystem, file->mPath );
 	file->mFileIO = new pp::FileIO ( mSingletonInstance->mInstance );
 
-	file->mFileIO->Open ( *( file->mFileRef ), PP_FILEOPENFLAG_WRITE | PP_FILEOPENFLAG_CREATE | PP_FILEOPENFLAG_TRUNCATE , cc );
+	file->mFileIO->Open ( *( file->mFileRef ), file->mFlags, cc );
 }
 
 //----------------------------------------------------------------//
@@ -151,7 +242,11 @@ void NaClFileSystem::OpenFileCallback ( void * userData, int32_t result ) {
   
 	NaClFile * file = static_cast < NaClFile * > ( userData );
 	
-	file->mIsFileOpen = true;
+	if ( result == PP_OK ) {
+		file->mIsFileOpen = true;
+	}
+
+	file->mIsFileLocked = false;
 }
 
 //----------------------------------------------------------------//
@@ -177,7 +272,7 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 		sleep ( 0.01f );
 	}
 
-	if ( newFile->mExists ) {
+	if ( newFile->mIsFileExist ) {
 		delete newFile;
 		return 0;
 	}
@@ -185,6 +280,15 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 		delete newFile;
 		return -1;
 	}
+}
+
+void NaClFileSystem::SetSizeFileMainThread ( void * userData, int32_t result ) {
+
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+
+	pp::CompletionCallback cc ( FileOperationDone, file );
+
+	file->mFileIO->Query ( &file->mFileInfo, cc );
 }
 
 //----------------------------------------------------------------//
@@ -206,16 +310,47 @@ void NaClFileSystem::RequestURLStatsMainThread ( void * userData, int32_t result
 int NaClFileSystem::fclose ( NaClFile *file ) {
 
 	printf ( "NaClFileSystem::fclose %s \n\n", file->mPath );
+
+	file->mIsFileLocked = true;
+
+	if ( !mCore->IsMainThread ()) {
+		pp::CompletionCallback cc ( DeletePepperFileMainThread, file );
+		mCore->CallOnMainThread ( 0, cc , 0 );
+	}
+	else {
+		DeletePepperFileMainThread ( file, 0 );
+		file->mIsFileLocked = false;
+	}
+
+	while ( file->mIsFileLocked ) {
+		sleep ( 0.01f );
+	}
+
 	delete file;
 	return 0;
 }
 
+void NaClFileSystem::DeletePepperFileMainThread ( void * userData, int32_t result ) {
+
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+
+	if ( file->mFileRef ) {
+		delete file->mFileRef;
+	}
+
+	if ( file->mFileIO ) {
+		delete file->mFileIO;
+	}
+
+	file->mIsFileLocked = false;
+}
+
 //----------------------------------------------------------------//
-size_t NaClFileSystem::fread ( void *ptr, size_t size_of_elements, size_t number_of_elements, NaClFile *file ) {
+size_t NaClFileSystem::fread ( void *ptr, size_t size, size_t count, NaClFile *file ) {
 
-	if( file && file->mIsHttpLoaded ) {
+	if( file && ( file->mIsHttpLoaded || file->mIsFileOpen )) {
 
-		int readSize = size_of_elements * number_of_elements;
+		int readSize = size * count;
 		int remainingSize = file->mSize - file->mOffset;
 
 		if ( readSize <= remainingSize ) {
@@ -229,6 +364,33 @@ size_t NaClFileSystem::fread ( void *ptr, size_t size_of_elements, size_t number
 			return remainingSize;
 		}
 	}
+	//AJV unused for now due to complications with other std file I/O
+	//e.g. getc, ungetc
+	/*else if ( file && file->mIsFileOpen ) {
+
+		printf( "NaClFileSystem::fread filesys read\n" );
+		file->mIsFileLocked = true;
+		file->mExternalBuffer = ( char* ) ptr;
+		file->mSize = size *  count;
+
+		pp::CompletionCallback cc ( ReadFileMainThread, file );
+		
+		if ( !mCore->IsMainThread ()) {
+			mCore->CallOnMainThread ( 0, cc , 0 );
+		}
+		else {
+			printf( "ERROR: Cannot read files on main thread\n" );
+			ReadFileMainThread ( file, 0 );
+			file->mIsFileLocked = false;
+		}
+
+		while ( file->mIsFileLocked ) {
+			sleep ( 0.01f );
+		}
+
+		file->mExternalBuffer = NULL;
+		file->mOffset += size *  count;
+	}*/
 	else {
 		printf ( "NaClFileSystem::fread - invalid file" );
 	}
@@ -241,7 +403,7 @@ size_t NaClFileSystem::fwrite ( const void *ptr, size_t size, size_t count, NaCl
 	if( file && file->mIsFileOpen ) {
 
 		file->mIsFileLocked = true;
-		file->mData = ( char* ) ptr;
+		file->mExternalBuffer = ( char* ) ptr;
 		file->mSize = size *  count;
 
 		pp::CompletionCallback cc ( WriteFileMainThread, file );
@@ -259,6 +421,7 @@ size_t NaClFileSystem::fwrite ( const void *ptr, size_t size, size_t count, NaCl
 			sleep ( 0.01f );
 		}
 
+		file->mExternalBuffer = NULL;
 		file->mOffset += size *  count;
 	}
 
@@ -270,11 +433,21 @@ void NaClFileSystem::WriteFileMainThread ( void * userData, int32_t result ) {
 
 	NaClFile * file = static_cast < NaClFile * > ( userData );
 
-	pp::CompletionCallback cc ( WriteFileDone, file );
-	file->mFileIO->Write ( file->mOffset, file->mData, file->mSize, cc );
+	pp::CompletionCallback cc ( FileOperationDone, file );
+	file->mFileIO->Write ( file->mOffset, file->mExternalBuffer, file->mSize, cc );
 }
 
-void NaClFileSystem::WriteFileDone ( void * userData, int32_t result )  {
+//----------------------------------------------------------------//
+void NaClFileSystem::ReadFileMainThread ( void * userData, int32_t result ) {
+
+	NaClFile * file = static_cast < NaClFile * > ( userData );
+
+	pp::CompletionCallback cc ( FileOperationDone, file );
+	file->mFileIO->Read ( file->mOffset, file->mData, file->mSize, cc );
+}
+
+//----------------------------------------------------------------//
+void NaClFileSystem::FileOperationDone ( void * userData, int32_t result )  {
 
 	NaClFile * file = static_cast < NaClFile * > ( userData );
 
@@ -286,7 +459,7 @@ void NaClFileSystem::HttpLoaded ( void *_file, const char *buffer, int32_t size 
 
 	NaClFile *file = static_cast < NaClFile * > ( _file );
 
-	if ( file->mExists && size ) {
+	if ( file->mIsFileExist && size ) {
 
 		printf ( "NaClFileSystem::HttpLoaded file %s, size: %d\n", file->mPath, size );
 
@@ -306,13 +479,17 @@ NaClFileSystem * NaClFileSystem::Get () {
 }
 
 NaClFile::NaClFile () {
-	mIsHttpLoaded = false;
-	mSize = 0;
+
 	mData = NULL;
-	mOffset = 0;
-	mExists = false;
+	mIsFileExist = false;
 	mFileRef = NULL;
 	mFileIO = NULL;
+	mFlags = 0;
+	mIsFileLocked = false;
+	mIsFileOpen = false;
+	mIsHttpLoaded = false;
+	mOffset = 0;
+	mSize = 0;
 }
 
 NaClFile::~NaClFile () {
@@ -322,14 +499,6 @@ NaClFile::~NaClFile () {
 		delete [] mData;
 	}
 
-	if ( mFileRef ) {
-		delete mFileRef;
-	}
-
-	if ( mFileIO ) {
-		delete mFileIO;
-	}
-
 	mOffset = 0;
-	mExists = false;
+	mIsFileExist = false;
 }

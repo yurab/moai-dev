@@ -40,37 +40,37 @@ class GetURLHandler {
 	void SetMethod ( int method );
 
  private:
-  static const int kBufferSize = 4096;
+	static const int kBufferSize = 4096;
 
-  GetURLHandler ( pp::Instance* instance_, const std::string& url );
-  ~GetURLHandler();
+	GetURLHandler ( pp::Instance* instance_, const std::string& url );
+	~GetURLHandler();
 
-  // Callback fo the pp::URLLoader::Open().
-  // Called by pp::URLLoader when response headers are received or when an
-  // error occurs (in response to the call of pp::URLLoader::Open()).
-  // Look at <ppapi/c/ppb_url_loader.h> and
-  // <ppapi/cpp/url_loader.h> for more information about pp::URLLoader.
-  void OnOpen(int32_t result);
+	// Callback fo the pp::URLLoader::Open().
+	// Called by pp::URLLoader when response headers are received or when an
+	// error occurs (in response to the call of pp::URLLoader::Open()).
+	// Look at <ppapi/c/ppb_url_loader.h> and
+	// <ppapi/cpp/url_loader.h> for more information about pp::URLLoader.
+	void OnOpen(int32_t result);
 
-  // Callback fo the pp::URLLoader::ReadResponseBody().
-  // |result| contains the number of bytes read or an error code.
-  // Appends data from this->buffer_ to this->url_response_body_.
-  void OnRead(int32_t result);
+	// Callback fo the pp::URLLoader::ReadResponseBody().
+	// |result| contains the number of bytes read or an error code.
+	// Appends data from this->buffer_ to this->url_response_body_.
+	void OnRead(int32_t result);
 
-  // Reads the response body (asynchronously) into this->buffer_.
-  // OnRead() will be called when bytes are received or when an error occurs.
-  void ReadBody();
+	// Reads the response body (asynchronously) into this->buffer_.
+	// OnRead() will be called when bytes are received or when an error occurs.
+	void ReadBody();
 
-  // Post a message back to the browser with the download results.
-  void ReportResult(const std::string& fname,
-                    const std::string& text,
-                    bool success);
+	// Post a message back to the browser with the download results.
+	void ReportResult(const std::string& fname,
+					const std::string& text,
+					bool success);
 
-  // Post a message back to the browser with the download results and
-  // self-destroy.  |this| is no longer valid when this method returns.
-  void ReportResultAndDie(const std::string& fname,
-                          const std::string& text,
-                          bool success);
+	// Post a message back to the browser with the download results and
+	// self-destroy.  |this| is no longer valid when this method returns.
+	void ReportResultAndDie(const std::string& fname,
+							const std::string& text,
+							bool success);
 
 	GetURLCallback mCallback;
 

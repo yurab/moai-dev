@@ -86,10 +86,10 @@ void GetURLHandler::OnOpen ( int32_t result ) {
 		//get info about file TODO: get size,exist, other file stat
 
 		if ( mUrlLoader.GetResponseInfo ().GetStatusCode () == 200 ) {
-			mFile->mExists = true;
+			mFile->mIsFileExist = true;
 		}
 		else {
-			mFile->mExists = false;
+			mFile->mIsFileExist = false;
 		}
 
 		if ( mMethod == GET ) {

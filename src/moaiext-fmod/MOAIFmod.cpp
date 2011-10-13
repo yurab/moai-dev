@@ -96,6 +96,7 @@ void MOAIFmod::OpenSoundSystem () {
 	FMOD_RESULT result;
 
 	//FMOD::Debug_SetLevel(FMOD_DEBUG_ALL);
+	//FMOD::Debug_SetLevel(FMOD_DEBUG_LEVEL_ERROR);
 
 	result = FMOD::System_Create ( &this->mSoundSys ); // Create the main system object.
 	if ( result != FMOD_OK ) return;
@@ -104,10 +105,10 @@ void MOAIFmod::OpenSoundSystem () {
 
 	printf ( "init moai fmod system\n" );
 	FMOD_NACL_EXTRADRIVERDATA extraDriverData;
-	memset(&extraDriverData, 0, sizeof(FMOD_NACL_EXTRADRIVERDATA));
+	memset(&extraDriverData, 0, sizeof(FMOD_NACL_EXTRADRIVERDATA)); 
 	extraDriverData.instance = g_instance->pp_instance();
 
-	result = this->mSoundSys->init ( 32, FMOD_INIT_NORMAL, &extraDriverData );
+	result = this->mSoundSys->init ( 100, FMOD_INIT_NORMAL, &extraDriverData );
 #else
 	result = this->mSoundSys->init ( 100, FMOD_INIT_NORMAL, 0 );
 #endif

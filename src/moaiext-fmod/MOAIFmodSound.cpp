@@ -206,25 +206,37 @@ void MOAIFmodSound::Load ( cc8* filename, bool streaming, bool async ) {
 #ifdef MOAI_OS_NACL
 
 	mode = FMOD_OPENMEMORY;
-	NaClFile *file = g_FileSystem->fopen ( filename, "r" );
 
 	memset( &info, 0, sizeof( FMOD_CREATESOUNDEXINFO ) );
 	info.cbsize = sizeof( FMOD_CREATESOUNDEXINFO );
-	info.length = file->mSize;
 
-	result = soundSys->createSound (( cc8* )file->mData, mode, &info, &sound );
+	NaClFile *file = g_FileSystem->fopen ( filename, "r" );
 
-	g_FileSystem->fclose ( file );
+	if ( file ) {
+		
+		info.length = file->mSize;
+
+		result = soundSys->createSound (( cc8* )file->mData, FMOD_SOFTWARE | mode, &info, &sound );
+
+		g_FileSystem->fclose ( file );
+	}
+	else {
+		info.length = 0;
+		result = soundSys->createSound (( cc8* )NULL, FMOD_SOFTWARE | mode, &info, &sound );
+	}
 #else
 	if ( streaming ) {
-		result = soundSys->createStream ( filename, FMOD_SOFTWARE, &info, &sound );
+		result = soundSys->createStream ( filename, FMOD_SOFTWARE | mode, &info, &sound );
 	}
 	else {
 		result = soundSys->createSound ( filename, FMOD_SOFTWARE | mode, &info, &sound );
 	}
 #endif
 	
-	if ( result != FMOD_OK ) return;
+	if ( result != FMOD_OK ) {
+		printf ( "MOAIFmodSound::Load ( %s ) error loading sound %d\n", filename, result );
+		return;
+	}
 
 	this->mSound = sound;
 }

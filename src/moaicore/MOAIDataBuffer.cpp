@@ -200,7 +200,10 @@ int MOAIDataBuffer::_save ( lua_State* L ) {
 
 	cc8* filename = lua_tostring ( state, 2 );
 	bool affirm_path = state.GetValue < bool >( 3, true );
-
+#if MOAI_OS_NACL
+	//AJV TODO Fix
+	affirm_path = false;
+#endif
 	bool success = self->Save ( filename, affirm_path );
 	lua_pushboolean ( state, success );
 

@@ -34,18 +34,14 @@ int MOAIFmodChannel::_getVolume ( lua_State* L ) {
  */
 int MOAIFmodChannel::_isPlaying ( lua_State* L ) {
 	
-	printf ( "is playing\n" );
 	MOAI_LUA_SETUP ( MOAIFmodChannel, "U" )
 	
 	bool isPlaying = self->mPlayState == PLAYING;
 
-	printf ( "is playing 2\n" );
 	if ( self->mSound ) {
-		printf ( "is playing 3\n" );
 		lua_pushboolean ( state, isPlaying );
 		return 1; 
 	}
-	printf ( "is playing 4\n" );
 	return 0;
 }
 

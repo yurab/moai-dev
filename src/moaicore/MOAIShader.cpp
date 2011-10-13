@@ -578,7 +578,6 @@ void MOAIShader::UpdateColor ( float r, float g, float b, float a ) {
 
 	// reload the uniform values
 	for ( u32 i = 0; i < this->mUniforms.Size (); ++i ) {
-		printf ( "shader update col %f, %f, %f, %f\n", r, g, b, a );
 		this->mUniforms [ i ].BindColor ( r, g, b, a );
 	}
 }

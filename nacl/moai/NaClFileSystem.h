@@ -14,20 +14,22 @@ public:
 	NaClFile ();
 	~NaClFile ();
 
-	const char * mPath;
-
-	bool mIsHttpLoaded;
-
-	bool mIsFileOpen;
-	bool mIsFileLocked;
-
 	char * mData;
-	int mSize;
-	int mOffset;
-	bool mExists;
-
+	char * mExternalBuffer;
+	
 	pp::FileRef *mFileRef;
 	pp::FileIO *mFileIO;
+	PP_FileInfo mFileInfo;
+	int mFlags;
+
+	bool mIsFileExist;
+	bool mIsFileLocked;
+	bool mIsFileOpen;
+	bool mIsHttpLoaded;
+
+	int mOffset;
+	const char * mPath;
+	int mSize;
 };
 
 
@@ -63,13 +65,20 @@ private:
 	static void OpenFileMainThread ( void * userData, int32_t result );
 	static void OpenFileCallback ( void * userData, int32_t result );
 
+	static void SetSizeFileMainThread ( void * userData, int32_t result ); 
 	static void WriteFileMainThread ( void * userData, int32_t result );
-	static void WriteFileDone ( void * userData, int32_t result );
+	static void ReadFileMainThread ( void * userData, int32_t result );
+	static void FileOperationDone ( void * userData, int32_t result );
+
+	static void DeletePepperFileMainThread ( void * userData, int32_t result );
 
 	//pp Filesystem
 	static void OpenFileSystemMainThread ( void* userData, int32_t result );
 
 	void OpenFileSystemCallback ( int32_t result );
+
+	//
+	int QuerySize ( const char *file );
 
 	pp::CompletionCallbackFactory<NaClFileSystem> mCCFactory;
 
