@@ -33,6 +33,23 @@ class MoaiInstance : public pp::Instance {
 	virtual bool HandleInputEvent ( const pp::InputEvent & event );
 };
 
+
+
+class NaClMessageQueue {
+public:
+  pthread_mutex_t mutex;
+  int tail;
+  int num;
+
+  static const int kMaxMessages = 100;
+
+  std::string messages [ kMaxMessages ];
+
+  void PushMessage ( std::string &message );
+  int PopMessage ( std::string &message );
+};
+
+extern NaClMessageQueue *g_MessageQueue;
 extern NaClFileSystem *g_FileSystem;
 extern bool g_blockOnMainThread;
 extern pp::Core* g_core;

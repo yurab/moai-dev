@@ -39,7 +39,6 @@ void USHttpTask::Clear () {
 //----------------------------------------------------------------//
 void USHttpTask::Finish () {
 
-#ifndef MOAI_OS_NACL
 	this->mInfo->Finish ();
 	
 	this->mBytes = this->mInfo->mData;
@@ -50,7 +49,6 @@ void USHttpTask::Finish () {
 
 	this->Clear ();
 	this->Release ();
-#endif
 }
 
 //----------------------------------------------------------------//

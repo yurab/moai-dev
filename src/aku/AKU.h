@@ -41,6 +41,14 @@ AKU_DECLARE_FUNC_ACCESSORS ( ExitFullscreenMode )
 AKU_DECLARE_FUNC_ACCESSORS ( OpenWindow )
 AKU_DECLARE_FUNC_ACCESSORS ( StartGameLoop )
 
+typedef void ( *AKUSocialConnectInitFunc )		(const char* appId, int nperms, const char** perms, void *connector);
+typedef void ( *AKUSocialConnectLogoutFunc )	();
+typedef void ( *AKUSocialConnectRequestFunc )	(int requestId, const char* requestURL, const char* httpRequestMethod, int nargs, const char** keyValPairs);
+
+AKU_DECLARE_FUNC_ACCESSORS ( SocialConnectInit )
+AKU_DECLARE_FUNC_ACCESSORS ( SocialConnectLogout )
+AKU_DECLARE_FUNC_ACCESSORS ( SocialConnectRequest )
+
 struct lua_State;
 typedef int AKUContextID;
 

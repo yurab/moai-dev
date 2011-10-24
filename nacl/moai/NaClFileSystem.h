@@ -8,6 +8,7 @@
 #include "ppapi/cpp/instance.h"
 #include "ppapi/cpp/file_io.h"
 #include "ppapi/c/ppb_file_io.h"
+#include "geturl_handler.h"
 
 class NaClFile {
 public:
@@ -91,10 +92,9 @@ private:
 
 	static NaClFileSystem *mSingletonInstance;
 
-	//TODO move to my own url handler
-	static void HttpLoaded ( void *_instance, const char *buffer, int32_t size );
+	static void HttpLoaded ( GetURLHandler *handler, const char *buffer, int32_t size );
 
-	//filemap? for caching
+	//TODO, remove
 	NaClFile mCurrentFile;
 };
 

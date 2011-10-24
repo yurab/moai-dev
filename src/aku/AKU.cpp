@@ -35,6 +35,10 @@ struct AKUContext {
 	AKU_DEFINE_FUNC_CONTEXT ( OpenWindow );
 	AKU_DEFINE_FUNC_CONTEXT ( StartGameLoop );
 	
+	AKU_DEFINE_FUNC_CONTEXT ( SocialConnectInit );
+	AKU_DEFINE_FUNC_CONTEXT ( SocialConnectLogout );
+	AKU_DEFINE_FUNC_CONTEXT ( SocialConnectRequest );
+
 	USGlobals*	mGlobals;
 	void*		mUserdata;
 };
@@ -66,6 +70,29 @@ AKU_DEFINE_FUNC_ACCESSORS ( OpenWindow, _OpenWindow )
 //----------------------------------------------------------------//
 static void _StartGameLoop () {}
 AKU_DEFINE_FUNC_ACCESSORS ( StartGameLoop, _StartGameLoop )
+
+//----------------------------------------------------------------//
+static void _SocialConnectInit(const char* appId, int nperms, const char** perms, void *connector) {
+	UNUSED( appId );
+	UNUSED( nperms );
+	UNUSED( perms );
+	UNUSED( connector );
+}
+AKU_DEFINE_FUNC_ACCESSORS ( SocialConnectInit, _SocialConnectInit )
+
+//----------------------------------------------------------------//
+static void _SocialConnectLogout() {}
+AKU_DEFINE_FUNC_ACCESSORS ( SocialConnectLogout, _SocialConnectLogout )
+
+//----------------------------------------------------------------//
+static void _SocialConnectRequest(int requestId, const char* requestURL, const char* httpRequestMethod, int nargs, const char** keyValPairs) {
+	UNUSED( requestId );
+	UNUSED( requestURL );
+	UNUSED( httpRequestMethod );
+	UNUSED( nargs );
+	UNUSED( keyValPairs );
+}
+AKU_DEFINE_FUNC_ACCESSORS ( SocialConnectRequest, _SocialConnectRequest )
 
 //----------------------------------------------------------------//
 static void _deleteContext ( AKUContext* context ) {

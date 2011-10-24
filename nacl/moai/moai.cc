@@ -12,6 +12,7 @@
 #include "geturl_handler.h"
 #include "NaClFileSystem.h"
 #include "opengl_context.h"
+#include "moaicore/pch.h"
 #include "moai_nacl.h"
 
 #include <unistd.h>
@@ -35,18 +36,21 @@ extern "C" {
 
 #include <aku/AKU-fmod.h>
 
-#include "moaicore/pch.h"
 #include "moaicore/MOAIGfxDevice.h"
+#include "moaicore/MOAISocialConnect.h"
 
 namespace {
 
 pthread_t gThreadId;
 bool g_swapping = false;
-
+MOAISocialConnect *g_SocialConnect = NULL;
 }
 
 NaClFileSystem *g_FileSystem = NULL;
+NaClMessageQueue *g_MessageQueue = NULL;
+
 MoaiInstance *g_instance = NULL;
+
 bool g_blockOnMainThread = false;
 
 pp::Core* g_core = NULL;
@@ -70,6 +74,9 @@ namespace NaClInputDeviceSensorID {
 }
 
 //----------------------------------------------------------------//
+void HandleSocialMessage ( std::string & message );
+
+//----------------------------------------------------------------//
 void RenderMainThread ( void* userData, int32_t result ) {
 
 	AKUFmodUpdate ();
@@ -87,11 +94,58 @@ void NaClRender () {
 	pp::CompletionCallback cc ( RenderMainThread, g_instance );
 	g_core->CallOnMainThread ( 0, cc , 0 );
 
-	//sleep lock while waiting for filesys
 	while ( g_swapping ) {
 
 		sleep ( 0.01f );
 	}
+}
+
+//----------------------------------------------------------------//
+int NaClMessageQueue::PopMessage ( std::string &message ) {
+
+	pthread_mutex_lock( &mutex );
+
+	int result = 0;
+
+	if ( num > 0) {
+
+		result = 1;
+		message = messages [ tail ];
+		++tail;
+
+		if ( tail >=  NaClMessageQueue::kMaxMessages) {
+			tail -=  NaClMessageQueue::kMaxMessages;
+		}
+		--num;
+	}
+
+	pthread_mutex_unlock( &mutex );
+
+	return result;
+}
+
+//----------------------------------------------------------------//
+void NaClMessageQueue::PushMessage ( std::string &message ) {
+
+	pthread_mutex_lock( &mutex );
+
+	if ( num >= NaClMessageQueue::kMaxMessages ) {
+		printf ("ERROR: g_MessageQueue, kMaxMessages (%d) exceeded\n", NaClMessageQueue::kMaxMessages );
+	} 
+	else {
+		int head = ( tail + num) % NaClMessageQueue::kMaxMessages;
+
+		 messages [ head ] = message;
+		++num;
+
+		if ( num >= NaClMessageQueue::kMaxMessages )  {
+			 num -= NaClMessageQueue::kMaxMessages;
+		}
+
+		//pthread_cond_signal( & condvar );
+	}
+
+	pthread_mutex_unlock( &mutex );
 }
 
 //================================================================//
@@ -121,6 +175,12 @@ void* moai_main ( void *_instance ) {
 			g_LuaMem = lua_getgccount ( L );
 			g_TexMem = MOAIGfxDevice::Get ().GetTextureMemoryUsage ();
 			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
+		}
+
+		//handle messages
+		std::string message;
+		while ( g_MessageQueue->PopMessage ( message )) {
+			HandleSocialMessage ( message );
 		}
 
 		AKUUpdate ();
@@ -154,6 +214,138 @@ void _AKUOpenWindowFunc ( const char* title, int width, int height ) {
 void _AKUStartGameLoopFunc () {
 
 	printf ( "Moai_NaCl: unimplemented _AKUStartGameLoopFunc\n" );
+}
+
+//----------------------------------------------------------------//
+void HandleSocialMessage ( std::string & message ) {
+
+	if ( message.find( "SOCIAL:OnLoginSuccess:" ) != std::string::npos ) {
+
+		//change to queue for bckgrd thread
+		printf ( "SOCIAL:OnLoginSuccess!\n" );
+		g_SocialConnect->OnLoginSuccess ();
+	}
+	else if ( message.find( "SOCIAL:OnLoginFailed:" ) != std::string::npos ) {
+
+		//change to queue for bckgrd thread
+		printf ( "SOCIAL:OnLoginFailed!\n" );
+		g_SocialConnect->OnLoginFailed ( "", false ) ;
+	}
+	else if ( message.find( "SOCIAL:OnRequestSuccess:" ) != std::string::npos ) {
+
+		//change to queue for bckgrd thread
+		int responseStartIndex =  strlen ( "SOCIAL:OnRequestSuccess:" );
+		int responseEndIndex =  message.find( "&" );
+
+		int responseSize = responseEndIndex - responseStartIndex + 1;
+		char *responseText = new char [ responseSize ];
+
+		memset ( responseText, 0, responseSize );
+		memcpy ( responseText, message.c_str () + responseStartIndex, responseSize - 1 );
+
+		int responseId = atoi ( message.c_str () + responseEndIndex + 1 ); 
+
+		printf ( "mSocialConnect->OnRequestSuccess ( %d, %s )\n", responseId, responseText );
+		g_SocialConnect->OnRequestSuccess ( responseId, responseText );
+		
+		delete [] responseText;
+	}
+}
+
+//----------------------------------------------------------------//
+void SocialConnectInitMainThread ( void * userData, int32_t result ) {
+	MOAISocialConnect * socialConnect = ( MOAISocialConnect * ) userData;
+
+	char message[256];
+	memset ( message, 0, 256 );
+	sprintf ( message, "SOCIAL:init:%s", socialConnect->mAppId );
+
+	g_instance->PostMessage ( pp::Var ( message ));
+}
+//----------------------------------------------------------------//
+void _AKUSocialConnectInit(const char* appId, int nperms, const char** perms, void *connector)
+{
+	/*
+	AJV TODO - permissions, actually use apId
+	NSMutableArray* permissions = nil;
+	if( nperms > 0 )
+	{
+		permissions = [NSMutableArray array];
+		for( int i = 0; i < nperms; i++ )
+			[permissions addObject:[NSString stringWithUTF8String:perms[i]]];
+	}
+	
+	[moaiView fbInit:_appId withPermissions:permissions connector:(MOAISocialConnect*)connector];*/
+
+	printf ( "AKUSocialConnectInit appId %s permissions %d, %p\n", appId, nperms, connector );
+
+	MOAISocialConnect * socialConnect = ( MOAISocialConnect * ) connector;
+
+	g_SocialConnect = socialConnect;
+
+	memset ( socialConnect->mAppId, 0, 128 );
+	strcpy ( socialConnect->mAppId, appId );
+
+	pp::CompletionCallback cc ( SocialConnectInitMainThread, socialConnect );
+
+	g_core->CallOnMainThread ( 0, cc , 0 );
+
+}
+
+//----------------------------------------------------------------//
+void _AKUSocialConnectLogout()
+{
+	//AJV no need to 'logout'
+	printf ( "AKUSocialConnectLogout\n" );
+}		
+
+struct SocialConnectRequest {
+	std::string mGraphURL;
+	int id;
+};
+
+void SocialConnectRequestMainThread ( void * userData, int32_t result ) {
+	SocialConnectRequest *req  = ( SocialConnectRequest * ) userData;
+
+	char message[512];
+	memset ( message, 0, 512 );
+	sprintf ( message, "SOCIAL:request:%s,%d", req->mGraphURL.c_str (), req->id );
+
+	delete req;
+
+	g_instance->PostMessage ( pp::Var ( message ));
+}
+//----------------------------------------------------------------//
+void _AKUSocialConnectRequest(int requestId, const char* requestURL, const char* httpRequestMethod, int nargs, const char** args)
+{
+	/*
+	AJV TODO - using params
+	NSMutableDictionary *params = [NSMutableDictionary dictionary];
+	for( int i = 0; i < nargs; i++ )
+	{
+		[params setObject:[NSString stringWithUTF8String:args[2*i]]
+				   forKey:[NSString stringWithUTF8String:args[2*i+1]]];
+	}
+	
+	printf("Facebook: requesting %s %s\n", httpRequestMethod, requestURL);
+	
+	moaiView->mFBRequestId = requestId;
+	
+	[[moaiView mFacebook] requestWithGraphPath:[NSString stringWithUTF8String:requestURL]
+									 andParams:params
+								 andHttpMethod:[NSString stringWithUTF8String:httpRequestMethod]
+								   andDelegate:moaiView];*/
+	
+
+	printf ( "AKUSocialConnectRequest ID: %d, URL: %s, method: %s\n", requestId, requestURL, httpRequestMethod );
+
+	SocialConnectRequest *req = new SocialConnectRequest ();
+	req->mGraphURL = requestURL;
+	req->id = requestId;
+
+	pp::CompletionCallback cc ( SocialConnectRequestMainThread, req );
+
+	g_core->CallOnMainThread ( 0, cc , 0 );
 }
 
 //----------------------------------------------------------------//
@@ -274,6 +466,7 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 	}
 
 	g_FileSystem = new NaClFileSystem ( g_core, this );
+	g_MessageQueue = new NaClMessageQueue ();
 
 	AKUCreateContext ();
 
@@ -296,6 +489,10 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 	AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
 	AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
 	AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
+
+	AKUSetFunc_SocialConnectInit( _AKUSocialConnectInit );
+	AKUSetFunc_SocialConnectLogout( _AKUSocialConnectLogout );
+	AKUSetFunc_SocialConnectRequest( _AKUSocialConnectRequest );
 
 	AKUFmodInit ();
 
@@ -327,12 +524,8 @@ void MoaiInstance::HandleMessage ( const pp::Var& var_message ) {
 
 	std::string message = var_message.AsString ();
 
-	pp::Var var_reply;
-
-	//Java Script messages
-	/*if ( message == "" ) {
-		 
-	}*/
+	//AJV send to queue and proccess on background thread ( due to thread safety issues / file I/O )
+	g_MessageQueue->PushMessage ( message );
 }
 
 //----------------------------------------------------------------//

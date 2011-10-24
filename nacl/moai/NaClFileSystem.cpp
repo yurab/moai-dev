@@ -13,10 +13,8 @@
 
 #include "geturl_handler.h"
 
-//AJV TODO - this needs to be refactored, decision needs to be made on whether
-// to force binary package for NaCl apps, or to allow seemless Local/Remote File I/O
-// Pros for binary: Clear downloading time for user, consistent speeds
-// Pros for seemless: Easily move files local <-> remote, little work to move hosted <-> packaged app.
+//AJV TODO - this needs to be refactored, will be switched to caching files
+// as needed, check disk first then download.
 // auto-caching will double disk space for packages apps though...
 
 NaClFileSystem *NaClFileSystem::mSingletonInstance = NULL;
@@ -218,9 +216,10 @@ void NaClFileSystem::RequestURLMainThread ( void * userData, int32_t result ) {
 	NaClFile * file = static_cast < NaClFile * > ( userData );
 	GetURLHandler* handler = GetURLHandler::Create( Get ()->mInstance, file->mPath );
 
+	handler->SetUserData ( file );
 	if (handler != NULL) {
 
-		handler->Start( HttpLoaded, file );
+		handler->Start( HttpLoaded );
 	}
 }
 
@@ -298,10 +297,11 @@ void NaClFileSystem::RequestURLStatsMainThread ( void * userData, int32_t result
 
 	GetURLHandler* handler = GetURLHandler::Create( Get ()->mInstance, file->mPath );
 	handler->SetMethod ( GetURLHandler::HEAD );
+	handler->SetUserData ( file );
 
 	if (handler != NULL) {
 
-		handler->Start( HttpLoaded, file );
+		handler->Start( HttpLoaded );
 	}
 
 }
@@ -455,9 +455,16 @@ void NaClFileSystem::FileOperationDone ( void * userData, int32_t result )  {
 }
 
 //----------------------------------------------------------------//
-void NaClFileSystem::HttpLoaded ( void *_file, const char *buffer, int32_t size ) {
+void NaClFileSystem::HttpLoaded ( GetURLHandler *handler, const char *buffer, int32_t size ) {
 
-	NaClFile *file = static_cast < NaClFile * > ( _file );
+	NaClFile *file = static_cast < NaClFile * > ( handler->GetUserData ());
+
+	if ( handler->GetStatusCode () == 200 ) {
+		file->mIsFileExist = true;
+	}
+	else {
+		file->mIsFileExist = false;
+	}
 
 	if ( file->mIsFileExist && size ) {
 

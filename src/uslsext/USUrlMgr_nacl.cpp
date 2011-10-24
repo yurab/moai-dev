@@ -14,8 +14,13 @@ SUPPRESS_EMPTY_FILE_WARNING
 // USUrlMgr
 //================================================================//
 
+static bool sMore = false;
+static STLList < USHttpTask* > sTasks;
+
 //----------------------------------------------------------------//
 void USUrlMgr::AddHandle ( USHttpTask& task ) {
+	
+	sTasks.push_back ( &task );
 }
 
 //----------------------------------------------------------------//
@@ -26,6 +31,19 @@ bool USUrlMgr::More () {
 
 //----------------------------------------------------------------//
 void USUrlMgr::Process () {
+
+	for( STLList < USHttpTask* >::iterator iter = sTasks.begin(); iter != sTasks.end(); ++iter )
+	{
+		if(( *iter )->GetInfo ()->mReady ) {
+
+			( *iter )->Finish ();
+
+			STLList < USHttpTask* >::iterator old_iter = iter;
+			old_iter--;
+			sTasks.erase ( iter );
+			iter = old_iter;
+		}
+	}
 }
 
 //----------------------------------------------------------------//

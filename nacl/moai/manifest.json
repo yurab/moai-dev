@@ -1,13 +1,21 @@
 {
 	"name": "Moai",
 	"description": "Moai Test Manifest",
-	"version": "0.0.0.1",
+	"version": "0.0.0.2",
+	"content_scripts": [
+    	{
+	"matches": ["https://www.facebook.com/connect/login_success.html*"],
+	"js": ["intercept.js"]
+    	}
+  	],
 	"icons": {
 	"16": "Icon_16.png",
 	"128": "Icon_128.png"
 	},
 	"permissions": [
-	  "unlimitedStorage"
+	  "unlimitedStorage",
+	  "http://*/",
+	  "https://*/"
 	],
 	"app": {
 	"launch": {
