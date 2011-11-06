@@ -807,7 +807,7 @@ void MOAISim::Render () {
 	if ( this->mClearFlags ) {
 		glClear ( this->mClearFlags );
 	}
-
+	
 	RenderPassIt passIt = this->mRenderPasses.Head ();
 	for ( ; passIt; passIt = passIt->Next ()) {
 		MOAIProp2D* renderPass = passIt->Data ();
@@ -836,6 +836,7 @@ void MOAISim::RunFile ( cc8* filename ) {
 	USLuaStateHandle state = USLuaRuntime::Get ().State ();
 	
 	status = luaL_loadfile ( state, filename );
+
 	if ( state.PrintErrors ( USLog::CONSOLE, status )) return;
 	
 	this->mRenderPasses.Clear ();
@@ -938,14 +939,31 @@ void MOAISim::Update () {
 	// 'gap' is the time left to make up between sim time and real time
 	double gap = realTime - this->mSimTime;	
 
-	if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
+	if ( gap > 1.0f ) {
+		this->mSimTime = realTime;
+		gap = realTime - this->mSimTime;	
+	}
+	/*if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
 		double boost = gap - ( this->mStep * this->mBoostThreshold );
 		if ( boost > 0.0f ) {
 			budget -= this->StepSim ( gap );
 			gap = 0.0f;
 		}
-	}
+	}*/
 	
+	//AJV multi-step boost to prevent bad game state
+	if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
+		double boost = gap - ( this->mStep * this->mBoostThreshold );
+		while ( boost > 0.0f ) {
+			
+			budget -= this->StepSim ( this->mStep );
+
+			gap -= this->mStep;
+			boost = gap - ( this->mStep * this->mBoostThreshold );
+
+		}
+	}
+
 	// single step
 	if (( this->mStep <= gap ) && ( budget > 0.0 )) {
 		budget -= this->StepSim ( this->mStep );

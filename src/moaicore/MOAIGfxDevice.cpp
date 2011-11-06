@@ -185,14 +185,14 @@ void MOAIGfxDevice::ClearColorBuffer ( u32 color ) {
 //----------------------------------------------------------------//
 void MOAIGfxDevice::ClearErrors () {
 
-	while ( glGetError () != GL_NO_ERROR );
+	//while ( glGetError () != GL_NO_ERROR );
 }
 
 //----------------------------------------------------------------//
 u32 MOAIGfxDevice::CountErrors () const {
 
 	u32 count = 0;
-	while ( glGetError () != GL_NO_ERROR ) count++;
+	//while ( glGetError () != GL_NO_ERROR ) count++;
 	return count;
 }
 
@@ -934,6 +934,12 @@ void MOAIGfxDevice::SetSize ( u32 width, u32 height ) {
 	}
 }
 
+void MOAIGfxDevice::SetRealSize	( u32 width, u32 height ) {
+
+	this->mRealWidth = width;
+	this->mRealHeight = height;
+}
+
 //----------------------------------------------------------------//
 bool MOAIGfxDevice::SetTexture ( MOAITexture* texture ) {
 	
@@ -1114,7 +1120,10 @@ void MOAIGfxDevice::SetViewport ( const USRect& viewport ) {
 	GLsizei w = ( GLsizei )( viewport.Width () + 0.5f );
 	GLsizei h = ( GLsizei )( viewport.Height () + 0.5f );
 	
-	glViewport ( x, y, w, h );
+	float scale = this->mRealWidth / 1024.0f;
+
+	//printf (" Set View port %d, %d, %d, %d, scale %f\n", x, y, w, h, scale );
+	glViewport ( x* scale, y * scale, w * scale, h * scale );
 
 	this->mViewRect = viewport;
 }

@@ -126,7 +126,6 @@ bool MOAITileDeck2D::Bind () {
 void MOAITileDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float xScale, float yScale ) {
 	
 	idx = idx - 1;
-	
 	MOAICellCoord coord = this->GetCellCoord ( idx );
 	USRect uvRect = this->GetTileRect ( coord );
 	uvRect.FlipY ();

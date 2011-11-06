@@ -118,7 +118,7 @@ public:
 	GET ( u32, RenderCounter, mRenderCounter )
 	GET ( double, Step, mStep )
 	
-	static const u32 DEFAULT_LOOP_FLAGS = SIM_LOOP_ALLOW_SPIN;
+	static const u32 DEFAULT_LOOP_FLAGS = SIM_LOOP_ALLOW_BOOST;
 	static const double DEFAULT_BOOST_THRESHOLD;
 	
 	//----------------------------------------------------------------//
@@ -135,6 +135,7 @@ public:
 	void			RunFile						( cc8* filename );
 	void			RunString					( cc8* script );
 	void			SendFinalizeEvent			();
+	void			SetLongLoad					( bool longLoad ) { mLongLoadFlag = longLoad; }
 	void			Update						();
 };
 

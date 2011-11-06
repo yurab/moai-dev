@@ -18,6 +18,7 @@ private:
 	USLeanArray < u8 >	mData;
 	
 	USStream*			mStream;
+	//USMemStream			mStream;
 
 	u32					mResponseCode;
 	bool				mReady;

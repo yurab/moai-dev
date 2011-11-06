@@ -464,8 +464,12 @@ ZIPFSFILE* zipfs_freopen ( const char* filename, const char* mode, ZIPFSFILE* fp
 	
 	memset ( fp, 0, sizeof ( ZIPFSFile ));
 
+#ifndef NACL
 	filename = zipfs_get_abs_filepath ( filename );
 	mount = find_best_virtual_path ( filename );
+#else
+	mount = NULL;
+#endif
 
 	if ( mount ) {
 		

@@ -11,6 +11,8 @@ class MOAIKernVec :
 	public USVec2D {
 public:
 
+	MOAIKernVec () { mX = 0; mY = 0; }
+
 	u32			mName;
 };
 

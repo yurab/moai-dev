@@ -39,6 +39,7 @@ public:
 	//----------------------------------------------------------------//
 				MOAIFmodSound			();
 				~MOAIFmodSound			();
+	char		*GetFileName			() { return mFileName; }
 	void		Load					( MOAIDataBuffer& data, bool streaming );
 	void		Load					( cc8* filename, bool streaming, bool async );
 	void		RegisterLuaClass		( USLuaState& state );

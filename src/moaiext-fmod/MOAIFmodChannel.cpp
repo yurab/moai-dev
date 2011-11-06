@@ -90,6 +90,7 @@ int MOAIFmodChannel::_play ( lua_State* L ) {
 	MOAIFmodSound* sound = state.GetLuaObject < MOAIFmodSound >( 2 );
 	if ( !sound ) return 0;
 
+	printf ( "playing %s\n", sound->GetFileName ());
 	int loopCount = state.GetValue < int >( 3, 0 );
 
 	self->Play ( sound, loopCount );

@@ -38,6 +38,7 @@ extern "C" {
 
 #include "moaicore/MOAIGfxDevice.h"
 #include "moaicore/MOAISocialConnect.h"
+#include "MOAIApp.h"
 
 namespace {
 
@@ -47,13 +48,36 @@ MOAISocialConnect *g_SocialConnect = NULL;
 }
 
 NaClFileSystem *g_FileSystem = NULL;
-NaClMessageQueue *g_MessageQueue = NULL;
 
+NaClQueue<std::string> *g_MessageQueue = NULL;
+NaClQueue<pp::InputEvent> *g_InputQueue = NULL;
+
+int g_width = 0;
+int g_height = 0;
+float g_scale = 0.0f;
+int g_bInitialized = 0;
+bool g_handlingInput;
 MoaiInstance *g_instance = NULL;
-
-bool g_blockOnMainThread = false;
-
 pp::Core* g_core = NULL;
+
+#include <stdint.h>
+
+extern "C" {
+
+ __inline__ uint64_t rdtsc(void) {
+   uint32_t lo, hi;
+
+   __asm__ __volatile__ (      // serialize
+   "xorl %%eax,%%eax \n        cpuid"
+   ::: "%rax", "%rbx", "%rcx", "%rdx");
+
+   /* We cannot use "=A", since this would use %rax on x86_64 and return only the lower 32bits of the TSC */
+   __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+
+   return (uint64_t)hi << 32 | lo;
+
+ }
+}
 
 namespace NaClInputDeviceID {
 	enum {
@@ -76,10 +100,110 @@ namespace NaClInputDeviceSensorID {
 //----------------------------------------------------------------//
 void HandleSocialMessage ( std::string & message );
 
+void NaClHandleInputEvent ( const pp::InputEvent & event ) {
+	
+	switch ( event.GetType() ) {
+		case PP_INPUTEVENT_TYPE_MOUSEDOWN:
+		case PP_INPUTEVENT_TYPE_MOUSEUP: {
+
+			pp::MouseInputEvent mouse_event ( event );
+
+			bool mouseDown = false;
+			if( event.GetType() == PP_INPUTEVENT_TYPE_MOUSEDOWN ) {
+				mouseDown = true;
+			}
+
+			switch ( mouse_event.GetButton() ) {
+				case PP_INPUTEVENT_MOUSEBUTTON_LEFT:
+					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT, mouseDown );
+					break;
+				case PP_INPUTEVENT_MOUSEBUTTON_RIGHT:
+					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT, mouseDown );
+					break;
+				case PP_INPUTEVENT_MOUSEBUTTON_MIDDLE:
+					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE, mouseDown );
+					break;
+				default:
+					break;
+			}
+			break;
+		}
+		case PP_INPUTEVENT_TYPE_MOUSEMOVE: {
+			pp::MouseInputEvent mouse_event ( event );
+			//AJV TODO :(
+			AKUEnqueuePointerEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER, mouse_event.GetPosition ().x () / g_scale, mouse_event.GetPosition ().y () / g_scale );
+			break;
+		}
+		case PP_INPUTEVENT_TYPE_KEYDOWN: 
+		case PP_INPUTEVENT_TYPE_KEYUP: {
+
+			pp::KeyboardInputEvent keyboard_event ( event );
+
+			bool keyDown = false;
+			if( event.GetType() == PP_INPUTEVENT_TYPE_KEYDOWN ) {
+				keyDown = true;
+			}
+
+			int keycode = keyboard_event.GetKeyCode ();
+			AKUEnqueueKeyboardEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD, keycode, keyDown );
+
+			break;
+		}
+		default: {
+			NACL_LOG ( "Moai_NaCl: unHandled event %d\n", event.GetType() );
+			break;
+		}
+	}
+}
+//----------------------------------------------------------------//
+void PostMessageThenDeleteMainThread ( void * userData, int32_t result ) {
+	char *message  = ( char * ) userData;
+
+	g_instance->PostMessage ( pp::Var ( message ));
+
+	delete [] message;
+}
+
+//----------------------------------------------------------------//
+void NaClPostMessage ( char *str ) {
+
+	int size = strlen ( str );
+	char *message = new char [ size ];
+	strcpy ( message, str );
+
+	pp::CompletionCallback cc ( PostMessageThenDeleteMainThread, message );
+
+	g_core->CallOnMainThread ( 0, cc , 0 );
+}
+
+//----------------------------------------------------------------//
+void FlushMainThread ( void* userData, int32_t result ) {
+
+	glFlush ();
+
+	g_swapping = false;
+}
+
+void NaClFlush () {
+
+	//g_swapping = true;
+
+	pp::CompletionCallback cc ( FlushMainThread, g_instance );
+	g_core->CallOnMainThread ( 0, cc , 0 );
+
+	//while ( g_swapping ) {
+
+	//	sleep ( 0.0001f );
+	//}
+}
+
 //----------------------------------------------------------------//
 void RenderMainThread ( void* userData, int32_t result ) {
 
+	static NaClMoaiTimer fmodTimer ( "Main__Fmod" );
+	fmodTimer.Start ();
 	AKUFmodUpdate ();
+	fmodTimer.FinishAndPrint ();
 
 	g_instance->DrawSelf ();
 
@@ -91,66 +215,80 @@ void NaClRender () {
 
 	g_swapping = true;
 
+	static NaClMoaiTimer flushTimer ( "Main__FlushWait" );
+	flushTimer.Start ();
+	while ( g_instance->GetOpenGLContext ()->flush_pending ()) {
+		sleep ( 0.0001f );
+	}
+	flushTimer.FinishAndPrint ();
+
 	pp::CompletionCallback cc ( RenderMainThread, g_instance );
 	g_core->CallOnMainThread ( 0, cc , 0 );
 
 	while ( g_swapping ) {
 
-		sleep ( 0.01f );
+		sleep ( 0.0001f );
 	}
 }
 
 //----------------------------------------------------------------//
-int NaClMessageQueue::PopMessage ( std::string &message ) {
+void InputMainThread ( void* userData, int32_t result ) {
 
-	pthread_mutex_lock( &mutex );
-
-	int result = 0;
-
-	if ( num > 0) {
-
-		result = 1;
-		message = messages [ tail ];
-		++tail;
-
-		if ( tail >=  NaClMessageQueue::kMaxMessages) {
-			tail -=  NaClMessageQueue::kMaxMessages;
-		}
-		--num;
+	pp::InputEvent ievent;
+	while ( g_InputQueue->PopMessage ( ievent )) {
+		NaClHandleInputEvent ( ievent );
 	}
 
-	pthread_mutex_unlock( &mutex );
-
-	return result;
+	g_handlingInput = false;
 }
 
 //----------------------------------------------------------------//
-void NaClMessageQueue::PushMessage ( std::string &message ) {
+void NaClInput () {
 
-	pthread_mutex_lock( &mutex );
+	g_handlingInput = true;
 
-	if ( num >= NaClMessageQueue::kMaxMessages ) {
-		printf ("ERROR: g_MessageQueue, kMaxMessages (%d) exceeded\n", NaClMessageQueue::kMaxMessages );
-	} 
-	else {
-		int head = ( tail + num) % NaClMessageQueue::kMaxMessages;
+	pp::CompletionCallback cc ( InputMainThread, g_instance );
+	g_core->CallOnMainThread ( 0, cc , 0 );
 
-		 messages [ head ] = message;
-		++num;
+	while ( g_handlingInput ) {
 
-		if ( num >= NaClMessageQueue::kMaxMessages )  {
-			 num -= NaClMessageQueue::kMaxMessages;
-		}
-
-		//pthread_cond_signal( & condvar );
+		sleep ( 0.0001f );
 	}
 
-	pthread_mutex_unlock( &mutex );
 }
 
 //================================================================//
 // AKU callbacks
 //================================================================//
+
+NaClMoaiTimer::NaClMoaiTimer ( const char * _name ) {
+	mName = _name;
+
+	mTimer = rdtsc ();
+	mClockTimer = USDeviceTime::GetTimeInSeconds ();
+}
+
+void NaClMoaiTimer::Start () {
+#if ENABLE_NACLPROFILE
+	mTimer = rdtsc ();
+	mClockTimer = USDeviceTime::GetTimeInSeconds ();
+#endif
+}
+
+void NaClMoaiTimer::FinishAndPrint () {
+#if ENABLE_NACLPROFILE
+	uint64_t time = rdtsc ();
+	uint64_t printTime = 
+	NACL_LOG ( "Timer %s: %d\n", mName.c_str (),  time - mTimer );
+
+	double clockTime = USDeviceTime::GetTimeInSeconds ();
+	NACL_LOG ( "Clock Timer %s: %f\n", mName.c_str (),  clockTime - mClockTimer );
+#endif
+}
+
+double NaClMoaiTimer::GetClockTimer () {
+	return mClockTimer;
+}
 
 void	_AKUEnterFullscreenModeFunc		();
 void	_AKUExitFullscreenModeFunc		();
@@ -163,30 +301,80 @@ void* moai_main ( void *_instance ) {
 
 	g_instance = ( MoaiInstance * ) _instance;
 	g_FileSystem->Init ();
+	printf ( "File System Initialized\n" );
 
+	printf ( "Running: main.lua\n" );
 	AKURunScript ( "main.lua" );
+	
+	printf ( "Running: config.lua\n" );
 	AKURunScript ( "config.lua" );
+
+	printf ( "Running: game.lua\n" );
 	AKURunScript ( "game.lua" );
 
+	NaClMoaiTimer mainTimer ( "Frame" );
+	NaClMoaiTimer logicTimer ( "Logic" );
+	NaClMoaiTimer otherTimer ( "Other" );
+	NaClMoaiTimer inputTimer ( "Input" );
+	NaClMoaiTimer messagesTimer ( "Messages" );
+	NaClMoaiTimer gfxTimer ( "Main__" );
+
 	while ( true ) {
+
+		mainTimer.FinishAndPrint ();
+#if ENABLE_NACLPROFILE
+		NACL_LOG ( "*****************Start Frame***********************\n" );
+#endif
+		mainTimer.Start ();
+
+		otherTimer.Start ();
 
 		lua_State *L = AKUGetLuaState ();
 		if ( lua_getgccount ( L ) != g_LuaMem || MOAIGfxDevice::Get ().GetTextureMemoryUsage () != g_TexMem ) {
 			g_LuaMem = lua_getgccount ( L );
 			g_TexMem = MOAIGfxDevice::Get ().GetTextureMemoryUsage ();
-			printf ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
+			NACL_LOG ( "****Memory Updated: ****\n**** Lua: %d****\n**** Tex: %d****\n", g_LuaMem, g_TexMem );
 		}
 
+		otherTimer.FinishAndPrint ();
+
 		//handle messages
+		messagesTimer.Start ();
 		std::string message;
 		while ( g_MessageQueue->PopMessage ( message )) {
 			HandleSocialMessage ( message );
+			MOAIApp::HandleStoreMessage ( message );
 		}
+		messagesTimer.FinishAndPrint ();
+		
+		inputTimer.Start ();
+		NaClInput ();
+		inputTimer.FinishAndPrint ();
 
+		//NaClFlush ();
+		/*static double LoopTime = 0;
+		static double prevLoopTime = 0;
+		LoopTime = USDeviceTime::GetTimeInSeconds ();
+		if (( LoopTime - prevLoopTime ) > 1.0f ) {
+
+			NACL_LOG ( "Loop Set Long Load\n" );
+			MOAISim::Get ().SetLongLoad ( true );
+			//NACL_LOG ( "Loop time %f\n", LoopTime - prevLoopTime );
+
+		}
+		prevLoopTime = LoopTime;*/
+
+		logicTimer.Start ();
 		AKUUpdate ();
+		logicTimer.FinishAndPrint ();
 
+		gfxTimer.Start ();
 		NaClRender ();
+		gfxTimer.FinishAndPrint ();
 
+		/*if ( mainTimer.GetClockTimer() < .033 ) {
+			sleep ( 0.0001 );
+		}*/
 	}
 
 	return NULL;
@@ -195,25 +383,25 @@ void* moai_main ( void *_instance ) {
 //----------------------------------------------------------------//
 void _AKUEnterFullscreenModeFunc () {
 
-	printf ( "Moai_NaCl: unimplemented _AKUEnterFullscreenModeFunc\n" );
+	NACL_LOG ( "Moai_NaCl: unimplemented _AKUEnterFullscreenModeFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUExitFullscreenModeFunc () {
 
-	printf ( "Moai_NaCl: unimplemented _AKUExitFullscreenModeFunc\n" );
+	NACL_LOG ( "Moai_NaCl: unimplemented _AKUExitFullscreenModeFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUOpenWindowFunc ( const char* title, int width, int height ) {
 	
-	printf ( "Moai_NaCl: unimplemented _AKUOpenWindowFunc\n" );
+	NACL_LOG ( "Moai_NaCl: unimplemented _AKUOpenWindowFunc\n" );
 }
 
 //----------------------------------------------------------------//
 void _AKUStartGameLoopFunc () {
 
-	printf ( "Moai_NaCl: unimplemented _AKUStartGameLoopFunc\n" );
+	NACL_LOG ( "Moai_NaCl: unimplemented _AKUStartGameLoopFunc\n" );
 }
 
 //----------------------------------------------------------------//
@@ -222,20 +410,20 @@ void HandleSocialMessage ( std::string & message ) {
 	if ( message.find( "SOCIAL:OnLoginSuccess:" ) != std::string::npos ) {
 
 		//change to queue for bckgrd thread
-		printf ( "SOCIAL:OnLoginSuccess!\n" );
+		NACL_LOG ( "SOCIAL:OnLoginSuccess!\n" );
 		g_SocialConnect->OnLoginSuccess ();
 	}
 	else if ( message.find( "SOCIAL:OnLoginFailed:" ) != std::string::npos ) {
 
 		//change to queue for bckgrd thread
-		printf ( "SOCIAL:OnLoginFailed!\n" );
+		NACL_LOG ( "SOCIAL:OnLoginFailed!\n" );
 		g_SocialConnect->OnLoginFailed ( "", false ) ;
 	}
 	else if ( message.find( "SOCIAL:OnRequestSuccess:" ) != std::string::npos ) {
 
 		//change to queue for bckgrd thread
 		int responseStartIndex =  strlen ( "SOCIAL:OnRequestSuccess:" );
-		int responseEndIndex =  message.find( "&" );
+		int responseEndIndex =  message.find( "#" );
 
 		int responseSize = responseEndIndex - responseStartIndex + 1;
 		char *responseText = new char [ responseSize ];
@@ -245,7 +433,7 @@ void HandleSocialMessage ( std::string & message ) {
 
 		int responseId = atoi ( message.c_str () + responseEndIndex + 1 ); 
 
-		printf ( "mSocialConnect->OnRequestSuccess ( %d, %s )\n", responseId, responseText );
+		NACL_LOG ( "mSocialConnect->OnRequestSuccess ( %d, %s )\n", responseId, responseText );
 		g_SocialConnect->OnRequestSuccess ( responseId, responseText );
 		
 		delete [] responseText;
@@ -277,7 +465,7 @@ void _AKUSocialConnectInit(const char* appId, int nperms, const char** perms, vo
 	
 	[moaiView fbInit:_appId withPermissions:permissions connector:(MOAISocialConnect*)connector];*/
 
-	printf ( "AKUSocialConnectInit appId %s permissions %d, %p\n", appId, nperms, connector );
+	NACL_LOG ( "AKUSocialConnectInit appId %s permissions %d, %p\n", appId, nperms, connector );
 
 	MOAISocialConnect * socialConnect = ( MOAISocialConnect * ) connector;
 
@@ -292,12 +480,26 @@ void _AKUSocialConnectInit(const char* appId, int nperms, const char** perms, vo
 
 }
 
+void SocialConnectLogoutMainThread ( void * userData, int32_t result ) {
+
+	char message[256];
+	memset ( message, 0, 256 );
+	sprintf ( message, "SOCIAL:logout:" );
+
+	g_instance->PostMessage ( pp::Var ( message ));
+}
+
 //----------------------------------------------------------------//
 void _AKUSocialConnectLogout()
 {
 	//AJV no need to 'logout'
-	printf ( "AKUSocialConnectLogout\n" );
+	NACL_LOG ( "AKUSocialConnectLogout\n" );
+
+	pp::CompletionCallback cc ( SocialConnectLogoutMainThread, NULL );
+
+	g_core->CallOnMainThread ( 0, cc , 0 );
 }		
+
 
 struct SocialConnectRequest {
 	std::string mGraphURL;
@@ -327,7 +529,7 @@ void _AKUSocialConnectRequest(int requestId, const char* requestURL, const char*
 				   forKey:[NSString stringWithUTF8String:args[2*i+1]]];
 	}
 	
-	printf("Facebook: requesting %s %s\n", httpRequestMethod, requestURL);
+	NACL_LOG("Facebook: requesting %s %s\n", httpRequestMethod, requestURL);
 	
 	moaiView->mFBRequestId = requestId;
 	
@@ -337,7 +539,7 @@ void _AKUSocialConnectRequest(int requestId, const char* requestURL, const char*
 								   andDelegate:moaiView];*/
 	
 
-	printf ( "AKUSocialConnectRequest ID: %d, URL: %s, method: %s\n", requestId, requestURL, httpRequestMethod );
+	NACL_LOG ( "AKUSocialConnectRequest ID: %d, URL: %s, method: %s\n", requestId, requestURL, httpRequestMethod );
 
 	SocialConnectRequest *req = new SocialConnectRequest ();
 	req->mGraphURL = requestURL;
@@ -365,66 +567,19 @@ bool MoaiInstance::Init ( uint32_t /* argc */, const char* /* argn */[], const c
 //----------------------------------------------------------------//
 bool MoaiInstance::HandleInputEvent	( const pp::InputEvent & event ) {
 	
-	switch ( event.GetType() ) {
-		case PP_INPUTEVENT_TYPE_MOUSEDOWN:
-		case PP_INPUTEVENT_TYPE_MOUSEUP: {
-
-			pp::MouseInputEvent mouse_event ( event );
-
-			bool mouseDown = false;
-			if( event.GetType() == PP_INPUTEVENT_TYPE_MOUSEDOWN ) {
-				mouseDown = true;
-			}
-
-			switch ( mouse_event.GetButton() ) {
-				case PP_INPUTEVENT_MOUSEBUTTON_LEFT:
-					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT, mouseDown );
-					break;
-				case PP_INPUTEVENT_MOUSEBUTTON_RIGHT:
-					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT, mouseDown );
-					break;
-				case PP_INPUTEVENT_MOUSEBUTTON_MIDDLE:
-					AKUEnqueueButtonEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE, mouseDown );
-					break;
-				default:
-					break;
-			}
-			break;
-		}
-		case PP_INPUTEVENT_TYPE_MOUSEMOVE: {
-			pp::MouseInputEvent mouse_event ( event );
-			AKUEnqueuePointerEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER, mouse_event.GetPosition ().x (), mouse_event.GetPosition ().y () );
-			break;
-		}
-		case PP_INPUTEVENT_TYPE_KEYDOWN: 
-		case PP_INPUTEVENT_TYPE_KEYUP: {
-
-			pp::KeyboardInputEvent keyboard_event ( event );
-
-			bool keyDown = false;
-			if( event.GetType() == PP_INPUTEVENT_TYPE_KEYDOWN ) {
-				keyDown = true;
-			}
-
-			int keycode = keyboard_event.GetKeyCode ();
-			AKUEnqueueKeyboardEvent ( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD, keycode, keyDown );
-
-			break;
-		}
-		default:
-			printf ( "Moai_NaCl: unHandled event %d\n", event.GetType() );
-			return false;
-	}
+	g_InputQueue->Push ( event );
 
 	return PP_TRUE;
 }
 
-int g_width = 0;
-int g_height = 0;
+void MoaiInstance::DidChangeFocus (	bool has_focus ) {
+	NACL_LOG ( "********************************DidChangeFocus %d\n", has_focus );
+}
 
 //----------------------------------------------------------------//
 void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& clip ) {
 
+	NACL_LOG ( "********************************DidChangeView %d,%d\n", clip.size ().width (), clip.size ().height ());
 	if ( g_width == position.size ().width () && g_height == position.size ().height () ) {
 		return;
 	}
@@ -434,84 +589,123 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 
 	//AJV extremely ugly hack to 'detect' unix systems or any other system where the default clock is wrong
 	//check out "clock() issues with beta SDK, chrome 15 vs 16" in the native client discuss Google group
-	//NOTE: After talking with google, stay tuned, new timer coming soon!
-	double beforeClock = USDeviceTime::GetTimeInSeconds ();
-	double beforeTime = g_core->GetTime ();
+	//NOTE: After talking with google, stay tuned, new timer coming soon?
+	if ( !g_bInitialized ) {
 
-	while (( g_core->GetTime () - beforeTime ) < 1.0f ) {
-		sleep ( 0.1f );
-	}
+		double beforeClock = USDeviceTime::GetTimeInSeconds ();
+		double beforeTime = g_core->GetTime ();
 
-	double afterClock = USDeviceTime::GetTimeInSeconds ();
-	double afterTime = g_core->GetTime ();
+		while (( g_core->GetTime () - beforeTime ) < 1.0f ) {
+			sleep ( 0.1f );
+		}
 
-	printf ( "clocks per second %f, %f\n", beforeClock, afterClock );
-	if (( afterClock - beforeClock ) < 0.1f ) {
-		USDeviceTime::SetClocksPerSecond ( 1000 );
+		double afterClock = USDeviceTime::GetTimeInSeconds ();
+		double afterTime = g_core->GetTime ();
+
+		NACL_LOG ( "clocks per second %f, %f\n", beforeClock, afterClock );
+		if (( afterClock - beforeClock ) < 0.1f ) {
+			USDeviceTime::SetClocksPerSecond ( 1000 );
+		}
+	
 	}
 	//AJV End extremely ugly hack
 
-	printf ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );
+	NACL_LOG ( "resize to %d, %d\n", position.size ().width (), position.size ().height () );
 
 	if (opengl_context == NULL) {
 		opengl_context = new OpenGLContext ( this );
 	}
 
+	NACL_LOG ( "OpenGLContext %p\n", opengl_context );
+
 	opengl_context->InvalidateContext ( this );
 	
 	opengl_context->ResizeContext ( position.size ());
 
+	NACL_LOG ( "OpenGLContext MakeContextCurrent\n" );
+
 	if ( !opengl_context->MakeContextCurrent ( this )) {
+		printf ( "Error: OpenGLContext failed to MakeContextCurrent\n" );
 		return;
 	}
 
-	g_FileSystem = new NaClFileSystem ( g_core, this );
-	g_MessageQueue = new NaClMessageQueue ();
+	NACL_LOG ( "OpenGLContext Created\n" );
+	if ( !g_bInitialized ) {
 
-	AKUCreateContext ();
+		g_FileSystem = new NaClFileSystem ( g_core, this );
+		NACL_LOG ( "NaClFileSystem Created\n" );
 
-	AKUSetInputConfigurationName ( "AKUNaCl" );
+		g_MessageQueue = new  NaClQueue<std::string> ();
+		g_InputQueue = new  NaClQueue<pp::InputEvent> ();
+		NACL_LOG ( "NaClQueue Created\n" );
 
-	AKUReserveInputDevices			( NaClInputDeviceID::TOTAL );
-	AKUSetInputDevice				( NaClInputDeviceID::DEVICE, "device" );
+		AKUCreateContext ();
+		NACL_LOG ( "AKUContext Created\n" );
+
+		AKUSetInputConfigurationName ( "AKUNaCl" );
+
+		AKUReserveInputDevices			( NaClInputDeviceID::TOTAL );
+		AKUSetInputDevice				( NaClInputDeviceID::DEVICE, "device" );
 	
-	AKUReserveInputDeviceSensors	( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::TOTAL );
-	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD,		"keyboard" );
-	AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER,		"pointer" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT,	"mouseLeft" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE,	"mouseMiddle" );
-	AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT,	"mouseRight" );
+		AKUReserveInputDeviceSensors	( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::TOTAL );
+		AKUSetInputDeviceKeyboard		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::KEYBOARD,		"keyboard" );
+		AKUSetInputDevicePointer		( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::POINTER,		"pointer" );
+		AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_LEFT,	"mouseLeft" );
+		AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_MIDDLE,	"mouseMiddle" );
+		AKUSetInputDeviceButton			( NaClInputDeviceID::DEVICE, NaClInputDeviceSensorID::MOUSE_RIGHT,	"mouseRight" );
 
-	RequestInputEvents ( PP_INPUTEVENT_CLASS_MOUSE );
-	RequestInputEvents ( PP_INPUTEVENT_CLASS_KEYBOARD );
+		RequestInputEvents ( PP_INPUTEVENT_CLASS_MOUSE );
+		RequestInputEvents ( PP_INPUTEVENT_CLASS_KEYBOARD );
+		NACL_LOG ( "Input Initialized\n" );
 
-	AKUSetFunc_EnterFullscreenMode ( _AKUEnterFullscreenModeFunc );
-	AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
-	AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
-	AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
+		AKUSetFunc_EnterFullscreenMode ( _AKUEnterFullscreenModeFunc );
+		AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
+		AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
+		AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
 
-	AKUSetFunc_SocialConnectInit( _AKUSocialConnectInit );
-	AKUSetFunc_SocialConnectLogout( _AKUSocialConnectLogout );
-	AKUSetFunc_SocialConnectRequest( _AKUSocialConnectRequest );
+		AKUSetFunc_SocialConnectInit( _AKUSocialConnectInit );
+		AKUSetFunc_SocialConnectLogout( _AKUSocialConnectLogout );
+		AKUSetFunc_SocialConnectRequest( _AKUSocialConnectRequest );
+		NACL_LOG ( "AKU functions registered Initialized\n" );
 
-	AKUFmodInit ();
+		AKUFmodInit ();
+		NACL_LOG ( "Fmod Initialized\n" );
 
-	AKUDetectGfxContext ();
+		AKUDetectGfxContext ();
+		NACL_LOG ( "AKUDetectGfxContext\n" );
 
-	pthread_create( &gThreadId, NULL, moai_main, g_instance );	
+		REGISTER_LUA_CLASS ( MOAIApp )
+
+		pthread_create( &gThreadId, NULL, moai_main, g_instance );
+		NACL_LOG ( "Main Thread Created\n" );
+	}
+
+	// AJV TODO :(
+	MOAIGfxDevice::Get ().SetRealSize ( g_width, g_height );
+	g_scale = ( g_width / 1024.0f );
+
+	g_bInitialized = 1;
 }
 
 //----------------------------------------------------------------//
 void MoaiInstance::DrawSelf() {
 
-  if ( !opengl_context->flush_pending () ) {
+	if ( !opengl_context->flush_pending () ) {
 
-	  opengl_context->MakeContextCurrent(this);
+		static NaClMoaiTimer renderTimer ( "Main_Render" );
+		renderTimer.Start ();
+		opengl_context->MakeContextCurrent(this);
+		
+		AKURender ();
+		renderTimer.FinishAndPrint ();
 
-	  AKURender ();
+		static NaClMoaiTimer finishTimer ( "Main_Finsh" );
+		finishTimer.Start ();
+		glFinish ();
+		finishTimer.FinishAndPrint ();
 
-	  opengl_context->FlushContext();
-  }
+		opengl_context->FlushContext();
+	}
 
 }
 
@@ -525,7 +719,7 @@ void MoaiInstance::HandleMessage ( const pp::Var& var_message ) {
 	std::string message = var_message.AsString ();
 
 	//AJV send to queue and proccess on background thread ( due to thread safety issues / file I/O )
-	g_MessageQueue->PushMessage ( message );
+	g_MessageQueue->Push ( message );
 }
 
 //----------------------------------------------------------------//

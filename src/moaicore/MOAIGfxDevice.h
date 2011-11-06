@@ -81,6 +81,10 @@ private:
 	u32				mWidth;
 	u32				mHeight;
 
+	//AJV Crimson Hacks
+	u32				mRealWidth;
+	u32				mRealHeight;
+
 	u32				mUVMtxInput;
 	u32				mUVMtxOutput;
 
@@ -204,6 +208,7 @@ public:
 	void					SetShader				( MOAIShader* shader = 0 );
 	void					SetShaderPreset			( u32 preset );
 	void					SetSize					( u32 width, u32 height );
+	void					SetRealSize				( u32 width, u32 height );
 	bool					SetTexture				( MOAITexture* texture = 0 );
 	
 	void					SetUVMtxMode			( u32 input, u32 output );

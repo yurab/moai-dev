@@ -10,6 +10,7 @@
 #include "ppapi/cpp/file_ref.h"
 
 #include "NaClFileSystem.h"
+#include "moai_nacl.h"
 
 #include "geturl_handler.h"
 
@@ -44,7 +45,7 @@ void NaClFileSystem::Init () {
 
 	while ( !mFileSystemOpened ) {
 
-		sleep ( 0.01f );
+		sleep ( 0.0001f );
 	}
 }
 
@@ -64,7 +65,8 @@ void NaClFileSystem::OpenFileSystemMainThread ( void* userData, int32_t result )
 void NaClFileSystem::OpenFileSystemCallback ( int32_t result ) {
 
 	if ( result != PP_OK ) {
-		printf ( "ERROR: NaClFileSystem Open File system result %d\n", result );
+		NACL_LOG ( "ERROR: NaClFileSystem Open File system result %d\n", result );
+		mFileSystemOpened = true;
 	}
 	else {
 		mFileSystemOpened = true;
@@ -91,10 +93,10 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 	NaClFile * newFile = new NaClFile ();
 	newFile->mPath = redirectPath;
 	
-	printf ( "NaClFileSystem::fopen %s, mode %s, is on disk %d \n", newFile->mPath, mode, isOnDisk );
+	NACL_LOG ( "NaClFileSystem::fopen %s, mode %s, is on disk %d \n", newFile->mPath, mode, isOnDisk );
 
 	if ( mCore->IsMainThread () ) {
-		printf( "ERROR: Cannot perform blocking file I/O on main thread\n" );
+		NACL_LOG( "ERROR: Cannot perform blocking file I/O on main thread\n" );
 	}
 
 	if ( mode[0] == 'r' ) {
@@ -115,7 +117,7 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 
 			while ( !newFile->mIsHttpLoaded ) {
 
-				sleep ( 0.01f );
+				sleep ( 0.0001f );
 			}
 		}
 	} 
@@ -125,12 +127,12 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 			newFile->mFlags = PP_FILEOPENFLAG_WRITE | PP_FILEOPENFLAG_CREATE | PP_FILEOPENFLAG_TRUNCATE;
 		}
 		else {
-			printf ( "ERROR: Cannot write to file not on local file system\n" );
+			NACL_LOG ( "ERROR: Cannot write to file not on local file system\n" );
 		}
 
 	}
 	else {
-		printf ( "NaClFileSystem::fopen - Unsupported mode %s\n", mode );
+		NACL_LOG ( "NaClFileSystem::fopen - Unsupported mode %s\n", mode );
 	}
 
 	if ( isOnDisk ) {
@@ -148,7 +150,7 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 
 		while ( newFile->mIsFileLocked ) {
 
-			sleep ( 0.01f );
+			sleep ( 0.0001f );
 		}
 
 		if ( newFile->mIsFileOpen ) {
@@ -172,7 +174,7 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 			}
 
 			while ( newFile->mIsFileLocked ) {
-				sleep ( 0.01f );
+				sleep ( 0.0001f );
 			}
 
 			newFile->mSize = newFile->mFileInfo.size;
@@ -192,12 +194,12 @@ NaClFile * NaClFileSystem::fopen ( const char * path, const char *mode ) {
 			}
 
 			while ( newFile->mIsFileLocked ) {
-				sleep ( 0.01f );
+				sleep ( 0.0001f );
 			}
 
 			newFile->mOffset = 0;
 
-			printf ( "NaClFileSystem Read in file %s with %d bytes\n", path, newFile->mSize );
+			NACL_LOG( "NaClFileSystem Read in file %s with %d bytes\n", path, newFile->mSize );
 		}
 
 	}
@@ -261,14 +263,14 @@ int NaClFileSystem::stat ( const char *path, struct stat *buf ) {
 		mCore->CallOnMainThread ( 0, cc , 0 );
 	}
 	else {
-		printf( "ERROR: Cannot load files on main thread\n" );
+		NACL_LOG( "ERROR: Cannot load files on main thread\n" );
 		RequestURLStatsMainThread ( newFile, 0 );
 		newFile->mIsHttpLoaded = true;
 	}
 
 	while ( !newFile->mIsHttpLoaded ) {
 
-		sleep ( 0.01f );
+		sleep ( 0.0001f );
 	}
 
 	if ( newFile->mIsFileExist ) {
@@ -309,7 +311,7 @@ void NaClFileSystem::RequestURLStatsMainThread ( void * userData, int32_t result
 //----------------------------------------------------------------//
 int NaClFileSystem::fclose ( NaClFile *file ) {
 
-	printf ( "NaClFileSystem::fclose %s \n\n", file->mPath );
+	NACL_LOG( "NaClFileSystem::fclose %s \n\n", file->mPath );
 
 	file->mIsFileLocked = true;
 
@@ -323,7 +325,7 @@ int NaClFileSystem::fclose ( NaClFile *file ) {
 	}
 
 	while ( file->mIsFileLocked ) {
-		sleep ( 0.01f );
+		sleep ( 0.0001f );
 	}
 
 	delete file;
@@ -368,7 +370,7 @@ size_t NaClFileSystem::fread ( void *ptr, size_t size, size_t count, NaClFile *f
 	//e.g. getc, ungetc
 	/*else if ( file && file->mIsFileOpen ) {
 
-		printf( "NaClFileSystem::fread filesys read\n" );
+		NACL_LOG( "NaClFileSystem::fread filesys read\n" );
 		file->mIsFileLocked = true;
 		file->mExternalBuffer = ( char* ) ptr;
 		file->mSize = size *  count;
@@ -379,20 +381,20 @@ size_t NaClFileSystem::fread ( void *ptr, size_t size, size_t count, NaClFile *f
 			mCore->CallOnMainThread ( 0, cc , 0 );
 		}
 		else {
-			printf( "ERROR: Cannot read files on main thread\n" );
+			NACL_LOG( "ERROR: Cannot read files on main thread\n" );
 			ReadFileMainThread ( file, 0 );
 			file->mIsFileLocked = false;
 		}
 
 		while ( file->mIsFileLocked ) {
-			sleep ( 0.01f );
+			sleep ( 0.0001f );
 		}
 
 		file->mExternalBuffer = NULL;
 		file->mOffset += size *  count;
 	}*/
 	else {
-		printf ( "NaClFileSystem::fread - invalid file" );
+		NACL_LOG( "NaClFileSystem::fread - invalid file" );
 	}
 
 	return 0;
@@ -412,13 +414,13 @@ size_t NaClFileSystem::fwrite ( const void *ptr, size_t size, size_t count, NaCl
 			mCore->CallOnMainThread ( 0, cc , 0 );
 		}
 		else {
-			printf( "ERROR: Cannot write files on main thread\n" );
+			NACL_LOG ( "ERROR: Cannot write files on main thread\n" );
 			WriteFileMainThread ( file, 0 );
 			file->mIsFileLocked = false;
 		}
 
 		while ( file->mIsFileLocked ) {
-			sleep ( 0.01f );
+			sleep ( 0.0001f );
 		}
 
 		file->mExternalBuffer = NULL;
@@ -468,7 +470,7 @@ void NaClFileSystem::HttpLoaded ( GetURLHandler *handler, const char *buffer, in
 
 	if ( file->mIsFileExist && size ) {
 
-		printf ( "NaClFileSystem::HttpLoaded file %s, size: %d\n", file->mPath, size );
+		NACL_LOG ( "NaClFileSystem::HttpLoaded file %s, size: %d\n", file->mPath, size );
 
 		file->mSize = size;
 		file->mData = new char [ size ];

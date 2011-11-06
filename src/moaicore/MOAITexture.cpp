@@ -395,11 +395,11 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 			image.GetBitmap ()
 		);
 		
-		if ( glGetError () != 0 ) {
+		/*if ( glGetError () != 0 ) {
 			// we have an error
 			this->Clear ();
 			return;
-		}
+		}*/
 		
 		this->mDataSize = image.GetBitmapSize ();
 	}
@@ -615,6 +615,7 @@ void MOAITexture::CreateTextureFromPVR ( void* data, size_t size ) {
 	#endif
 }
 
+
 //----------------------------------------------------------------//
 u32 MOAITexture::GetHeight () {
 	return this->mHeight;
@@ -802,7 +803,8 @@ void MOAITexture::OnClear () {
 }
 #ifdef MOAI_OS_NACL
 #include "moai_nacl.h"
-
+bool g_blockOnMainThreadTexLoad;
+bool g_blockOnMainThreadTexUnload;
 //----------------------------------------------------------------//
 void MOAITexture::NaClLoadTexture ( void* userData, int32_t result ) {
 
@@ -823,7 +825,7 @@ void MOAITexture::NaClLoadTexture ( void* userData, int32_t result ) {
 			texture->SetError ();
 	}
 
-	g_blockOnMainThread = false;
+	g_blockOnMainThreadTexLoad = false;
 }
 
 //----------------------------------------------------------------//
@@ -832,7 +834,7 @@ void MOAITexture::NaClUnLoadTexture ( void* userData, int32_t result ) {
 	MOAITexture *texture = ( MOAITexture * ) userData;
 	glDeleteTextures ( 1, &texture->mGLTexID );
 
-	g_blockOnMainThread = false;
+	g_blockOnMainThreadTexUnload = false;
 }
 
 #endif
@@ -841,6 +843,7 @@ void MOAITexture::OnLoad () {
 
 	if ( this->mFrameBuffer ) {
 		
+		printf ( "ERROR NACL: frame buffer not supported\n" );
 		this->mFrameBuffer->Bind ();
 		if ( this->mFrameBuffer->IsValid ()) {
 		
@@ -858,11 +861,15 @@ void MOAITexture::OnLoad () {
 		this->mLoader->Load ();
 		
 #ifdef MOAI_OS_NACL
-		g_blockOnMainThread = true;
+		if ( g_core->IsMainThread () ) {
+			printf ( "ERROR: Texture Cannot perform blocking file I/O on main thread\n" );
+		}
+
+		g_blockOnMainThreadTexLoad = true;
 		pp::CompletionCallback cc ( NaClLoadTexture, this );
 		g_core->CallOnMainThread ( 0, cc , 0 );
 
-		while ( g_blockOnMainThread ) {
+		while ( g_blockOnMainThreadTexLoad ) {
 			sleep ( 0.0001f );
 		}
 #else
@@ -920,11 +927,15 @@ void MOAITexture::OnUnload () {
 		}
 
 #ifdef MOAI_OS_NACL
-		g_blockOnMainThread = true;
+		g_blockOnMainThreadTexUnload = true;
 		pp::CompletionCallback cc ( NaClUnLoadTexture, this );
 		g_core->CallOnMainThread ( 0, cc , 0 );
 
-		while ( g_blockOnMainThread ) {
+		if ( g_core->IsMainThread () ) {
+			printf ( "ERROR: Texture Cannot perform blocking file I/O on main thread\n" );
+		}
+
+		while ( g_blockOnMainThreadTexUnload ) {
 			sleep ( 0.0001f );
 		}
 #else

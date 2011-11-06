@@ -103,7 +103,6 @@ void MOAIFmod::OpenSoundSystem () {
 
 #ifdef MOAI_OS_NACL
 
-	printf ( "init moai fmod system\n" );
 	FMOD_NACL_EXTRADRIVERDATA extraDriverData;
 	memset(&extraDriverData, 0, sizeof(FMOD_NACL_EXTRADRIVERDATA)); 
 	extraDriverData.instance = g_instance->pp_instance();
@@ -117,8 +116,6 @@ void MOAIFmod::OpenSoundSystem () {
 	
 	result = this->mSoundSys->getMasterChannelGroup ( &this->mMainChannelGroup );
 	if ( result != FMOD_OK ) return;
-
-	printf ( "init moai fmod all done\n" );
 }
 
 //----------------------------------------------------------------//

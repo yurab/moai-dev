@@ -48,7 +48,7 @@ int MOAIFmodSound::_load ( lua_State* L ) {
 
 		cc8* filename	= state.GetValue < cc8* >( 2, "" );
 
-		printf ( " MOAIFmodSound::_load file %s\n", filename );
+		NACL_LOG ( " MOAIFmodSound::_load file %s\n", filename );
 		memcpy( self->mFileName, filename, strlen ( filename ));
 
 		self->Load ( filename, streaming, async );
@@ -78,6 +78,10 @@ int	MOAIFmodSound::_loadBGM ( lua_State* L ) {
 	else if ( state.IsType( 2, LUA_TSTRING ) ) {
 
 		cc8* filename	= state.GetValue < cc8* >( 2, "" );
+
+		NACL_LOG ( " MOAIFmodSound::_load file %s\n", filename );
+		memcpy( self->mFileName, filename, strlen ( filename ));
+
 		self->Load ( filename, true, false );
 	}
 
@@ -105,6 +109,10 @@ int	MOAIFmodSound::_loadSFX ( lua_State* L ) {
 	else if ( state.IsType( 2, LUA_TSTRING ) ) {
 
 		cc8* filename	= state.GetValue < cc8* >( 2, "" );
+
+		NACL_LOG ( " MOAIFmodSound::_load file %s\n", filename );
+		memcpy( self->mFileName, filename, strlen ( filename ));
+
 		self->Load ( filename, false, true );
 	}
 
@@ -143,7 +151,7 @@ MOAIFmodSound::MOAIFmodSound () :
 //----------------------------------------------------------------//
 MOAIFmodSound::~MOAIFmodSound () {
 
-	printf ( " ~MOAIFmodSound file %s\n", mFileName );
+	NACL_LOG ( " ~MOAIFmodSound file %s\n", mFileName );
 	this->Release ();
 }
 
@@ -234,7 +242,7 @@ void MOAIFmodSound::Load ( cc8* filename, bool streaming, bool async ) {
 #endif
 	
 	if ( result != FMOD_OK ) {
-		printf ( "MOAIFmodSound::Load ( %s ) error loading sound %d\n", filename, result );
+		NACL_LOG ( "MOAIFmodSound::Load ( %s ) error loading sound %d\n", filename, result );
 		return;
 	}
 

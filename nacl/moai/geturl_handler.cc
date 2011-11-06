@@ -13,6 +13,7 @@
 #include "ppapi/cpp/var.h"
 
 #include "NaClFileSystem.h"
+#include "moai_nacl.h"
 
 extern "C" {
 #include <lua.h>
@@ -43,7 +44,7 @@ GetURLHandler::GetURLHandler(pp::Instance* instance, const std::string& url )
 	mMethod = GET;
 	url_request_.SetMethod ( "GET" );
 
-	url_request_.SetAllowCrossOriginRequests ( true );
+	//url_request_.SetAllowCrossOriginRequests ( true );
 }
 
 GetURLHandler::~GetURLHandler () {
@@ -61,6 +62,7 @@ void GetURLHandler::SetMethod ( int method ) {
 	}
 	else if ( method == POST ) {
 		url_request_.SetMethod ( "POST" );
+		url_request_.SetHeaders ( "Content-Type: application/x-www-form-urlencoded" );
 	}
 }
 void GetURLHandler::SetBody ( const void *data, int size ) {
@@ -91,7 +93,7 @@ bool GetURLHandler::Start ( GetURLCallback callback ) {
 void GetURLHandler::OnOpen ( int32_t result ) {
 
 	if ( result < 0 ) {
-		printf ( "ERROR: GetURLHandler::OnOpen %d, %s\n", result, url_.c_str ());
+		NACL_LOG ( "ERROR: GetURLHandler::OnOpen %d, %s\n", result, url_.c_str ());
 		ReportResultAndDie ( url_, "pp::URLLoader::Open() failed", false );
 	}
 	else {
@@ -99,7 +101,7 @@ void GetURLHandler::OnOpen ( int32_t result ) {
 		//get info about file TODO: get size,exist, other file stat
 		mHttpStatusCode = mUrlLoader.GetResponseInfo ().GetStatusCode ();
 
-		if ( mMethod == GET ) {
+		if ( mMethod == GET || mMethod == POST ) {
 			ReadBody ();
 		}
 		else {
@@ -153,7 +155,7 @@ void GetURLHandler::ReportResult(const std::string& fname,
 		//printf( "GetURLHandler::ReportResult(Ok).\n" );
 	}
 	else {
-		printf( "GetURLHandler::ReportResult(Err). %s\n", text.c_str ());
+		NACL_LOG( "GetURLHandler::ReportResult(Err). %s\n", text.c_str ());
 	}
 
 	if ( mInstance ) {

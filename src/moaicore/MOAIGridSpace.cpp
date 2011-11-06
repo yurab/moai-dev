@@ -146,8 +146,18 @@ MOAICellCoord MOAIGridSpace::GetCellCoord ( int cellAddr ) const {
 	
 	MOAICellCoord cellCoord;
 	
-	cellCoord.mX = ( cellAddr % this->mWidth );
-	cellCoord.mY = (( int )( cellAddr / this->mWidth ) % this->mHeight );
+	if ( this->mWidth ) {
+		cellCoord.mX = ( cellAddr % this->mWidth );
+	} else {
+		cellCoord.mX = 0;
+	}
+
+	if ( this->mHeight ) {
+		cellCoord.mY = (( int )( cellAddr / this->mWidth ) % this->mHeight );
+	}
+	else {
+		cellCoord.mY = 0;
+	}
 	
 	return cellCoord;
 }

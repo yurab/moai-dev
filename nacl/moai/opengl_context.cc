@@ -8,10 +8,13 @@
 #include "ppapi/cpp/completion_callback.h"
 #include "ppapi/gles2/gl2ext_ppapi.h"
 
+#include <stdio.h>
+
 namespace {
 // This is called by the brower when the 3D context has been flushed to the
 // browser window.
 void FlushCallback(void* data, int32_t result) {
+	//printf ( "Flush Complete\n" );
   static_cast<OpenGLContext*>(data)->set_flush_pending(false);
 }
 }  // namespace

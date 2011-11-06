@@ -383,7 +383,6 @@ void MOAIProp2D::Draw () {
 		MOAICellCoord c1;
 		
 		this->GetBoundsInView ( c0, c1 );
-
 		this->mDeck->Draw ( this->GetLocalToWorldMtx (), *this->mGrid, this->mRemapper, this->mGridScale, c0, c1 );
 	}
 	else {
