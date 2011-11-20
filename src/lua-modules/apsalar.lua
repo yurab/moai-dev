@@ -9,144 +9,144 @@
 ----------------------------------------------------------------
 module ( ..., package.seeall )
 
-require "crypto"
-require "luasql"
+--require "crypto"
+--require "luasql"
 require "url"
 require "util"
 
 --==============================================================
 -- database
 --==============================================================
-local docDir = MOAIEnvironment.getDocumentDirectory ()
+--local docDir = MOAIEnvironment.getDocumentDirectory ()
 
-if docDir == "UNKNOWN" then
-	error ( "apsalar is not supported on this platform.", 2 )
-	return
-end
+--if docDir == "UNKNOWN" then
+--	error ( "apsalar is not supported on this platform.", 2 )
+--	return
+--end
 
-local DB_PATH = docDir .. "/apsalar.sqlite3"
-local needNewDatabase = not util.fileExists ( DB_PATH )
-
-----------------------------------------------------------------
-local function closeConnection ( ... )
-
-	for i = 1, #arg do
-		arg[ i ]:close ()
-	end
-end
+--local DB_PATH = docDir .. "/apsalar.sqlite3"
+--local needNewDatabase = not util.fileExists ( DB_PATH )
 
 ----------------------------------------------------------------
-local function connectToDb ()
+-- local function closeConnection ( ... )
 
-	local sqlEnv = luasql.sqlite3 ()
-	local sqlCon = sqlEnv:connect ( DB_PATH )
-	sqlCon:setautocommit ( true )
-	return sqlEnv, sqlCon
-end
-
-----------------------------------------------------------------
-local function makeSqliteRecord ( sqliteTable )
-
-	local sqliteRecord = {}
-	local columns = {}
-	
-	--------------------------------
-	sqliteRecord.insert = function ( self, sqlCon )
-
-		local sqlStatement = "INSERT INTO '" .. sqliteTable:getName () .. "' ("
-
-		for i,v in ipairs ( columns ) do
-			sqlStatement = sqlStatement .. " \"" .. v.columnName .. "\","
-		end
-		
-		sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. ") VALUES ("
-		
-		for i,v in ipairs ( columns ) do
-			if not (v.value == nil) then
-				if v.columnName == "data" then
-					v.value, num = v.value:gsub ("'", "")		
-				end
-				sqlStatement = sqlStatement .. " '" .. v.value .. "',"
-			else
-				sqlStatement = sqlStatement .. " '" .. "" .. "',"
-			end
-		end
-		
-		sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. " )"
-		sqlCon:execute ( sqlStatement )
-	end
-	
-	--------------------------------
-	sqliteRecord.setColumn = function ( self, columnName, value )
-	
-		table.insert ( columns, { columnName = columnName, value = value })
-	end
-
-	--------------------------------
-	return sqliteRecord
-end
+	-- for i = 1, #arg do
+		-- arg[ i ]:close ()
+	-- end
+-- end
 
 ----------------------------------------------------------------
-local function makeSqliteTable ( name )
+-- local function connectToDb ()
 
-	local sqliteTable = {}
-	local columns = {}
-
-	--------------------------------
-	sqliteTable.addColumn = function ( self, name, dataType )
-	
-		table.insert ( columns, { name = name, dataType = dataType })
-	end
-	
-	--------------------------------
-	sqliteTable.addRecord = function ( self )
-	
-		return makeSqliteRecord ( self )
-	end
-	
-	--------------------------------
-	sqliteTable.create = function ( self, sqlCon )
-	
-		local sqlStatement = "CREATE TABLE \"" .. name .. "\" ("
-	
-		for i,v in ipairs ( columns ) do
-			sqlStatement = sqlStatement .. " \"" .. v.name .. "\" \"" .. v.dataType .. "\"," 
-		end
-		
-		sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. " )"
-		
-		sqlCon:execute ( sqlStatement )
-	end
-	
-	--------------------------------
-	sqliteTable.getName = function ( self )
-	
-		return name
-	end
-	
-	--------------------------------
-	return sqliteTable
-end
+	-- local sqlEnv = luasql.sqlite3 ()
+	-- local sqlCon = sqlEnv:connect ( DB_PATH )
+	-- sqlCon:setautocommit ( true )
+	-- return sqlEnv, sqlCon
+-- end
 
 ----------------------------------------------------------------
-local sqlEventsTable = makeSqliteTable ( "events" )
+-- local function makeSqliteRecord ( sqliteTable )
 
-if needNewDatabase then
+	-- local sqliteRecord = {}
+	-- local columns = {}
+	
+	------------------------------
+	-- sqliteRecord.insert = function ( self, sqlCon )
 
-	-- open db connection
-	local sqlEnv, sqlCon = connectToDb ()
+		-- local sqlStatement = "INSERT INTO '" .. sqliteTable:getName () .. "' ("
 
-	-- create events table
-	sqlEventsTable:addColumn ( "name", "TEXT" )
-	sqlEventsTable:addColumn ( "data", "TEXT" )
-	sqlEventsTable:addColumn ( "time", "INTEGER" )
-	sqlEventsTable:addColumn ( "sessionid", "TEXT")
-	sqlEventsTable:addColumn ( "url", "TEXT" )
-	sqlEventsTable:create ( sqlCon )
+		-- for i,v in ipairs ( columns ) do
+			-- sqlStatement = sqlStatement .. " \"" .. v.columnName .. "\","
+		-- end
 		
-	-- close db connection
-	closeConnection ( sqlCon, sqlEnv )
-end
+		-- sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. ") VALUES ("
+		
+		-- for i,v in ipairs ( columns ) do
+			-- if not (v.value == nil) then
+				-- if v.columnName == "data" then
+					-- v.value, num = v.value:gsub ("'", "")		
+				-- end
+				-- sqlStatement = sqlStatement .. " '" .. v.value .. "',"
+			-- else
+				-- sqlStatement = sqlStatement .. " '" .. "" .. "',"
+			-- end
+		-- end
+		
+		-- sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. " )"
+		-- sqlCon:execute ( sqlStatement )
+	-- end
+	
+	------------------------------
+	-- sqliteRecord.setColumn = function ( self, columnName, value )
+	
+		-- table.insert ( columns, { columnName = columnName, value = value })
+	-- end
+
+	------------------------------
+	-- return sqliteRecord
+-- end
+
+----------------------------------------------------------------
+-- local function makeSqliteTable ( name )
+
+	-- local sqliteTable = {}
+	-- local columns = {}
+
+	------------------------------
+	-- sqliteTable.addColumn = function ( self, name, dataType )
+	
+		-- table.insert ( columns, { name = name, dataType = dataType })
+	-- end
+	
+	------------------------------
+	-- sqliteTable.addRecord = function ( self )
+	
+		-- return makeSqliteRecord ( self )
+	-- end
+	
+	------------------------------
+	-- sqliteTable.create = function ( self, sqlCon )
+	
+		-- local sqlStatement = "CREATE TABLE \"" .. name .. "\" ("
+	
+		-- for i,v in ipairs ( columns ) do
+			-- sqlStatement = sqlStatement .. " \"" .. v.name .. "\" \"" .. v.dataType .. "\"," 
+		-- end
+		
+		-- sqlStatement = string.sub ( sqlStatement, 1, #sqlStatement - 1 ) .. " )"
+		
+		-- sqlCon:execute ( sqlStatement )
+	-- end
+	
+	------------------------------
+	-- sqliteTable.getName = function ( self )
+	
+		-- return name
+	-- end
+	
+	------------------------------
+	-- return sqliteTable
+-- end
+
+----------------------------------------------------------------
+-- local sqlEventsTable = makeSqliteTable ( "events" )
+
+-- if needNewDatabase then
+
+	----open db connection
+	-- local sqlEnv, sqlCon = connectToDb ()
+
+	----create events table
+	-- sqlEventsTable:addColumn ( "name", "TEXT" )
+	-- sqlEventsTable:addColumn ( "data", "TEXT" )
+	-- sqlEventsTable:addColumn ( "time", "INTEGER" )
+	-- sqlEventsTable:addColumn ( "sessionid", "TEXT")
+	-- sqlEventsTable:addColumn ( "url", "TEXT" )
+	-- sqlEventsTable:create ( sqlCon )
+		
+	----close db connection
+	-- closeConnection ( sqlCon, sqlEnv )
+-- end
 
 --==============================================================
 -- apsalar api
@@ -161,9 +161,11 @@ local mSessionStartTime
 local mOSBrand
 
 ----------------------------------------------------------------
+dofile("sha1.lua")
 local function addSecurityHash ( queryString )
 
-	local hash = crypto.evp.digest ( "sha1", mApiSecret .. "?" .. queryString )
+	--local hash = crypto.evp.digest ( "sha1", mApiSecret .. "?" .. queryString )
+	local hash = sha1( mApiSecret .. "?" .. queryString )
 	queryString = queryString .. "&h=" .. hash
 	return queryString
 end
@@ -371,15 +373,15 @@ end
 --==============================================================
 -- event api call
 --==============================================================
-function event ( name, data )
-
+function apsalar_event ( name, data )
+	
 	-- validate call
 	if not mApiKey then
 		error ( "apsalar.event called before apsalar.start", 2 )
 	end
 
 	-- open db connection
-	local sqlEnv, sqlCon = connectToDb ()
+	--local sqlEnv, sqlCon = connectToDb ()
 		
 	-- build url
 	local curTime = os.time ()
@@ -399,24 +401,28 @@ function event ( name, data )
 	queryString = addSecurityHash ( queryString )
 	local url = BASE_API_URI .. "event?" .. queryString
 		
-	-- insert record for the event
-	local record = sqlEventsTable:addRecord ()
-	record:setColumn ( "name", name )
-	record:setColumn ( "time", curTime )
-	record:setColumn ( "data", jsonEncodedData )
-	record:setColumn ( "sessionID", mSessionId )
-	record:setColumn ( "url", url )
-	record:insert ( sqlCon )
+	print ( 'app salar url' + url )
+	---- insert record for the event
+	-- local record = sqlEventsTable:addRecord ()
+	-- record:setColumn ( "name", name )
+	-- record:setColumn ( "time", curTime )
+	-- record:setColumn ( "data", jsonEncodedData )
+	-- record:setColumn ( "sessionID", mSessionId )
+	-- record:setColumn ( "url", url )
+	-- record:insert ( sqlCon )
 	
-	-- close db connection
-	closeConnection ( sqlCon, sqlEnv )
+	----close db connection
+	-- closeConnection ( sqlCon, sqlEnv )
 end
 
 --==============================================================
 -- start api call
 --==============================================================
-function start ( apiKey, apiSecret )
+function appsalar_start ( apiKey, apiSecret )
 
+	apiKey = "Adam"
+	apiSecret = "ygz2yaMp"
+	
 	-- validate parameters
 	if apiKey == nil then
 		error ( "apsalar.start is missing required \"apiKey\" parameter", 2 )
@@ -432,7 +438,7 @@ function start ( apiKey, apiSecret )
 	mSessionStartTime = os.time ()
 	mSessionId = MOAIEnvironment.generateGUID ()
 	
-	local osBrand = MOAIEnvironment.getOSBrand ()
+	local osBrand = "iOS"
 	if osBrand == MOAIEnvironment.OS_BRAND_IOS then
 		mOSBrand = "iOS"
 	elseif osBrand == MOAIEnvironment.OS_BRAND_ANDROID then
@@ -440,7 +446,7 @@ function start ( apiKey, apiSecret )
 	end
 	
 	-- open db connection
-	local sqlEnv, sqlCon = connectToDb ()
+	--local sqlEnv, sqlCon = connectToDb ()
 	
 	-- build url	
 	local queryString = url.encode {
@@ -459,15 +465,17 @@ function start ( apiKey, apiSecret )
 
 	local url = BASE_API_URI .. "start?" .. queryString
 	
-	-- insert record for the event
-	local record = sqlEventsTable:addRecord ()
-	record:setColumn ( "name", "start" )
-	record:setColumn ( "time", mSessionStartTime )
-	record:setColumn ( "data", "" )
-	record:setColumn ( "sessionID", mSessionId )
-	record:setColumn ( "url", url )
-	record:insert ( sqlCon )
+	print ( 'app salar url' + url )
+	
+	----insert record for the event
+	-- local record = sqlEventsTable:addRecord ()
+	-- record:setColumn ( "name", "start" )
+	-- record:setColumn ( "time", mSessionStartTime )
+	-- record:setColumn ( "data", "" )
+	-- record:setColumn ( "sessionID", mSessionId )
+	-- record:setColumn ( "url", url )
+	-- record:insert ( sqlCon )
 				
-	-- close db connection
-	closeConnection ( sqlCon, sqlEnv )
+	----close db connection
+	-- closeConnection ( sqlCon, sqlEnv )
 end

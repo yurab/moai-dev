@@ -122,9 +122,11 @@ bool MOAITileDeck2D::Bind () {
 	return true;
 }
 
+#include "moai_nacl.h"
 //----------------------------------------------------------------//
 void MOAITileDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float xScale, float yScale ) {
 	
+	if ( g_toggles [ GT_TILEDECK ] ) {
 	idx = idx - 1;
 	MOAICellCoord coord = this->GetCellCoord ( idx );
 	USRect uvRect = this->GetTileRect ( coord );
@@ -134,6 +136,7 @@ void MOAITileDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float xScale, 
 	quad.SetVerts ( this->mRect );
 	quad.SetUVs ( uvRect );
 	quad.Draw ( xOff, yOff, xScale, yScale );
+	}
 }
 
 //----------------------------------------------------------------//

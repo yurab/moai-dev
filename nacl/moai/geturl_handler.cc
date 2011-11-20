@@ -93,7 +93,7 @@ bool GetURLHandler::Start ( GetURLCallback callback ) {
 void GetURLHandler::OnOpen ( int32_t result ) {
 
 	if ( result < 0 ) {
-		NACL_LOG ( "ERROR: GetURLHandler::OnOpen %d, %s\n", result, url_.c_str ());
+		printf ( "ERROR: GetURLHandler::OnOpen %d, %s\n", result, url_.c_str ());
 		ReportResultAndDie ( url_, "pp::URLLoader::Open() failed", false );
 	}
 	else {

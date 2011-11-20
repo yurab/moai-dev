@@ -66,6 +66,10 @@ void NaClFileSystem::OpenFileSystemCallback ( int32_t result ) {
 
 	if ( result != PP_OK ) {
 		NACL_LOG ( "ERROR: NaClFileSystem Open File system result %d\n", result );
+
+		//AJV TODO send message back to browser
+		g_instance->PostMessage ( pp::Var ( "ALERT:Warning: You are in Incognito mode, data for this session will not be saved" ));
+
 		mFileSystemOpened = true;
 	}
 	else {

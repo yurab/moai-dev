@@ -20,8 +20,10 @@
 //================================================================//
 
 //----------------------------------------------------------------//
+#include "moai_nacl.h"
 void MOAIDeck2D::Draw ( const USAffine2D& transform, u32 idx, MOAIDeckRemapper* remapper ) {
 	
+	if ( g_toggles [ GT_DECK2D ] ) {
 	idx = remapper ? remapper->Remap ( idx ) : idx;
 	if ( !idx || ( idx & MOAITileFlags::HIDDEN )) return;
 	
@@ -35,6 +37,7 @@ void MOAIDeck2D::Draw ( const USAffine2D& transform, u32 idx, MOAIDeckRemapper* 
 	float yScale = ( idx & MOAITileFlags::YFLIP ) ? -1.0f : 1.0f;
 	
 	this->DrawPatch ( idx & MOAITileFlags::CODE_MASK, 0.0f, 0.0f, xScale, yScale );
+	}
 }
 
 //----------------------------------------------------------------//
@@ -49,6 +52,7 @@ void MOAIDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float xScale, floa
 //----------------------------------------------------------------//
 void MOAIDeck2D::Draw ( const USAffine2D& transform, MOAIGrid& grid, MOAIDeckRemapper* remapper, USVec2D& gridScale, MOAICellCoord& c0, MOAICellCoord& c1 ) {
 	
+	if ( g_toggles [ GT_DECK2D_2 ] ) {
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
 	
 	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );
@@ -74,6 +78,7 @@ void MOAIDeck2D::Draw ( const USAffine2D& transform, MOAIGrid& grid, MOAIDeckRem
 			
 			this->DrawPatch ( idx & MOAITileFlags::CODE_MASK, loc.mX, loc.mY, xScale, yScale );
 		}
+	}
 	}
 }
 

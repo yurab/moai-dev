@@ -27,6 +27,8 @@
 
 namespace {
 	int g_CLOCKS_PER_SECOND = 1000000;
+	double g_startClock;
+	double g_prevClock;
 }
 
 //================================================================//
@@ -55,6 +57,8 @@ static long _getTimerInfo () {
 
 	void USDeviceTime::SetClocksPerSecond	( int clocksPerSecond ) {
 		g_CLOCKS_PER_SECOND = clocksPerSecond;
+		g_startClock = ( clock () / ( double ) ( g_CLOCKS_PER_SECOND ) );
+		g_prevClock = g_startClock;
 	}
 	//----------------------------------------------------------------//
 	
@@ -87,7 +91,17 @@ static long _getTimerInfo () {
 
 		#endif
 #else
-		return  ( clock () / ( double ) ( g_CLOCKS_PER_SECOND ) );
+		double curclock = ( clock () / ( double ) ( g_CLOCKS_PER_SECOND ) );
+		
+		double clockDelta = curclock - g_prevClock;
+
+		if ( clockDelta > 0.0 ) {
+			g_startClock += clockDelta;
+		}
+
+		g_prevClock = curclock;
+
+		return  g_startClock;
 #endif
 	}
 #endif

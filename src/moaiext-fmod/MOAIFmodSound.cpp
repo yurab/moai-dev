@@ -213,7 +213,7 @@ void MOAIFmodSound::Load ( cc8* filename, bool streaming, bool async ) {
 
 #ifdef MOAI_OS_NACL
 
-	mode = FMOD_OPENMEMORY;
+	mode = FMOD_OPENMEMORY | FMOD_CREATESAMPLE;
 
 	memset( &info, 0, sizeof( FMOD_CREATESOUNDEXINFO ) );
 	info.cbsize = sizeof( FMOD_CREATESOUNDEXINFO );

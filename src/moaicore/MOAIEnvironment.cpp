@@ -366,7 +366,11 @@ MOAIEnvironment::MOAIEnvironment () :
 	mOSBrand ( "UNKNOWN" ),
 	mOSVersion ( "UNKNOWN" ),
 	mResourceDirectory ( "UNKNOWN" ),
+#if MOAI_OS_NACL
+	mUDID ( "NaCl" ) {
+#else
 	mUDID ( "UNKNOWN" ) {
+#endif
 
 	RTTI_SINGLE ( USLuaObject )
 }

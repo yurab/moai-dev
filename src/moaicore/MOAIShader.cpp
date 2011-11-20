@@ -73,7 +73,7 @@ void MOAIShaderUniform::BindMatrix ( const USMatrix4x4& matrix ) {
 void MOAIShaderUniform::BindPipelineTransforms ( const USMatrix4x4& world, const USMatrix4x4& view, const USMatrix4x4& proj ) {
 
 	switch ( this->mType ) {
-		
+
 		case UNIFORM_VIEW_PROJ: {
 			
 			USMatrix4x4 mtx = view;
@@ -86,6 +86,8 @@ void MOAIShaderUniform::BindPipelineTransforms ( const USMatrix4x4& world, const
 			this->BindMatrix ( world );
 			break;
 		}
+		case UNIFORM_WORLD_VIEW_PROJ_DEBUG: {
+		}
 		case UNIFORM_WORLD_VIEW_PROJ: {
 			
 			USMatrix4x4 mtx = world;
@@ -94,6 +96,7 @@ void MOAIShaderUniform::BindPipelineTransforms ( const USMatrix4x4& world, const
 			this->BindMatrix ( mtx );
 			break;
 		}
+		
 	}
 }
 
@@ -488,6 +491,7 @@ void MOAIShader::RegisterLuaClass ( USLuaState& state ) {
 	state.SetField ( -1, "UNIFORM_VIEW_PROJ",			( u32 )MOAIShaderUniform::UNIFORM_VIEW_PROJ );
 	state.SetField ( -1, "UNIFORM_WORLD",				( u32 )MOAIShaderUniform::UNIFORM_WORLD );
 	state.SetField ( -1, "UNIFORM_WORLD_VIEW_PROJ",		( u32 )MOAIShaderUniform::UNIFORM_WORLD_VIEW_PROJ );
+	state.SetField ( -1, "UNIFORM_WORLD_VIEW_PROJ_DEBUG",		( u32 )MOAIShaderUniform::UNIFORM_WORLD_VIEW_PROJ_DEBUG );
 }
 
 //----------------------------------------------------------------//

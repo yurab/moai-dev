@@ -21,6 +21,52 @@
 #endif
 
 
+#define LUA_HEADERFILE_LOADER(Name) \
+const char* _reader_##Name ( lua_State* L, void* data, size_t* size ) { \
+	UNUSED ( data ); \
+	( *size ) = Name##_SIZE; \
+	return ( const char* )Name; \
+} \
+void load_bundled_lua_##Name( lua_State* L ) { \
+	lua_load ( L, _reader_##Name, 0, ""); \
+	lua_call ( L, 0, 1 ); \
+} \
+
+#include"levels_h/BrokenBlackHeart_lua.h"
+#include"levels_h/CatchAndRelease_lua.h"
+#include"levels_h/ConfederateGold_lua.h"
+#include"levels_h/CrimsonTide_lua.h"
+#include"levels_h/DeadMansHand_lua.h"
+#include"levels_h/FishingOutMermaids_lua.h"
+#include"levels_h/GamblingDebt_lua.h"
+#include"levels_h/LordM_lua.h"
+#include"levels_h/LoveAtFirstSight_lua.h"
+#include"levels_h/MrTesla_lua.h"
+#include"levels_h/NewFlames_lua.h"
+#include"levels_h/Old_Friends_lua.h"
+#include"levels_h/SocialCall_lua.h"
+#include"levels_h/TakingFlight_lua.h"
+#include"levels_h/TheEyeOfGod_lua.h"
+#include"levels_h/TravelingMoney_lua.h"
+
+LUA_HEADERFILE_LOADER(BrokenBlackHeart)
+LUA_HEADERFILE_LOADER(CatchAndRelease)
+LUA_HEADERFILE_LOADER(ConfederateGold)
+LUA_HEADERFILE_LOADER(CrimsonTide)
+LUA_HEADERFILE_LOADER(DeadMansHand)
+LUA_HEADERFILE_LOADER(FishingOutMermaids)
+LUA_HEADERFILE_LOADER(GamblingDebt)
+LUA_HEADERFILE_LOADER(LordM)
+LUA_HEADERFILE_LOADER(LoveAtFirstSight)
+LUA_HEADERFILE_LOADER(MrTesla)
+LUA_HEADERFILE_LOADER(NewFlames)
+LUA_HEADERFILE_LOADER(Old_Friends)
+LUA_HEADERFILE_LOADER(SocialCall)
+LUA_HEADERFILE_LOADER(TakingFlight)
+LUA_HEADERFILE_LOADER(TheEyeOfGod)
+LUA_HEADERFILE_LOADER(TravelingMoney)
+
+#define LUA_CHECK_COMPILED_HEADER(string)
 
 //================================================================//
 // local
@@ -157,9 +203,17 @@ int MOAISim::_getDeviceSize ( lua_State* L ) {
 
 	@out	number time			The device clock time in seconds.
 */
-int MOAISim::_getDeviceTime ( lua_State* L ) {
+/*int MOAISim::_getDeviceTime ( lua_State* L ) {
 	
 	lua_pushnumber ( L, USDeviceTime::GetTimeInSeconds ());
+	return 1;
+}*/
+
+int MOAISim::_getDeviceTime ( lua_State* L ) {
+	
+	//lua_pushnumber ( L, USDeviceTime::GetTimeInSeconds ());
+	MOAISim& device = MOAISim::Get ();
+	lua_pushnumber ( L, device.mSimTime );
 	return 1;
 }
 
@@ -314,6 +368,83 @@ int MOAISim::_getPerformance ( lua_State* L ) {
 int MOAISim::_getSimTime( lua_State* L )
 {
 	lua_pushnumber(L, MOAISim::Get().mSimTime);
+	return 1;
+}
+
+int MOAISim::_loadCompiledLua( lua_State* L )
+{
+	USLuaState state ( L );
+
+	if ( !state.CheckParams ( 1, "S" )) return 0;
+
+	cc8* file = lua_tostring ( state, 1 );
+
+	//levels : (
+	if ( !strcmp ( file, "levels/BrokenBlackHeart.lua" )) {
+
+		load_bundled_lua_BrokenBlackHeart( L );
+	}
+	else if ( !strcmp ( file, "levels/CatchAndRelease.lua" )) {
+
+		load_bundled_lua_CatchAndRelease ( L );
+	}
+	else if ( !strcmp ( file, "levels/ConfederateGold.lua" )) {
+
+		load_bundled_lua_ConfederateGold ( L );
+	}
+	else if ( !strcmp ( file, "levels/CrimsonTide.lua" )) {
+
+		load_bundled_lua_CrimsonTide ( L );
+	}
+	else if ( !strcmp ( file, "levels/DeadMansHand.lua" )) {
+
+		load_bundled_lua_DeadMansHand ( L );
+	}
+	else if ( !strcmp ( file, "levels/FishingOutMermaids.lua" )) {
+
+		load_bundled_lua_FishingOutMermaids ( L );
+	}
+	else if ( !strcmp ( file, "levels/GamblingDebt.lua" )) {
+
+		load_bundled_lua_GamblingDebt ( L );
+	}
+	else if ( !strcmp ( file, "levels/LordM.lua" )) {
+
+		load_bundled_lua_LordM ( L );
+	}
+	else if ( !strcmp ( file, "levels/LoveAtFirstSight.lua" )) {
+
+		load_bundled_lua_LoveAtFirstSight ( L );
+	}
+	else if ( !strcmp ( file, "levels/MrTesla.lua" )) {
+
+		load_bundled_lua_MrTesla ( L );
+	}
+	else if ( !strcmp ( file, "levels/NewFlames.lua" )) {
+
+		load_bundled_lua_NewFlames ( L );
+	}
+	else if ( !strcmp ( file, "levels/Old Friends.lua" )) {
+
+		load_bundled_lua_Old_Friends ( L );
+	}
+	else if ( !strcmp ( file, "levels/SocialCall.lua" )) {
+
+		load_bundled_lua_SocialCall ( L );
+	}
+	else if ( !strcmp ( file, "levels/TakingFlight.lua" )) {
+
+		load_bundled_lua_TakingFlight ( L );
+	}
+	else if ( !strcmp ( file, "levels/TheEyeOfGod.lua" )) {
+
+		load_bundled_lua_TheEyeOfGod ( L );
+	}
+	else if ( !strcmp ( file, "levels/TravelingMoney.lua" )) {
+
+		load_bundled_lua_TravelingMoney ( L );
+	}
+
 	return 1;
 }
 
@@ -758,6 +889,7 @@ void MOAISim::RegisterLuaClass ( USLuaState& state ) {
 		{ "getMemoryUsage",				_getMemoryUsage },
 		{ "getPerformance",				_getPerformance },
 		{ "getSimTime",					_getSimTime},
+		{ "loadCompiledLua",			_loadCompiledLua },
 		{ "openWindow",					_openWindow },
 		{ "pauseTimer",					_pauseTimer },
 		{ "popRenderPass",				_popRenderPass },
@@ -786,6 +918,7 @@ void MOAISim::RegisterLuaFuncs ( USLuaState& state ) {
 	UNUSED ( state );
 }
 
+#include "moai_nacl.h"
 //----------------------------------------------------------------//
 void MOAISim::Render () {
 
@@ -808,12 +941,16 @@ void MOAISim::Render () {
 		glClear ( this->mClearFlags );
 	}
 	
+	int pass = 0;
 	RenderPassIt passIt = this->mRenderPasses.Head ();
 	for ( ; passIt; passIt = passIt->Next ()) {
+		if ( pass > 10 || g_toggles[ pass ] ) {
 		MOAIProp2D* renderPass = passIt->Data ();
 		
 		MOAIGfxDevice::Get ().BeginDrawing ();
 		renderPass->Draw ();
+		}
+		++pass;
 	}
 
 	MOAIGfxDevice::Get ().Flush ();
@@ -939,20 +1076,26 @@ void MOAISim::Update () {
 	// 'gap' is the time left to make up between sim time and real time
 	double gap = realTime - this->mSimTime;	
 
-	if ( gap > 1.0f ) {
-		this->mSimTime = realTime;
+	//AJV Set to 0.1 due to timer that check level end (Crimson)
+	if ( gap > 0.1f ) {
+		this->mSimTime = realTime - this->mStep;
+		//this->mSimTime = realTime - 0.1f;
 		gap = realTime - this->mSimTime;	
 	}
-	/*if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
+
+	//gap = 0.17f;
+
+	if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
 		double boost = gap - ( this->mStep * this->mBoostThreshold );
 		if ( boost > 0.0f ) {
+
 			budget -= this->StepSim ( gap );
 			gap = 0.0f;
 		}
-	}*/
+	}
 	
 	//AJV multi-step boost to prevent bad game state
-	if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
+	/*if ( this->mLoopFlags & SIM_LOOP_ALLOW_BOOST ) {
 		double boost = gap - ( this->mStep * this->mBoostThreshold );
 		while ( boost > 0.0f ) {
 			
@@ -962,21 +1105,22 @@ void MOAISim::Update () {
 			boost = gap - ( this->mStep * this->mBoostThreshold );
 
 		}
-	}
+	}*/
 
 	// single step
 	if (( this->mStep <= gap ) && ( budget > 0.0 )) {
+
 		budget -= this->StepSim ( this->mStep );
 		gap -= this->mStep;
 	}
 		
 	// spin to use up any additional budget
-	if ( this->mLoopFlags & SIM_LOOP_ALLOW_SPIN ) {
+	/*if ( this->mLoopFlags & SIM_LOOP_ALLOW_SPIN ) {
 		while (( this->mStep <= gap ) && ( budget > 0.0 )) {
 			budget -= this->StepSim ( this->mStep );
 			gap -= this->mStep;
 		}
-	}	
+	}	*/
 
 	// these stay out of the sim step for now
 	USUrlMgr::Get ().Process ();

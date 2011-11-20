@@ -26,7 +26,9 @@ private:
 	//----------------------------------------------------------------//
 	static int		_setTexture			( lua_State* L );
 	static int		_setVertexBuffer	( lua_State* L );
+	static int		_flagDebug			( lua_State* L );
 
+	bool			mbDebugShader;
 public:
 	
 	DECL_LUA_FACTORY ( MOAIMesh )

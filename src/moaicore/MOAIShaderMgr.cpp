@@ -80,6 +80,17 @@ MOAIShader& MOAIShaderMgr::GetShader ( u32 shaderID ) {
 				shader->DeclareUniform ( 1, "ucolor", MOAIShaderUniform::UNIFORM_COLOR );
 
 				break;
+			case MESH_DEBUG_SHADER:
+				shader->SetSource ( _meshShaderVSH, _meshShaderFSH );
+				shader->SetVertexAttribute ( MOAIVertexFormatMgr::XYUVC_POSITION, "position" );
+				shader->SetVertexAttribute ( MOAIVertexFormatMgr::XYUVC_TEXCOORD, "uv" );
+				shader->SetVertexAttribute ( MOAIVertexFormatMgr::XYUVC_COLOR, "color" );
+
+				shader->ReserveUniforms ( 2 );
+				shader->DeclareUniform ( 0, "transform", MOAIShaderUniform::UNIFORM_WORLD_VIEW_PROJ_DEBUG );
+				shader->DeclareUniform ( 1, "ucolor", MOAIShaderUniform::UNIFORM_COLOR );
+
+				break;
 		}
 		
 		this->mShaders [ shaderID ] = shader;

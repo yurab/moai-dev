@@ -11,6 +11,12 @@
 #include <moaicore/MOAISim.h>
 #include <moaicore/MOAITexture.h>
 
+#if MOAI_OS_NACL
+#include "moai_nacl.h"
+bool g_blockOnMainThreadTexLoad;
+bool g_blockOnMainThreadTexUnload;
+#endif
+
 //================================================================//
 // MOAITextureLoader
 //================================================================//
@@ -201,7 +207,6 @@ int MOAITexture::_load ( lua_State* L ) {
 
 		cc8* filename = lua_tostring ( state, 2 );
 
-		printf ( " MOAITexture::_load file %s\n", filename );
 		if ( strlen ( filename ) <  128 ) {
 			memcpy( self->mFileName, filename, strlen ( filename ));
 		}
@@ -223,7 +228,6 @@ int MOAITexture::_load ( lua_State* L ) {
 int MOAITexture::_release ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAITexture, "U" )
 	
-	printf ( " MOAITexture::_release file %s\n", self->mFileName );
 	self->MOAITexture::Clear ();
 	
 	return 0;
@@ -752,7 +756,6 @@ MOAITexture::MOAITexture () :
 //----------------------------------------------------------------//
 MOAITexture::~MOAITexture () {
 
-	printf ( " ~MOAITexture file %s\n", mFileName );
 	this->Clear ();
 }
 
@@ -780,7 +783,6 @@ void MOAITexture::OnBind () {
 //----------------------------------------------------------------//
 void MOAITexture::OnClear () {
 
-	printf ( " MOAITexture::OnClear file %s\n", mFileName );
 	this->OnUnload ();
 	
 	this->mWidth = 0;
@@ -802,9 +804,6 @@ void MOAITexture::OnClear () {
 	this->mIsRenewable = false;
 }
 #ifdef MOAI_OS_NACL
-#include "moai_nacl.h"
-bool g_blockOnMainThreadTexLoad;
-bool g_blockOnMainThreadTexUnload;
 //----------------------------------------------------------------//
 void MOAITexture::NaClLoadTexture ( void* userData, int32_t result ) {
 
@@ -919,7 +918,6 @@ void MOAITexture::OnRenew () {
 //----------------------------------------------------------------//
 void MOAITexture::OnUnload () {
 
-	printf ( " MOAITexture::OnUnload file %s\n", mFileName );
 	if ( this->mGLTexID ) {
 	
 		if ( MOAIGfxDevice::IsValid ()) {

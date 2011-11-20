@@ -28,11 +28,12 @@
 
 #ifdef NACL
 #include "NaClFile.h"
+#define SHIPPING 0
 #endif
 
 //================================================================//
 // ZIPFSFile
-//================================================================//
+//===============================================================//
 typedef struct ZIPFSFile {
 
 	int		mIsArchive;
@@ -425,10 +426,17 @@ int zipfs_fputc ( int c, ZIPFSFILE* fp ) {
 //----------------------------------------------------------------//
 int zipfs_fputs ( const char* string, ZIPFSFILE* fp ) {
 
+#if SHIPPING
+	if ( fp == zipfs_stdout ) {
+		return EOF;
+	}
+#endif
+
 	FILE* file = is_file ( fp );
 	if ( file ) {
 		return fputs ( string, file );
 	}
+
 	return EOF;
 }
 

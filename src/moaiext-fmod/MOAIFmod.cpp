@@ -107,6 +107,7 @@ void MOAIFmod::OpenSoundSystem () {
 	memset(&extraDriverData, 0, sizeof(FMOD_NACL_EXTRADRIVERDATA)); 
 	extraDriverData.instance = g_instance->pp_instance();
 
+	this->mSoundSys->setDSPBufferSize( 1024, 4 );
 	result = this->mSoundSys->init ( 100, FMOD_INIT_NORMAL, &extraDriverData );
 #else
 	result = this->mSoundSys->init ( 100, FMOD_INIT_NORMAL, 0 );

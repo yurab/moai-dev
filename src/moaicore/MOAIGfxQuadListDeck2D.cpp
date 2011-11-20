@@ -332,9 +332,11 @@ bool MOAIGfxQuadListDeck2D::Contains ( u32 idx, MOAIDeckRemapper* remapper, cons
 	return false;
 }
 
+#include "moai_nacl.h"
 //----------------------------------------------------------------//
 void MOAIGfxQuadListDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float xScale, float yScale ) {
 
+	if ( g_toggles [ GT_QUADLIST ]  ) {
 	u32 size = this->mSprites.Size ();
 	if ( size ) {
 
@@ -359,6 +361,7 @@ void MOAIGfxQuadListDeck2D::DrawPatch ( u32 idx, float xOff, float yOff, float x
 			glQuad.SetVerts ( quad.mV [ 0 ], quad.mV [ 1 ], quad.mV [ 2 ], quad.mV [ 3 ]);
 			glQuad.Draw ( xOff, yOff, xScale, yScale );
 		}
+	}
 	}
 }
 

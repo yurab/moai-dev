@@ -45,6 +45,5 @@ void AKUFmodRestoreSession () {
 //----------------------------------------------------------------//
 void AKUFmodUpdate () {
 
-	//printf ( "AKUFmodUpdate\n" );
 	MOAIFmod::Get ().Update ();
 }

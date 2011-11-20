@@ -660,7 +660,7 @@ void MOAIGfxDevice::ReportTextureAlloc ( cc8* name, size_t size ) {
 
 	this->mTextureMemoryUsage += size;
 	float mb = ( float )this->mTextureMemoryUsage / 1024.0f / 1024.0f;
-	MOAILog ( 0, MOAILogMessages::MOAITexture_MemoryUse_SDFS, "+", size, mb, name );
+	//MOAILog ( 0, MOAILogMessages::MOAITexture_MemoryUse_SDFS, "+", size, mb, name );
 }
 
 //----------------------------------------------------------------//
@@ -668,7 +668,7 @@ void MOAIGfxDevice::ReportTextureFree ( cc8* name, size_t size ) {
 
 	this->mTextureMemoryUsage -= size;
 	float mb = ( float )this->mTextureMemoryUsage / 1024.0f / 1024.0f;
-	MOAILog ( 0, MOAILogMessages::MOAITexture_MemoryUse_SDFS, "-", size, mb, name );
+	//MOAILog ( 0, MOAILogMessages::MOAITexture_MemoryUse_SDFS, "-", size, mb, name );
 }
 
 //----------------------------------------------------------------//
@@ -1073,7 +1073,7 @@ void MOAIGfxDevice::SetVertexTransform ( u32 id, const USAffine2D& transform ) {
 //----------------------------------------------------------------//
 void MOAIGfxDevice::SetVertexTransform ( u32 id, const USMatrix4x4& transform ) {
 
-	if ( !this->mVertexTransforms [ id ].IsSame ( transform )) {
+	//if ( !this->mVertexTransforms [ id ].IsSame ( transform )) {
 
 		this->mVertexTransforms [ id ] = transform;
 		
@@ -1092,7 +1092,7 @@ void MOAIGfxDevice::SetVertexTransform ( u32 id, const USMatrix4x4& transform ) 
 				this->mVertexTransforms [ VTX_PROJ_TRANSFORM ]
 			);
 		}
-	}
+	//}
 }
 
 //----------------------------------------------------------------//

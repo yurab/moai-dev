@@ -18,7 +18,7 @@ void USHttpTaskInfo::HttpLoaded ( GetURLHandler *handler, const char *buffer, in
 	USHttpTaskInfo *taskInfo = static_cast < USHttpTaskInfo * > ( handler->GetUserData ());
 	taskInfo->mResponseCode = handler->GetStatusCode ();
 
-	NACL_LOG ( "USHttpTaskInfo::HttpLoaded status? %d, size %d, pointer %p, data %s\n", handler->GetStatusCode (), size, taskInfo, buffer );
+	printf ( "USHttpTaskInfo::HttpLoaded status? %d, size %d, pointer %p, data %s\n", handler->GetStatusCode (), size, taskInfo, buffer );
 
 	/*taskInfo->mByteStream.SetBuffer ( const_cast<char *> ( buffer ), size );
 	taskInfo->mByteStream.SetLength ( size );
@@ -28,6 +28,26 @@ void USHttpTaskInfo::HttpLoaded ( GetURLHandler *handler, const char *buffer, in
 
 	taskInfo->mReady = true;
 }
+
+//----------------------------------------------------------------//
+void USHttpTaskInfo::HttpGetMainThread ( void* userData, int32_t result ) {
+
+	USHttpTaskInfo * taskInfo = static_cast < USHttpTaskInfo * > ( userData );
+
+	GetURLHandler* handler = GetURLHandler::Create( g_instance, taskInfo->mUrl );
+	
+	if (handler != NULL) {
+
+		printf ( "Getting.... %s\n", taskInfo->mUrl.c_str ());
+		//handler->SetMethod ( GetURLHandler::GET );
+		handler->SetUserData ( taskInfo );
+
+		handler->Start( HttpLoaded );
+	}
+
+	taskInfo->mLock = false;
+}
+
 
 //----------------------------------------------------------------//
 void USHttpTaskInfo::HttpPostMainThread ( void* userData, int32_t result ) {
@@ -84,8 +104,17 @@ void USHttpTaskInfo::InitForGet ( cc8* url, cc8* useragent, bool verbose ) {
 
 	this->Clear ();
 
-	//AJV TODO GET
-	NACL_LOG ( "USHttpTaskInfo::InitForGet ( %s, %s, verbose )\n", url, useragent );
+	this->mReady = false;
+	this->mUrl = url;
+	this->mLock = true;
+
+	printf ( "get %s\n", url );
+	pp::CompletionCallback cc ( HttpGetMainThread, this );
+	g_core->CallOnMainThread ( 0, cc , 0 );
+
+	while ( this->mLock ) {
+		sleep ( 0.0001f );
+	}
 
 	this->mUrl = url;
 }

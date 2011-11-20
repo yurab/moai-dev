@@ -90,7 +90,6 @@ int MOAIFmodChannel::_play ( lua_State* L ) {
 	MOAIFmodSound* sound = state.GetLuaObject < MOAIFmodSound >( 2 );
 	if ( !sound ) return 0;
 
-	printf ( "playing %s\n", sound->GetFileName ());
 	int loopCount = state.GetValue < int >( 3, 0 );
 
 	self->Play ( sound, loopCount );
@@ -231,8 +230,12 @@ void MOAIFmodChannel::Play ( MOAIFmodSound* sound, int loopCount ) {
 	FMOD_RESULT result;
 	FMOD::Channel* channel = 0;
 	
+	//printf ( "PLAY SOUND %s, @ %f\n", sound->GetFileName (), USDeviceTime::GetTimeInSeconds () );
 	result = soundSys->playSound ( FMOD_CHANNEL_FREE, sound->mSound, true, &channel );
-	if ( result != FMOD_OK ) return;
+	if ( result != FMOD_OK ) {
+		printf (" FMOD ERROR: Sound did not play\n" );
+		return;
+	}
 	
 	this->mChannel = channel;
 	this->mChannel->setMode ( FMOD_LOOP_NORMAL );

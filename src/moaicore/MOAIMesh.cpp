@@ -52,6 +52,13 @@ int MOAIMesh::_setVertexBuffer ( lua_State* L ) {
 	return 0;
 }
 
+int MOAIMesh::_flagDebug  ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIMesh, "U" )
+	
+	self->mbDebugShader = true;
+
+	return 0;
+}
 //================================================================//
 // MOAIMesh
 //================================================================//
@@ -65,23 +72,29 @@ bool MOAIMesh::Bind () {
 	return true;
 }
 
+#include "moai_nacl.h"
 //----------------------------------------------------------------//
 void MOAIMesh::Draw ( const USAffine2D& transform, u32 idx, MOAIDeckRemapper* remapper ) {
 	UNUSED ( idx );
 	UNUSED ( remapper );
 	
+	if ( g_toggles [ GT_MESH ] ) {
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
 	
-	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );
-	gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_PROJ );
-	gfxDevice.SetTexture ( this->mTexture );
+	gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_MODEL );
 	gfxDevice.SetUVMtxMode ( MOAIGfxDevice::UV_STAGE_MODEL, MOAIGfxDevice::UV_STAGE_TEXTURE );
+
+	//gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_PROJ );
+	gfxDevice.SetTexture ( this->mTexture );
+	
+	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );
 
 	/*gfxDevice.SetVertexMtxMode ( MOAIGfxDevice::VTX_STAGE_MODEL, MOAIGfxDevice::VTX_STAGE_MODEL );
 	gfxDevice.SetTexture ( this->mTexture );
 	gfxDevice.SetVertexTransform ( MOAIGfxDevice::VTX_WORLD_TRANSFORM, transform );*/
 
 	this->mVertexBuffer->Draw ();
+	}
 }
 
 //----------------------------------------------------------------//
@@ -110,9 +123,14 @@ USRect MOAIMesh::GetBounds ( u32 idx, MOAIDeckRemapper* remapper ) {
 //----------------------------------------------------------------//
 void MOAIMesh::LoadShader () {
 
-	if ( this->mShader ) {
+	/*if ( this->mShader ) {
 		MOAIGfxDevice::Get ().SetShader ( this->mShader );
 	}
+	else {*/
+	if ( mbDebugShader ) {
+		printf ( "BIND DEBUG SHADER\n" );
+		MOAIShaderMgr::Get ().BindShader ( MOAIShaderMgr::MESH_DEBUG_SHADER );
+	} 
 	else {
 		MOAIShaderMgr::Get ().BindShader ( MOAIShaderMgr::MESH_SHADER );
 	}
@@ -123,6 +141,7 @@ MOAIMesh::MOAIMesh () {
 
 	RTTI_SINGLE ( MOAIDeck )
 	this->SetContentMask ( MOAIProp::CAN_DRAW );
+	mbDebugShader = false;
 }
 
 //----------------------------------------------------------------//
@@ -143,6 +162,7 @@ void MOAIMesh::RegisterLuaFuncs ( USLuaState& state ) {
 	luaL_Reg regTable [] = {
 		{ "setTexture",				_setTexture },
 		{ "setVertexBuffer",		_setVertexBuffer },
+		{ "flagDebug",		_flagDebug },
 		{ NULL, NULL }
 	};
 	

@@ -14,7 +14,11 @@ namespace {
 // This is called by the brower when the 3D context has been flushed to the
 // browser window.
 void FlushCallback(void* data, int32_t result) {
-	//printf ( "Flush Complete\n" );
+
+	if ( result != PP_OK ) {
+		printf ( "Flush Error with %d\n", result );
+	}
+
   static_cast<OpenGLContext*>(data)->set_flush_pending(false);
 }
 }  // namespace

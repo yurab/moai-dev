@@ -33,6 +33,7 @@ private:
 
 	static void HttpLoaded ( GetURLHandler *handler, const char *buffer, int32_t size );
 	static void HttpPostMainThread ( void* userData, int32_t result );
+	static void HttpGetMainThread ( void* userData, int32_t result );
 
 public:
 

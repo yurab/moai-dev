@@ -1,8 +1,8 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
-#ifndef	MOAIDECK2DSHADER_FSH_H
-#define	MOAIDECK2DSHADER_FSH_H
+#ifndef	MOAI_NACL_H
+#define	MOAI_NACL_H
 
 #include "NaClFileSystem.h"
 #include "ppapi/cpp/input_event.h"
@@ -66,7 +66,6 @@ public:
 				 num -= NaClQueue::kMaxMessages;
 			}
 
-			//pthread_cond_signal( & condvar );
 		}
 
 		pthread_mutex_unlock( &mutex );
@@ -111,19 +110,40 @@ public:
 	void FinishAndPrint ();
 };
 
-#define SHIPPING 0
+#define SHIPPING 1
 #define ENABLE_NACLPROFILE 0
 
+#include "moaicore/pch.h"
 #if SHIPPING
 #define NACL_LOG(...)
 #else
-//#define NACL_LOG(...) printf("Time:%f:",USDeviceTime::GetTimeInSeconds ());printf(__VA_ARGS__)
-#define NACL_LOG(...) printf(__VA_ARGS__)
+#define NACL_LOG(...) printf("%f:",USDeviceTime::GetTimeInSeconds ());printf(__VA_ARGS__)
+//#define NACL_LOG(...) printf(__VA_ARGS__)
 #endif
 
 extern NaClQueue<std::string> *g_MessageQueue;
 extern NaClFileSystem *g_FileSystem;
 extern pp::Core* g_core;
 extern MoaiInstance *g_instance;
+
+enum GRAPHIC_TOGGLES {
+	GT_LAYER1,
+	GT_LAYER2,
+	GT_LAYER3,
+	GT_LAYER4,
+	GT_LAYER5,
+	GT_LAYER6,
+	GT_LAYER7,
+	GT_LAYER8,
+	GT_LAYER9,
+	GT_MESH,
+	GT_TILEDECK,
+	GT_DECK2D,
+	GT_DECK2D_2,
+	GT_QUADLIST,
+	GT_TOTAL
+};
+
+extern bool g_toggles[GT_TOTAL];
 
 #endif
