@@ -345,7 +345,7 @@ void MOAIPartition::InsertProp ( MOAIProp& prop ) {
 	
 	if ( prop.mPartition == this ) return;
 	
-	this->InsertObject ( prop );
+	this->LuaRetain ( prop );
 	
 	if ( prop.mPartition ) {
 		prop.mPartition->RemoveProp ( prop );
@@ -368,7 +368,7 @@ MOAIPartition::MOAIPartition () :
 	mPriorityCounter ( 0 ) {
 	
 	RTTI_BEGIN
-		RTTI_EXTEND ( USLuaObject )
+		RTTI_EXTEND ( MOAILuaObject )
 	RTTI_END
 }
 
@@ -378,12 +378,12 @@ MOAIPartition::~MOAIPartition () {
 }
 
 //----------------------------------------------------------------//
-void MOAIPartition::RegisterLuaClass ( USLuaState& state ) {
+void MOAIPartition::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIPartition::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIPartition::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	luaL_Reg regTable [] = {
 		{ "clear",						_clear },
@@ -412,7 +412,7 @@ void MOAIPartition::RemoveProp ( MOAIProp& prop ) {
 	}
 
 	prop.mPartition = 0;
-	this->RemoveObject ( prop );
+	this->LuaRelease ( prop );
 }
 
 //----------------------------------------------------------------//

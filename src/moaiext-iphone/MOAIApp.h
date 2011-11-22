@@ -18,7 +18,7 @@
 // TODO: harebrained
 @interface LuaAlertView : UIAlertView < UIAlertViewDelegate > {
 @public
-	USLuaRef callback;
+	MOAILuaRef callback;
 };
 
 	//----------------------------------------------------------------//
@@ -43,7 +43,7 @@
 	@const	REMOTE_NOTIFICATION_ALERT	Bitmask for alert notification.
 */
 class MOAIApp :
-	public USGlobalClass < MOAIApp, USLuaObject > {
+	public MOAIGlobalClass < MOAIApp, MOAILuaObject > {
 private:
 
 	enum {
@@ -72,12 +72,13 @@ private:
 	};
 	
 	enum {
+		APP_OPENED_FROM_URL,
 		SESSION_START,
 		SESSION_END
 	};
 	
 	UIApplication*			mApplication;
-	USLuaRef				mListeners [ TOTAL ];
+	MOAILuaRef				mListeners [ TOTAL ];
 	NSDictionary*			mAppNotificationPayload;
 	MOAIStoreKitListener*	mStoreKitListener;
 
@@ -92,6 +93,7 @@ private:
 	static int		_getDirectoryInDomain					( lua_State* L );
 	static int		_getNotificationThatStartedApp			( lua_State* L );
 	static int		_openURL								( lua_State* L );
+	static int		_openURLWithParams						( lua_State* L );
 	static int		_presentLocalNotification				( lua_State* L );
 	static int		_registerForRemoteNotifications			( lua_State* L );
 	static int		_restoreCompletedTransactions			( lua_State* L );
@@ -111,6 +113,7 @@ public:
 	SET ( UIApplication*, Application, mApplication )
 	
 	//----------------------------------------------------------------//
+	void		AppOpenedFromURL											( NSURL* url );
 	void		DidFailToRegisterForRemoteNotificationsWithError			( NSError* error );
 	void		DidReceiveLocalNotification									( UILocalNotification* notification );
 	void		DidReceivePaymentQueueError									( NSError *error, cc8 *extraInfo );
@@ -124,7 +127,7 @@ public:
 	void		OnInit														();
 	void		PaymentQueueUpdatedTransactions								( SKPaymentQueue* queue, NSArray* transactions );
 	void		ProductsRequestDidReceiveResponse							( SKProductsRequest* request, SKProductsResponse* response );
-	void		RegisterLuaClass											( USLuaState& state );
+	void		RegisterLuaClass											( MOAILuaState& state );
 	void		Reset														();
 	void		SetRemoteNotificationPayload								( NSDictionary* remoteNotificationPayload );
 	void		WillEndSession												();

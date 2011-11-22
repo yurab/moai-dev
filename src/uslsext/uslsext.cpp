@@ -44,16 +44,16 @@ static void _cleanup () {
 //================================================================//
 
 //----------------------------------------------------------------//
-void uslsext::InitGlobals ( USGlobals* globals ) {
+void uslsext::Init () {
 
-	uslscore::InitGlobals ( globals );
+	uslscore::Init ();
 
 	static bool sysInit = true;
 	if ( sysInit ) {;
 
 #ifndef MOAI_OS_NACL
 		SSL_load_error_strings ();
-		SSL_library_init (); 
+		SSL_library_init ();
 
 		curl_global_init ( CURL_GLOBAL_WIN32 | CURL_GLOBAL_SSL );
 #endif
@@ -61,6 +61,4 @@ void uslsext::InitGlobals ( USGlobals* globals ) {
 		atexit ( _cleanup );
 		sysInit = false;
 	}
-
-	USUrlMgr::Affirm ();
 }

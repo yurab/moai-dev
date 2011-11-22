@@ -164,10 +164,12 @@ bool Sound::decode(const RString& path, SoundInfo& info, float** data)
 	AudioSource* source = 0;
 	if (path.find(OGG_FILE_EXT) != RString::npos)
 	{
+#ifndef __ANDROID__
 		OggAudioSource* as = new OggAudioSource();
 		source = as;
 		if(as->init(path, true))
 			decoded = true;
+#endif			
 	}
 	else
 	{
@@ -216,6 +218,10 @@ bool Sound::decode(const RString& path, SoundInfo& info, float** data)
 	return true;
 }
 
+void Sound::dispose ( Sound* sound )
+{
+	delete sound;
+}
 
 Sound::Sound()
 {
@@ -224,6 +230,8 @@ Sound::Sound()
 
 Sound::~Sound()
 {
+	stop();
+	
 	UNTZ::System::get()->getData()->mMixer.removeSound(this);
 
 	if(mpData)
@@ -313,8 +321,11 @@ void Sound::pause()
 
 void Sound::stop()
 {	
-	mpData->mPlayState = kPlayStateStopped;
-	setPosition(0);
+	if(mpData)
+	{
+		mpData->mPlayState = kPlayStateStopped;
+		setPosition(0);
+	}
 }
 
 bool Sound::isPlaying()

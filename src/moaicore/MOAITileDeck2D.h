@@ -5,6 +5,7 @@
 #define	MOAITILEDECK2D_H
 
 #include <moaicore/MOAIDeck2D.h>
+#include <moaicore/MOAILua.h>
 
 class MOAITexture;
 
@@ -20,8 +21,8 @@ class MOAITileDeck2D :
 	public MOAIGridSpace {
 private:
 	
-	USRect					mRect;
-	USRef < MOAITexture >	mTexture;
+	USRect mRect;
+	MOAILuaSharedPtr < MOAITexture > mTexture;
 	
 	//----------------------------------------------------------------//
 	static int		_setRect				( lua_State* L );
@@ -29,8 +30,6 @@ private:
 	static int		_setTexture				( lua_State* L );
 	
 public:
-	
-	GET_SET ( MOAITexture*, Texture, mTexture )
 	
 	DECL_LUA_FACTORY ( MOAITileDeck2D )
 	
@@ -40,10 +39,10 @@ public:
 	USRect			GetBounds				( u32 idx, MOAIDeckRemapper* remapper );
 					MOAITileDeck2D			();
 					~MOAITileDeck2D			();
-	void			RegisterLuaClass		( USLuaState& state );
-	void			RegisterLuaFuncs		( USLuaState& state );
-	void			SerializeIn				( USLuaState& state, USLuaSerializer& serializer );
-	void			SerializeOut			( USLuaState& state, USLuaSerializer& serializer );
+	void			RegisterLuaClass		( MOAILuaState& state );
+	void			RegisterLuaFuncs		( MOAILuaState& state );
+	void			SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	void			SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 };
 
 #endif

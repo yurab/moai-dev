@@ -4,13 +4,15 @@
 #ifndef	MOAIDRAW_H
 #define	MOAIDRAW_H
 
+#include <moaicore/MOAILua.h>
+
 class MOAITexture;
 
 //================================================================//
 // MOAIDraw
 //================================================================//
 class MOAIDraw :
-	public USGlobalClass < MOAIDraw, USLuaObject > {
+	public MOAIGlobalClass < MOAIDraw, MOAILuaObject > {
 private:
 
 	//----------------------------------------------------------------//
@@ -52,10 +54,11 @@ public:
 	static void			DrawRectFill			( float left, float top, float right, float bottom );
 	static void			DrawRectOutline			( USRect& rect );
 	static void			DrawRectOutline			( float left, float top, float right, float bottom );
-	static void			DrawVertexArray			( USVec2D* verts, u32 count, u32 color, u32 primType );
+	static void			DrawVertexArray			( const USVec2D* verts, u32 count, u32 color, u32 primType );
+	static void			DrawVertexArray			( const float* verts, u32 count, u32 color, u32 primType );
 						MOAIDraw				();
 						~MOAIDraw				();
-	void				RegisterLuaClass		( USLuaState& state );
+	void				RegisterLuaClass		( MOAILuaState& state );
 };
 
 #endif

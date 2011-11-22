@@ -13,9 +13,8 @@
 //================================================================//
 // MOAIWebView
 //================================================================//
-class MOAIWebView :
-	public UIViewController, 
-	public MOAIEventSource {
+class MOAIWebView : 
+	public MOAIInstanceEventSource {
 private:
 	
 	bool						mHasToolBar;
@@ -78,8 +77,8 @@ public:
 	BOOL				RaiseShouldStartLoadWithRequestEvent	( NSURLRequest* request, UIWebViewNavigationType navType );
 	void				RaiseWebViewDidFinishLoadEvent			();
 	void				RaiseWebViewDidStartLoadEvent			();
-	void				RegisterLuaClass						( USLuaState& state );
-	void				RegisterLuaFuncs						( USLuaState& state );
+	void				RegisterLuaClass						( MOAILuaState& state );
+	void				RegisterLuaFuncs						( MOAILuaState& state );
 	STLString			ToString								();
 
 };

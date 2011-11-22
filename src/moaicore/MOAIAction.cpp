@@ -19,12 +19,7 @@
 	@out	nil
 */
 int MOAIAction::_addChild ( lua_State* L ) {
-	
-	USLuaState state ( L );
-	if ( !state.CheckParams ( 1, "UU" )) return 0;
-	
-	MOAIAction* self = state.GetLuaObject < MOAIAction >( 1 );
-	if ( !self ) return 0;
+	MOAI_LUA_SETUP ( MOAIAction, "UU" )
 	
 	MOAIAction* action = state.GetLuaObject < MOAIAction >( 2 );
 	if ( !action ) return 0;
@@ -42,12 +37,7 @@ int MOAIAction::_addChild ( lua_State* L ) {
 	@out	nil
 */
 int MOAIAction::_clear ( lua_State* L ) {
-
-	USLuaState state ( L );
-	if ( !state.CheckParams ( 1, "U" )) return 0;
-	
-	MOAIAction* self = state.GetLuaObject < MOAIAction >( 1 );
-	if ( !self ) return 0;
+	MOAI_LUA_SETUP ( MOAIAction, "U" )
 
 	self->ClearChildren ();
 	
@@ -100,20 +90,23 @@ int MOAIAction::_isDone ( lua_State* L ) {
 
 //----------------------------------------------------------------//
 /**	@name	start
-	@text	Adds the action to the root of the action tree for updating.
+	@text	Adds the action to a parent action or the root of the action tree.
 
 	@in		MOAIAction self
+	@opt	MOAIAction parent		Default value is MOAIActionMgr.getRoot ()
 	@out	MOAIAction self
 */
 int MOAIAction::_start ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIAction, "U" )
 
-	USLuaState state ( L );
-	if ( !state.CheckParams ( 1, "U" )) return 0;
+	MOAIAction* action = state.GetLuaObject < MOAIAction >( 2 );
 	
-	MOAIAction* self = state.GetLuaObject < MOAIAction >( 1 );
-	if ( !self ) return 0;
-
-	self->Start ();
+	if ( action ) {
+		self->Start ( *action );
+	}
+	else {
+		self->Start ();
+	}
 
 	state.CopyToTop ( 1 );
 
@@ -129,12 +122,7 @@ int MOAIAction::_start ( lua_State* L ) {
 	@out	nil
 */
 int MOAIAction::_stop ( lua_State* L ) {
-
-	USLuaState state ( L );
-	if ( !state.CheckParams ( 1, "U" )) return 0;
-	
-	MOAIAction* self = state.GetLuaObject < MOAIAction >( 1 );
-	if ( !self ) return 0;
+	MOAI_LUA_SETUP ( MOAIAction, "U" )
 
 	self->Stop ();
 
@@ -165,7 +153,9 @@ int MOAIAction::_throttle ( lua_State* L ) {
 //----------------------------------------------------------------//
 void MOAIAction::AddChild ( MOAIAction& action ) {
 
-	action.Retain ();
+	if ( action.mParent == this ) return;
+
+	this->LuaRetain ( action );
 	action.Stop ();
 	
 	this->mChildren.PushBack ( action.mLink );
@@ -223,8 +213,8 @@ MOAIAction::MOAIAction () :
 	this->mLink.Data ( this );
 
 	RTTI_BEGIN
-		RTTI_EXTEND ( USLuaObject )
-		RTTI_EXTEND ( MOAIEventSource )
+		RTTI_EXTEND ( MOAILuaObject )
+		RTTI_EXTEND ( MOAIInstanceEventSource )
 	RTTI_END
 }
 
@@ -241,9 +231,11 @@ void MOAIAction::OnStart () {
 //----------------------------------------------------------------//
 void MOAIAction::OnStop () {
 
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
-	if ( this->PushListenerAndSelf ( EVENT_STOP, state )) {
-		state.DebugCall ( 1, 0 );
+	if ( MOAILuaRuntime::IsValid ()) {
+		MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
+		if ( this->PushListenerAndSelf ( EVENT_STOP, state )) {
+			state.DebugCall ( 1, 0 );
+		}
 	}
 }
 
@@ -262,17 +254,17 @@ void MOAIAction::OnUpdate ( float step ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIAction::RegisterLuaClass ( USLuaState& state ) {
+void MOAIAction::RegisterLuaClass ( MOAILuaState& state ) {
 
-	MOAIEventSource::RegisterLuaClass ( state );
+	MOAIInstanceEventSource::RegisterLuaClass ( state );
 
 	state.SetField ( -1, "EVENT_STOP", ( u32 )EVENT_STOP );
 }
 
 //----------------------------------------------------------------//
-void MOAIAction::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIAction::RegisterLuaFuncs ( MOAILuaState& state ) {
 
-	MOAIEventSource::RegisterLuaFuncs ( state );
+	MOAIInstanceEventSource::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {
 		{ "addChild",			_addChild },
@@ -308,7 +300,8 @@ void MOAIAction::RemoveChild ( MOAIAction& action ) {
 		action.UnblockAll ();
 		action.mParent = 0;
 		action.OnStop ();
-		action.Release ();
+		
+		this->LuaRelease ( action );
 	}
 }
 

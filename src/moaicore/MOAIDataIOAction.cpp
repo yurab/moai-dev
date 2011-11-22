@@ -20,7 +20,7 @@
 */
 int MOAIDataIOAction::_setCallback ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	if ( !state.CheckParams ( 1, "UF" )) return 0;
 	
 	MOAIDataIOAction* self = state.GetLuaObject < MOAIDataIOAction >( 1 );
@@ -41,7 +41,7 @@ void MOAIDataIOAction::Finished ( USDataIOTask* task ) {
 
 	if ( this->mOnFinish ) {
 	
-		USLuaStateHandle state = USLuaRuntime::Get ().State ();
+		MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 		this->PushLocal ( state, this->mOnFinish );
 		this->mData->PushLuaUserdata ( state );
 		state.DebugCall ( 1, 0 );
@@ -55,7 +55,7 @@ void MOAIDataIOAction::Init ( cc8* filename, MOAIDataBuffer* data ) {
 	if ( this->mState != IDLE ) return;
 	
 	this->mFilename = filename;
-	this->mData = data;
+	this->mData.Set ( *this, data );
 }
 
 //----------------------------------------------------------------//
@@ -85,6 +85,8 @@ MOAIDataIOAction::MOAIDataIOAction () :
 
 //----------------------------------------------------------------//
 MOAIDataIOAction::~MOAIDataIOAction () {
+
+	this->mData.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
@@ -105,12 +107,12 @@ void MOAIDataIOAction::OnUpdate ( float step ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIDataIOAction::RegisterLuaClass ( USLuaState& state ) {
+void MOAIDataIOAction::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIDataIOAction::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIDataIOAction::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	MOAIAction::RegisterLuaFuncs ( state );
 

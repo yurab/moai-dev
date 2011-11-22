@@ -24,7 +24,7 @@ public:
 
 	cpCollisionType		mTypeA;
 	cpCollisionType		mTypeB;
-	USLuaRef			mHandler;
+	MOAILuaRef			mHandler;
 	u32					mMask;
 	
 	MOAICpSpace* mSpace;
@@ -44,7 +44,7 @@ MOAICpPrim::MOAICpPrim () :
 	mSpace ( 0 ) {
 	
 	RTTI_BEGIN
-		RTTI_EXTEND ( USLuaObject )
+		RTTI_EXTEND ( MOAILuaObject )
 	RTTI_END
 	
 	this->mLinkInSpace.Data ( this );
@@ -75,9 +75,9 @@ static int _cpCollisionFunc ( cpArbiter* arb, void* data, u32 eventType, bool ch
 	if ( handler->mMask & eventType ) {
 
 		// this can be called during shutdown, so make sure the runtime is still valid
-		if ( USLuaRuntime::IsValid ()) {
+		if ( MOAILuaRuntime::IsValid ()) {
 
-			USLuaStateHandle state = USLuaRuntime::Get ().State ();
+			MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 			if ( handler->mHandler.PushRef ( state )) {
 				
 				cpShape* a;
@@ -144,21 +144,21 @@ static void _cpCollisionSeparateFunc ( cpArbiter* arb, cpSpace* space, void *dat
 //----------------------------------------------------------------//
 static void _shapeListForPointCallback ( cpShape *shape, void *data ) {
 
-	USLuaState& state = *( USLuaState* )data;
+	MOAILuaState& state = *( MOAILuaState* )data;
 	(( MOAICpShape* )shape->data )->PushLuaUserdata ( state );
 }
 
 //----------------------------------------------------------------//
 static void _shapeListForRectCallback ( cpShape *shape, void *data ) {
 
-	USLuaState& state = *( USLuaState* )data;
+	MOAILuaState& state = *( MOAILuaState* )data;
 	(( MOAICpShape* )shape->data )->PushLuaUserdata ( state );
 }
 
 //----------------------------------------------------------------//
 static void _shapeListForSegmentCallback ( cpShape *shape, cpFloat t, cpVect n, void *data ) {
 
-	USLuaState& state = *( USLuaState* )data;
+	MOAILuaState& state = *( MOAILuaState* )data;
 	(( MOAICpShape* )shape->data )->PushLuaUserdata ( state );
 	
 	lua_pushnumber ( state, t );
@@ -272,7 +272,7 @@ int MOAICpSpace::_getStaticBody ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAICpSpace, "U" )
 	
 	if ( !self->mStaticBody ) {
-		self->mStaticBody = new MOAICpBody ();
+		self->mStaticBody.Set ( *self, new MOAICpBody ());
 		self->mStaticBody->mBody = &self->mSpace->staticBody;
 		self->mStaticBody->mBody->data = self->mStaticBody;
 	}
@@ -783,7 +783,7 @@ void MOAICpSpace::DrawDebug () {
 MOAICpArbiter* MOAICpSpace::GetArbiter () {
 
 	if ( !this->mArbiter ) {
-		this->mArbiter = new MOAICpArbiter ();
+		this->mArbiter.Set ( *this, new MOAICpArbiter ());
 	}
 	return this->mArbiter;
 }
@@ -859,6 +859,9 @@ MOAICpSpace::~MOAICpSpace () {
 		delete handler;
 	}
 
+	this->mStaticBody.Set ( *this, 0 );
+	this->mArbiter.Set ( *this, 0 );
+
 	cpSpaceFree ( this->mSpace );
 }
 
@@ -893,7 +896,7 @@ void MOAICpSpace::OnUpdate ( float step ) {
 }
 
 //----------------------------------------------------------------//
-void MOAICpSpace::RegisterLuaClass ( USLuaState& state ) {
+void MOAICpSpace::RegisterLuaClass ( MOAILuaState& state ) {
 
 	MOAIAction::RegisterLuaClass ( state );
 	
@@ -905,7 +908,7 @@ void MOAICpSpace::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAICpSpace::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAICpSpace::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	MOAIAction::RegisterLuaFuncs ( state );
 	

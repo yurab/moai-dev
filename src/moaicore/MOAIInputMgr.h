@@ -4,6 +4,8 @@
 #ifndef MOAIINPUTMGR_H
 #define MOAIINPUTMGR_H
 
+#include <moaicore/MOAILua.h>
+
 class MOAIInputDevice;
 class MOAISensor;
 
@@ -14,12 +16,12 @@ class MOAISensor;
 	@text	Input device class. Has no public methods.
 */
 class MOAIInputMgr :
-	public USGlobalClass < MOAIInputMgr, USLuaObject > {
+	public MOAIGlobalClass < MOAIInputMgr, MOAILuaObject > {
 private:
 
 	USMemStream	mInput;
 
-	USLeanArray < USRef < MOAIInputDevice > > mDevices;
+	USLeanArray < MOAIInputDevice* > mDevices;
 
 	//----------------------------------------------------------------//
 	bool				CheckSensor					( u8 deviceID, u8 sensorID, u32 type );
@@ -43,7 +45,7 @@ public:
 	void				EnqueueTouchEventCancel		( u8 deviceID, u8 sensorID );
 						MOAIInputMgr				();
 						~MOAIInputMgr				();
-	void				RegisterLuaClass			( USLuaState& state );
+	void				RegisterLuaClass			( MOAILuaState& state );
 	void				ReserveDevices				( u8 total );
 	void				ReserveSensors				( u8 deviceID, u8 total );
 	void				SetConfigurationName		( cc8* name );

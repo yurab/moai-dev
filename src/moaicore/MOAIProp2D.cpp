@@ -52,12 +52,44 @@ int MOAIProp2D::_getIndex ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	getRect
+	@text	Return the prop's local rect or 'nil' if prop rect is global.
+	
+	@in		MOAIProp2D self
+	@out	number xMin
+	@out	number yMin
+	@out	number xMax
+	@out	number yMax
+*/
+int MOAIProp2D::_getRect ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIProp2D, "U" )
+	
+	USRect rect;
+
+	if ( self->mFitToFrame ) {
+		rect = self->mFrame;
+	}
+	else {
+		u32 status = self->GetLocalFrame ( rect );
+		if ( status != BOUNDS_OK ) return 0;
+	}
+
+	state.Push ( rect.mXMin );
+	state.Push ( rect.mYMin );
+	state.Push ( rect.mXMax );
+	state.Push ( rect.mYMax );
+
+	return 4;
+}
+
+//----------------------------------------------------------------//
 /**	@name	inside
 	@text	Returns true if this prop is under the given world space point.
 	
 	@in		MOAIProp2D self
 	@in		number x
 	@in		number y
+	@opt	number pad			Pad the hit rectangle (in the prop's local space)
 	@out	boolean isInside
 */
 int	MOAIProp2D::_inside ( lua_State* L ) {
@@ -67,7 +99,9 @@ int	MOAIProp2D::_inside ( lua_State* L ) {
 	vec.mX	= state.GetValue < float >( 2, 0.0f );
 	vec.mY	= state.GetValue < float >( 3, 0.0f );
 
-	bool result = self->Inside ( vec );
+	float pad = state.GetValue < float >( 4, 0.0f );
+
+	bool result = self->Inside ( vec, pad );
 	lua_pushboolean ( state, result );
 	
 	return 1;
@@ -132,7 +166,7 @@ int MOAIProp2D::_setBlendMode ( lua_State* L ) {
 int MOAIProp2D::_setDeck ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIProp2D, "U" )
 
-	self->mDeck = state.GetLuaObject < MOAIDeck >( 2 );
+	self->mDeck.Set ( *self, state.GetLuaObject < MOAIDeck >( 2 ));
 
 	if ( self->mDeck ) {
 		self->SetMask ( self->mDeck->GetContentMask ());
@@ -198,7 +232,7 @@ int MOAIProp2D::_setGrid ( lua_State* L ) {
 	MOAIGrid* grid = state.GetLuaObject < MOAIGrid >( 2 );
 	if ( !grid ) return 0;
 	
-	self->mGrid = grid;
+	self->mGrid.Set ( *self, grid );
 	
 	return 0;
 }
@@ -235,6 +269,28 @@ int MOAIProp2D::_setIndex ( lua_State* L ) {
 	self->mIndex = state.GetValue < u32 >( 2, 1 );
 	self->ScheduleUpdate ();
 
+	return 0;
+}
+
+//----------------------------------------------------------------//
+/**	@name	setParent
+	@text	This method has been deprecated. Use MOAINode setAttrLink instead.
+	
+	@in		MOAIProp2D self
+	@opt	MOAINode parent		Default value is nil.
+	@out	nil
+*/
+int MOAIProp2D::_setParent ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIProp2D, "U" )
+
+	MOAINode* parent = state.GetLuaObject < MOAINode >( 2 );
+	
+	self->SetAttrLink ( PACK_ATTR ( MOAIColor, INHERIT_COLOR ), parent, PACK_ATTR ( MOAIColor, COLOR_TRAIT ));
+	self->SetAttrLink ( PACK_ATTR ( MOAITransform, INHERIT_TRANSFORM ), parent, PACK_ATTR ( MOAITransformBase, TRANSFORM_TRAIT ));
+	self->SetAttrLink ( PACK_ATTR ( MOAIProp2D, ATTR_VISIBLE ), parent, PACK_ATTR ( MOAIProp2D, ATTR_VISIBLE ));
+	
+	//MOAILog ( state, MOAILogMessages::MOAI_FunctionDeprecated_S, "setParent" );
+	
 	return 0;
 }
 
@@ -335,19 +391,34 @@ int MOAIProp2D::_setVisible ( lua_State* L ) {
 //================================================================//
 
 //----------------------------------------------------------------//
-bool MOAIProp2D::ApplyAttrOp ( u32 attrID, USAttrOp& attrOp ) {
+bool MOAIProp2D::ApplyAttrOp ( u32 attrID, MOAIAttrOp& attrOp, u32 op ) {
 
 	if ( MOAIProp2DAttr::Check ( attrID )) {
-		attrID = UNPACK_ATTR ( attrID );
-
-		if ( attrID == ATTR_INDEX ) {
-			this->mIndex = attrOp.Op ( this->mIndex );
-			return true;
+		
+		switch ( UNPACK_ATTR ( attrID )) {
+			case ATTR_INDEX:
+				this->mIndex = USFloat::ToIndex ( attrOp.Apply (( float )this->mIndex, op, MOAINode::ATTR_READ_WRITE ));
+				return true;
+			case ATTR_PARTITION:
+				this->SetPartition ( attrOp.Apply < MOAIPartition >( this->GetPartition (), op, MOAINode::ATTR_READ_WRITE ));
+				return true;
+			case ATTR_SHADER:
+				this->mShader.Set ( *this, attrOp.Apply < MOAIShader >( this->mShader, op, MOAINode::ATTR_READ_WRITE ));
+				return true;
+			case ATTR_BLEND_MODE:
+				attrOp.Apply < MOAIBlendMode >( this->mBlendMode, op, MOAINode::ATTR_READ_WRITE );
+				return true;
+			case ATTR_VISIBLE:
+				this->mVisible = USFloat::ToBoolean ( attrOp.Apply ( USFloat::FromBoolean ( this->mVisible ), op, MOAINode::ATTR_READ_WRITE ));
+				return true;
+			case FRAME_TRAIT:
+				attrOp.Apply < USRect >( &this->mFrame, op, MOAINode::ATTR_READ );
+				return true;
 		}
 	}
 	
-	if ( MOAIColor::ApplyAttrOp ( attrID, attrOp )) return true;
-	return MOAITransform::ApplyAttrOp ( attrID, attrOp );
+	if ( MOAIColor::ApplyAttrOp ( attrID, attrOp, op )) return true;
+	return MOAITransform::ApplyAttrOp ( attrID, attrOp, op );
 }
 
 //----------------------------------------------------------------//
@@ -390,7 +461,7 @@ void MOAIProp2D::Draw () {
 	}
 	
 	// TODO
-	//MOAILayoutFrame* parentFrame = USCast < MOAILayoutFrame >( this->mParent );
+	//MOAILayoutFrame* parentFrame = MOAICast < MOAILayoutFrame >( this->mParent );
 	//if ( parentFrame ) {
 	//	gfxDevice.SetScissorRect ();
 	//}
@@ -485,12 +556,6 @@ void MOAIProp2D::GatherSurfaces ( MOAISurfaceSampler2D& sampler ) {
 }
 
 //----------------------------------------------------------------//
-MOAIBlendMode MOAIProp2D::GetBlendModeTrait () {
-
-	return this->mBlendMode;
-}
-
-//----------------------------------------------------------------//
 void MOAIProp2D::GetBoundsInRect ( const USRect& rect, MOAICellCoord& c0, MOAICellCoord& c1 ) {
 
 	if ( this->mGrid ) {
@@ -531,36 +596,6 @@ void MOAIProp2D::GetBoundsInView ( MOAICellCoord& c0, MOAICellCoord& c1 ) {
 }
 
 //----------------------------------------------------------------//
-USColorVec MOAIProp2D::GetColorTrait () {
-
-	return MOAIColor::GetColorTrait ();
-}
-
-//----------------------------------------------------------------//
-USRect* MOAIProp2D::GetFrameTrait () {
-
-	return &this->mFrame;
-}
-
-//----------------------------------------------------------------//
-const USAffine2D* MOAIProp2D::GetLocTrait () {
-
-	return MOAITransform::GetLocTrait ();
-}
-
-//----------------------------------------------------------------//
-MOAIPartition* MOAIProp2D::GetPartitionTrait () {
-
-	return MOAIProp::GetPartitionTrait ();
-}
-
-//----------------------------------------------------------------//
-MOAIShader* MOAIProp2D::GetShaderTrait () {
-
-	return this->mShader;
-}
-
-//----------------------------------------------------------------//
 u32 MOAIProp2D::GetLocalFrame ( USRect& frame ) {
 	
 	if ( this->mGrid ) {
@@ -578,32 +613,25 @@ u32 MOAIProp2D::GetLocalFrame ( USRect& frame ) {
 }
 
 //----------------------------------------------------------------//
-const USAffine2D* MOAIProp2D::GetTransformTrait () {
-
-	return MOAITransform::GetTransformTrait ();
-}
-
-//----------------------------------------------------------------//
-bool MOAIProp2D::GetVisibleTrait () {
-
-	return this->mVisible;
-}
-
-//----------------------------------------------------------------//
-bool MOAIProp2D::Inside ( USVec2D vec ) {
+bool MOAIProp2D::Inside ( USVec2D vec, float pad ) {
 
 	const USAffine2D& worldToLocal = this->GetWorldToLocalMtx ();
 	worldToLocal.Transform ( vec );
 
+	USRect rect;
+
 	if ( this->mFitToFrame ) {
-		return this->mFrame.Contains ( vec ); 
+		rect = this->mFrame;
+	}
+	else {
+	
+		u32 status = this->GetLocalFrame ( rect );
+		
+		if ( status == BOUNDS_GLOBAL ) return true;
+		if ( status == BOUNDS_EMPTY ) return false;
 	}
 	
-	USRect rect;
-	u32 status = this->GetLocalFrame ( rect );
-	
-	if ( status == BOUNDS_GLOBAL ) return true;
-	if ( status == BOUNDS_EMPTY ) return false;
+	rect.Inflate ( pad );
 	
 	return rect.Contains ( vec );
 }
@@ -629,7 +657,7 @@ void MOAIProp2D::LoadShader () {
 	gfxDevice.SetBlendMode ( this->mBlendMode );
 	
 	// TODO
-	//MOAILayoutFrame* parent = USCast < MOAILayoutFrame >( this->mParent );
+	//MOAILayoutFrame* parent = MOAICast < MOAILayoutFrame >( this->mParent );
 	//if ( parent ) {
 	//	USRect scissorRect = parent->GetScissorRect ();			
 	//	gfxDevice.SetScissorRect ( scissorRect );
@@ -658,12 +686,18 @@ MOAIProp2D::MOAIProp2D () :
 
 //----------------------------------------------------------------//
 MOAIProp2D::~MOAIProp2D () {
+
+	this->mDeck.Set ( *this, 0 );
+	this->mRemapper.Set ( *this, 0 );
+	this->mGrid.Set ( *this, 0 );
+	this->mShader.Set ( *this, 0 );
+	this->mUVTransform.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
 void MOAIProp2D::OnDepNodeUpdate () {
 	
-	this->mColor = *this;
+	MOAIColor::OnDepNodeUpdate ();
 	
 	USRect rect;
 	rect.Init ( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -679,42 +713,11 @@ void MOAIProp2D::OnDepNodeUpdate () {
 	// select the frame
 	USRect frame = this->mFrame;
 	
-	MOAITraitsBuffer buffer;
-	this->AccumulateSources ( buffer );
-	
 	bool inheritFrame = false;
-	
-	if ( buffer.HasTraits ()) {
-
-		if ( buffer.HasTrait ( INHERIT_BLEND_MODE )) {
-			this->mBlendMode = buffer.GetBlendModeTrait ();
-		}
-	
-		if ( buffer.HasTrait ( INHERIT_COLOR )) {
-			this->mColor.Modulate ( buffer.GetColorTrait ());
-		}
-		
-		if ( buffer.HasTrait ( INHERIT_FRAME )) {
-			
-			USRect* frameTrait = buffer.GetFrameTrait ();
-			if ( frameTrait ) {
-				frame = *frameTrait;
-				inheritFrame = true;
-			}
-		}
-		
-		if ( buffer.HasTrait ( INHERIT_PARTITION )) {
-			MOAIPartition* partition = buffer.GetPartitionTrait ();
-			this->SetPartition ( partition );
-		}
-		
-		if ( buffer.HasTrait ( INHERIT_SHADER )) {
-			this->mShader = buffer.GetShaderTrait ();
-		}
-		
-		if ( buffer.HasTrait ( INHERIT_VISIBLE )) {
-			this->mVisible = buffer.GetVisibleTrait ();
-		}
+	const USRect* frameTrait = this->GetLinkedValue < USRect >( MOAIProp2DAttr::Pack ( INHERIT_FRAME ));
+	if ( frameTrait ) {
+		frame = *frameTrait;
+		inheritFrame = true;
 	}
 	
 	if ( inheritFrame || this->mFitToFrame ) {
@@ -736,7 +739,7 @@ void MOAIProp2D::OnDepNodeUpdate () {
 	}
 	
 	// inherit parent and offset transforms (and compute the inverse)
-	this->BuildTransforms ( &buffer, offset.mX, offset.mY, stretch.mX, stretch.mY );
+	this->BuildTransforms ( offset.mX, offset.mY, stretch.mX, stretch.mY );
 	
 	// update the prop location in the partition
 	// use the local frame; world transform will match it to target frame
@@ -755,16 +758,19 @@ void MOAIProp2D::OnDepNodeUpdate () {
 }
 
 //----------------------------------------------------------------//
-void MOAIProp2D::RegisterLuaClass ( USLuaState& state ) {
+void MOAIProp2D::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	MOAIProp::RegisterLuaClass ( state );
 	MOAIColor::RegisterLuaClass ( state );
 	
-	state.SetField ( -1, "INHERIT_COLOR", ( u32 )INHERIT_COLOR );
-	state.SetField ( -1, "INHERIT_FRAME", ( u32 )INHERIT_FRAME );
-	state.SetField ( -1, "INHERIT_PARTITION", ( u32 )INHERIT_PARTITION );
-	
 	state.SetField ( -1, "ATTR_INDEX", MOAIProp2DAttr::Pack ( ATTR_INDEX ));
+	state.SetField ( -1, "ATTR_PARTITION", MOAIProp2DAttr::Pack ( ATTR_PARTITION ));
+	state.SetField ( -1, "ATTR_SHADER", MOAIProp2DAttr::Pack ( ATTR_SHADER ));
+	state.SetField ( -1, "ATTR_BLEND_MODE", MOAIProp2DAttr::Pack ( ATTR_BLEND_MODE ));
+	state.SetField ( -1, "ATTR_VISIBLE", MOAIProp2DAttr::Pack ( ATTR_VISIBLE ));
+	
+	state.SetField ( -1, "INHERIT_FRAME", MOAIProp2DAttr::Pack ( INHERIT_FRAME ));
+	state.SetField ( -1, "FRAME_TRAIT", MOAIProp2DAttr::Pack ( FRAME_TRAIT ));
 	
 	state.SetField ( -1, "BLEND_ADD", ( u32 )MOAIBlendMode::BLEND_ADD );
 	state.SetField ( -1, "BLEND_MULTIPLY", ( u32 )MOAIBlendMode::BLEND_MULTIPLY );
@@ -784,7 +790,7 @@ void MOAIProp2D::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIProp2D::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIProp2D::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	MOAIProp::RegisterLuaFuncs ( state );
 	MOAIColor::RegisterLuaFuncs ( state );
@@ -792,6 +798,7 @@ void MOAIProp2D::RegisterLuaFuncs ( USLuaState& state ) {
 	luaL_Reg regTable [] = {
 		{ "getGrid",			_getGrid },
 		{ "getIndex",			_getIndex },
+		{ "getRect",			_getRect },
 		{ "inside",				_inside },
 		{ "setBlendMode",		_setBlendMode },
 		{ "setDeck",			_setDeck },
@@ -799,6 +806,7 @@ void MOAIProp2D::RegisterLuaFuncs ( USLuaState& state ) {
 		{ "setGrid",			_setGrid },
 		{ "setGridScale",		_setGridScale },
 		{ "setIndex",			_setIndex },
+		{ "setParent",			_setParent },
 		{ "setRemapper",		_setRemapper },
 		{ "setRepeat",			_setRepeat },
 		{ "setShader",			_setShader },
@@ -811,16 +819,16 @@ void MOAIProp2D::RegisterLuaFuncs ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIProp2D::SerializeIn ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIProp2D::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
 	
-	this->mDeck = serializer.GetRefField < MOAIDeck >( state, -1, "mDeck" );
-	this->mGrid = serializer.GetRefField < MOAIGrid >( state, -1, "mGrid" );
+	this->mDeck.Set ( *this, serializer.MemberIDToObject < MOAIDeck >( state.GetField < uintptr >( -1, "mDeck", 0 )));
+	this->mGrid.Set ( *this, serializer.MemberIDToObject < MOAIGrid >( state.GetField < uintptr >( -1, "mGrid", 0 )));
 }
 
 //----------------------------------------------------------------//
-void MOAIProp2D::SerializeOut ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIProp2D::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
 	
-	serializer.SetRefField ( state, -1, "mDeck", this->mDeck );
-	serializer.SetRefField ( state, -1, "mGrid", this->mGrid );
+	state.SetField ( -1, "mDeck", serializer.AffirmMemberID ( this->mDeck ));
+	state.SetField ( -1, "mGrid", serializer.AffirmMemberID ( this->mGrid ));
 }
 

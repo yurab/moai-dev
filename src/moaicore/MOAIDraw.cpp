@@ -32,7 +32,7 @@ int MOAIDraw::_drawAxisGrid ( lua_State* L ) {
 */
 int MOAIDraw::_drawCircle ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x0	= state.GetValue < float >( 1, 0.0f );
 	float y0	= state.GetValue < float >( 2, 0.0f );
@@ -55,7 +55,7 @@ int MOAIDraw::_drawCircle ( lua_State* L ) {
 */
 int MOAIDraw::_drawEllipse ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x		= state.GetValue < float >( 1, 0.0f );
 	float y		= state.GetValue < float >( 2, 0.0f );
@@ -110,7 +110,7 @@ int MOAIDraw::_drawPoints ( lua_State* L ) {
 */
 int MOAIDraw::_drawRay ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x		= state.GetValue < float >( 1, 0.0f );
 	float y		= state.GetValue < float >( 2, 0.0f );
@@ -132,7 +132,7 @@ int MOAIDraw::_drawRay ( lua_State* L ) {
 */
 int MOAIDraw::_drawRect ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x0 = state.GetValue < float >( 1, 0.0f );
 	float y0 = state.GetValue < float >( 2, 0.0f );
@@ -154,7 +154,7 @@ int MOAIDraw::_drawRect ( lua_State* L ) {
 */
 int MOAIDraw::_fillCircle ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x0	= state.GetValue < float >( 1, 0.0f );
 	float y0	= state.GetValue < float >( 2, 0.0f );
@@ -177,7 +177,7 @@ int MOAIDraw::_fillCircle ( lua_State* L ) {
 */
 int MOAIDraw::_fillEllipse ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x		= state.GetValue < float >( 1, 0.0f );
 	float y		= state.GetValue < float >( 2, 0.0f );
@@ -213,7 +213,7 @@ int MOAIDraw::_fillFan ( lua_State* L ) {
 */
 int MOAIDraw::_fillRect ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	float x0 = state.GetValue < float >( 1, 0.0f );
 	float y0 = state.GetValue < float >( 2, 0.0f );
@@ -441,7 +441,7 @@ void MOAIDraw::DrawLine ( float x0, float y0, float x1, float y1 ) {
 void MOAIDraw::DrawLuaParams ( lua_State* L, u32 primType ) {
 
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 
 	u32 total = state.GetTop () >> 1;
 	
@@ -609,7 +609,7 @@ void MOAIDraw::DrawRectOutline ( float left, float top, float right, float botto
 }
 
 //----------------------------------------------------------------//
-void MOAIDraw::DrawVertexArray ( USVec2D* verts, u32 count, u32 color, u32 primType ) {
+void MOAIDraw::DrawVertexArray ( const USVec2D* verts, u32 count, u32 color, u32 primType ) {
 
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
 
@@ -619,8 +619,27 @@ void MOAIDraw::DrawVertexArray ( USVec2D* verts, u32 count, u32 color, u32 primT
 	gfxDevice.BeginPrim ();
 	
 	for ( u32 i = 0; i < count; ++i ) {
-		USVec2D& vtx = verts [ i ];
+		const USVec2D& vtx = verts [ i ];
 		gfxDevice.WriteVtx ( vtx );
+		gfxDevice.WritePenColor4b ();
+	}
+
+	gfxDevice.EndPrim ();
+}
+
+//----------------------------------------------------------------//
+void MOAIDraw::DrawVertexArray ( const float* verts, u32 count, u32 color, u32 primType ) {
+
+	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
+
+	gfxDevice.SetPrimType ( primType );
+	gfxDevice.SetPenColor ( color );
+	
+	gfxDevice.BeginPrim ();
+	
+	for ( u32 i = 0; i < count; ++i ) {
+		u32 v = i << 1;
+		gfxDevice.WriteVtx ( verts [ v ], verts [ v + 1 ]);
 		gfxDevice.WritePenColor4b ();
 	}
 
@@ -630,7 +649,7 @@ void MOAIDraw::DrawVertexArray ( USVec2D* verts, u32 count, u32 color, u32 primT
 //----------------------------------------------------------------//
 MOAIDraw::MOAIDraw () {
 
-	RTTI_SINGLE ( MOAIDraw )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
@@ -638,7 +657,7 @@ MOAIDraw::~MOAIDraw () {
 }
 
 //----------------------------------------------------------------//
-void MOAIDraw::RegisterLuaClass ( USLuaState& state ) {
+void MOAIDraw::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
 
 	luaL_Reg regTable [] = {

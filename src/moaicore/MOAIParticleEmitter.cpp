@@ -140,8 +140,7 @@ int MOAIParticleEmitter::_setRect ( lua_State* L ) {
 int MOAIParticleEmitter::_setSystem ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIParticleEmitter, "UU" )
 
-	MOAIParticleSystem* system = state.GetLuaObject < MOAIParticleSystem >( 2 );
-	self->SetSystem ( system );
+	self->mSystem.Set ( *self, state.GetLuaObject < MOAIParticleSystem >( 2 ));
 
 	return 0;
 }
@@ -238,17 +237,19 @@ MOAIParticleEmitter::MOAIParticleEmitter () :
 
 //----------------------------------------------------------------//
 MOAIParticleEmitter::~MOAIParticleEmitter () {
+
+	this->mSystem.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleEmitter::RegisterLuaClass ( USLuaState& state ) {
+void MOAIParticleEmitter::RegisterLuaClass ( MOAILuaState& state ) {
 
 	this->MOAITransform::RegisterLuaClass ( state );
 	this->MOAIAction::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleEmitter::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIParticleEmitter::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	this->MOAITransform::RegisterLuaFuncs ( state );
 	this->MOAIAction::RegisterLuaFuncs ( state );
@@ -265,6 +266,20 @@ void MOAIParticleEmitter::RegisterLuaFuncs ( USLuaState& state ) {
 	};
 	
 	luaL_register ( state, 0, regTable );
+}
+
+//----------------------------------------------------------------//
+void MOAIParticleEmitter::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
+
+	MOAITransform::SerializeIn ( state, serializer );
+	MOAIAction::SerializeIn ( state, serializer );
+}
+
+//----------------------------------------------------------------//
+void MOAIParticleEmitter::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
+
+	MOAITransform::SerializeOut ( state, serializer );
+	MOAIAction::SerializeOut ( state, serializer );
 }
 
 //----------------------------------------------------------------//

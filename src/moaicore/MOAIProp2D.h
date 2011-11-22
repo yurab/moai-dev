@@ -6,6 +6,7 @@
 
 #include <moaicore/MOAIBlendMode.h>
 #include <moaicore/MOAIColor.h>
+#include <moaicore/MOAILua.h>
 #include <moaicore/MOAIProp.h>
 
 class MOAICellCoord;
@@ -56,19 +57,19 @@ protected:
 		REPEAT_Y	= 0x00000002,
 	};
 	
-	USRef < MOAIDeck >			mDeck;
-	USRef < MOAIDeckRemapper >	mRemapper;
-	u32							mIndex;
+	MOAILuaSharedPtr < MOAIDeck >			mDeck;
+	MOAILuaSharedPtr < MOAIDeckRemapper >	mRemapper;
+	u32										mIndex;
 	
-	USRef < MOAIGrid >			mGrid;
-	u32							mRepeat;
-	USVec2D						mGridScale;
+	MOAILuaSharedPtr < MOAIGrid >			mGrid;
+	u32										mRepeat;
+	USVec2D									mGridScale;
+	
+	MOAILuaSharedPtr < MOAIShader >			mShader;
+	MOAILuaSharedPtr < MOAITransformBase >	mUVTransform;
 	
 	USRect						mFrame;
 	bool						mFitToFrame;
-	
-	USRef < MOAIShader >		mShader;
-	USRef < MOAITransformBase >	mUVTransform;
 	
 	MOAIBlendMode				mBlendMode;
 	bool						mVisible;
@@ -76,6 +77,7 @@ protected:
 	//----------------------------------------------------------------//
 	static int		_getGrid			( lua_State* L );
 	static int		_getIndex			( lua_State* L );
+	static int		_getRect			( lua_State* L );
 	static int		_inside				( lua_State* L );
 	static int		_setBlendMode		( lua_State* L );
 	static int		_setDeck			( lua_State* L );
@@ -83,6 +85,7 @@ protected:
 	static int		_setGrid			( lua_State* L );
 	static int		_setGridScale		( lua_State* L );
 	static int		_setIndex			( lua_State* L );
+	static int		_setParent			( lua_State* L );
 	static int		_setRemapper		( lua_State* L );
 	static int		_setRepeat			( lua_State* L );
 	static int		_setShader			( lua_State* L );
@@ -91,16 +94,8 @@ protected:
 	
 	//----------------------------------------------------------------//
 	bool				BindDeck				();
-	MOAIBlendMode		GetBlendModeTrait		();
 	void				GetBoundsInRect			( const USRect& rect, MOAICellCoord& c0, MOAICellCoord& c1 );
 	void				GetBoundsInView			( MOAICellCoord& c0, MOAICellCoord& c1 );
-	USColorVec			GetColorTrait			();
-	USRect*				GetFrameTrait			();
-	const USAffine2D*	GetLocTrait				();
-	MOAIPartition*		GetPartitionTrait		();
-	MOAIShader*			GetShaderTrait			();
-	const USAffine2D*	GetTransformTrait		();
-	bool				GetVisibleTrait			();
 	void				LoadShader				();
 
 public:
@@ -110,33 +105,34 @@ public:
 	
 	enum {
 		ATTR_INDEX,
+		ATTR_PARTITION,
+		ATTR_SHADER,
+		ATTR_BLEND_MODE,
+		ATTR_VISIBLE,
+		
+		INHERIT_FRAME,
+		FRAME_TRAIT,
+		
 		TOTAL_ATTR,
 	};
-	
-	enum {
-		INHERIT_COLOR		= 0x00000004,
-		INHERIT_FRAME		= 0x00000008,
-		INHERIT_PARTITION	= 0x00000010,
-	};
-	
 	
 	GET_SET ( u32, Index, mIndex )
 	
 	//----------------------------------------------------------------//
-	bool							ApplyAttrOp				( u32 attrID, USAttrOp& attrOp );
+	bool							ApplyAttrOp				( u32 attrID, MOAIAttrOp& attrOp, u32 op );
 	virtual void					Draw					();
 	virtual void					DrawDebug				();
 	virtual void					GatherSurfaces			( MOAISurfaceSampler2D& sampler );
 	virtual u32						GetLocalFrame			( USRect& frame );
-	bool							Inside					( USVec2D vec );
+	bool							Inside					( USVec2D vec, float pad );
 	virtual MOAIOverlapPrim2D*		IsOverlapPrim2D			();
 									MOAIProp2D				();
 									~MOAIProp2D				();
 	void							OnDepNodeUpdate			();
-	void							RegisterLuaClass		( USLuaState& state );
-	void							RegisterLuaFuncs		( USLuaState& state );
-	void							SerializeIn				( USLuaState& state, USLuaSerializer& serializer );
-	void							SerializeOut			( USLuaState& state, USLuaSerializer& serializer );
+	void							RegisterLuaClass		( MOAILuaState& state );
+	void							RegisterLuaFuncs		( MOAILuaState& state );
+	void							SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	void							SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 };
 
 #endif

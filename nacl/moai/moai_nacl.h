@@ -110,7 +110,7 @@ public:
 	void FinishAndPrint ();
 };
 
-#define SHIPPING 1
+#define SHIPPING 0
 #define ENABLE_NACLPROFILE 0
 
 #include "moaicore/pch.h"

@@ -28,7 +28,7 @@
 int MOAIMesh::_setTexture ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIMesh, "U" )
 
-	self->mTexture = MOAITexture::AffirmTexture ( state, 2 );
+	self->mTexture.Set ( *self, MOAITexture::AffirmTexture ( state, 2 ));
 	if ( self->mTexture ) {
 		self->mTexture->PushLuaUserdata ( state );
 		return 1;
@@ -47,7 +47,7 @@ int MOAIMesh::_setTexture ( lua_State* L ) {
 int MOAIMesh::_setVertexBuffer ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIMesh, "U" )
 	
-	self->mVertexBuffer = state.GetLuaObject < MOAIVertexBuffer >( 2 );
+	self->mVertexBuffer.Set ( *self, state.GetLuaObject < MOAIVertexBuffer >( 2 ));
 
 	return 0;
 }
@@ -146,16 +146,19 @@ MOAIMesh::MOAIMesh () {
 
 //----------------------------------------------------------------//
 MOAIMesh::~MOAIMesh () {
+
+	this->mTexture.Set ( *this, 0 );
+	this->mVertexBuffer.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
-void MOAIMesh::RegisterLuaClass ( USLuaState& state ) {
+void MOAIMesh::RegisterLuaClass ( MOAILuaState& state ) {
 
 	this->MOAIDeck::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIMesh::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIMesh::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	this->MOAIDeck::RegisterLuaFuncs ( state );
 

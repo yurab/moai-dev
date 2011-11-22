@@ -4,6 +4,7 @@
 #ifndef USLSEXT_H
 #define USLSEXT_H
 
+#define MOAI_OS_NACL 1
 #ifdef MOAI_OS_NACL
 	#define USE_BOX2D 1
 	#define USE_CHIPMUNK 0
@@ -23,10 +24,6 @@
 
 #include <uslsext/USAdapterInfo.h>
 #include <uslsext/USAffine2D.h>
-#include <uslsext/USAnimCurve.h>
-#include <uslsext/USAttributed.h>
-#include <uslsext/USAttrMap.h>
-#include <uslsext/USAttrOp.h>
 #include <uslsext/USBinarySearch.h>
 #include <uslsext/USBox.h>
 #include <uslsext/USCgt.h>
@@ -36,8 +33,9 @@
 #include <uslsext/USDataIOTask.h>
 #include <uslsext/USDelegate.h>
 #include <uslsext/USDistance.h>
-#include <uslsext/USFsm.h>
-#include <uslsext/USFsmStateFactory.h>
+#include <uslsext/USHexDump.h>
+//#include <uslsext/USFsm.h>
+//#include <uslsext/USFsmStateFactory.h>
 #if USE_CURL
 #include <uslsext/USHttpTask.h>
 #include <uslsext/USHttpTask_impl.h>
@@ -58,7 +56,6 @@
 #include <uslsext/USPolar.h>
 #include <uslsext/USPolygon2D.h>
 #include <uslsext/USPolyScanner.h>
-#include <uslsext/USPrettyPrint.h>
 #include <uslsext/USQuad.h>
 #include <uslsext/USQuadCoord.h>
 #include <uslsext/USRadixSort16.h>
@@ -78,7 +75,6 @@
 #include <uslsext/USThread_win32.h>
 #include <uslsext/USTrig.h>
 #include <uslsext/USTypedPtr.h>
-#include <uslsext/USUrlMgr.h>
 //#if USE_EXPAT
 #include <uslsext/USXmlReader.h>
 //#endif
@@ -89,7 +85,7 @@
 namespace uslsext {
 
 	//----------------------------------------------------------------//
-	void			InitGlobals			( USGlobals* globals );
+	void			Init			();
 }
 
 #endif

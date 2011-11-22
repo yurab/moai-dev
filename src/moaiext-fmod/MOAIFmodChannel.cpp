@@ -182,13 +182,13 @@ int MOAIFmodChannel::_stop ( lua_State* L ) {
 //================================================================//
 
 //----------------------------------------------------------------//
-bool MOAIFmodChannel::ApplyAttrOp ( u32 attrID, USAttrOp& attrOp ) {
+bool MOAIFmodChannel::ApplyAttrOp ( u32 attrID, MOAIAttrOp& attrOp, u32 op ) {
 
 	if ( MOAIFmodChannelAttr::Check ( attrID )) {
 		attrID = UNPACK_ATTR ( attrID );
 
 		if ( attrID == ATTR_VOLUME ) {
-			this->mVolume = attrOp.Op ( this->mVolume );
+			this->mVolume = attrOp.Apply ( this->mVolume, op, MOAINode::ATTR_READ_WRITE );
 			this->SetVolume ( this->mVolume );
 			return true;
 		}
@@ -246,13 +246,13 @@ void MOAIFmodChannel::Play ( MOAIFmodSound* sound, int loopCount ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIFmodChannel::RegisterLuaClass ( USLuaState& state ) {
+void MOAIFmodChannel::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	state.SetField ( -1, "ATTR_VOLUME", MOAIFmodChannelAttr::Pack ( ATTR_VOLUME ));
 }
 
 //----------------------------------------------------------------//
-void MOAIFmodChannel::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIFmodChannel::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "getVolume",		_getVolume },
@@ -290,17 +290,4 @@ void MOAIFmodChannel::Stop () {
 
 	if ( !this->mChannel ) return;
 	this->mChannel->stop();
-}
-
-//----------------------------------------------------------------//
-STLString MOAIFmodChannel::ToString () {
-
-	STLString repr;
-
-	PRETTY_PRINT ( repr, mVolume )
-	PRETTY_PRINT ( repr, mPaused )
-	PRETTY_PRINT ( repr, mChannel )
-	PRETTY_PRINT ( repr, mSound )
-
-	return repr;
 }

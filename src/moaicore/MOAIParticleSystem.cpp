@@ -257,11 +257,11 @@ int MOAIParticleSystem::_setState ( lua_State* L ) {
 	if ( idx < self->mStates.Size ()) {
 	
 		MOAIParticleState* particleState =  state.GetLuaObject < MOAIParticleState >( 3 );
-		if ( particleState ) {
+		if ( particleState != self->mStates [ idx ]) {
 		
-			particleState->Retain ();
+			self->LuaRetain ( *particleState );
 			if ( self->mStates [ idx ]) {
-				self->mStates [ idx ]->Release ();
+				self->LuaRelease ( *self->mStates [ idx ]);
 			}
 			self->mStates [ idx ] = particleState;
 		}
@@ -306,7 +306,7 @@ void MOAIParticleSystem::ClearStates () {
 
 	for ( u32 i = 0; i < this->mStates.Size (); ++i ) {
 		if ( this->mStates [ i ]) {
-			this->mStates [ i ]->Release ();
+			this->LuaRelease ( *this->mStates [ i ]);
 		}
 	}
 	this->mStates.Clear ();
@@ -524,14 +524,14 @@ bool MOAIParticleSystem::PushSprite ( const AKUParticleSprite& sprite ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleSystem::RegisterLuaClass ( USLuaState& state ) {
+void MOAIParticleSystem::RegisterLuaClass ( MOAILuaState& state ) {
 
 	MOAIProp2D::RegisterLuaClass ( state );
 	MOAIAction::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleSystem::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIParticleSystem::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	MOAIProp2D::RegisterLuaFuncs ( state );
 	MOAIAction::RegisterLuaFuncs ( state );
@@ -599,14 +599,14 @@ void MOAIParticleSystem::ReserveStates ( u32 total ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleSystem::SerializeIn ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIParticleSystem::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
 
 	MOAIProp2D::SerializeIn ( state, serializer );
 	MOAIAction::SerializeIn ( state, serializer );
 }
 
 //----------------------------------------------------------------//
-void MOAIParticleSystem::SerializeOut ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIParticleSystem::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
 
 	MOAIProp2D::SerializeOut ( state, serializer );
 	MOAIAction::SerializeOut ( state, serializer );

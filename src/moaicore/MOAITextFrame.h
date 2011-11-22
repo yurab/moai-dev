@@ -70,11 +70,9 @@ private:
 	u32					mRGBA;
 	MOAITextCursor*		mCursor;
 	
-	
 	u32					mLineBottom;
 	u32					mLineTop;
 	
-	float				mLineHeight;
 	u32					mLineCount;
 	u32					mTotalLines;
 	
@@ -87,11 +85,12 @@ private:
 	MOAIFont*			mFont;
 	USRect				mFrame;
 	float				mPoints;
+	float				mLineSpacing;
 	u32					mJustify;
 	MOAITextLayout*		mLayout;
 	const MOAIGlyph*	mGlyph;
 	
-	USAnimCurve**		mCurves;
+	MOAIAnimCurve**		mCurves;
 	u32					mTotalCurves;
 
 	//----------------------------------------------------------------//
@@ -116,13 +115,14 @@ public:
 	SET ( cc8*, Text, mStr )
 	SET ( MOAIFont*, Font, mFont )
 	SET ( const USRect&, Frame, mFrame )
+	SET ( float, LineSpacing, mLineSpacing )
 	SET ( float, Points, mPoints )
 	SET ( u32, Alignment, mJustify )
 
 	//----------------------------------------------------------------//
 	void			Layout				( MOAITextLayout& layout, cc8* str, MOAITextCursor& cursor );
-	void			SetCurves			( USAnimCurve** curves, u32 totalCurves );
-					MOAITextFrame			();
+	void			SetCurves			( MOAIAnimCurve** curves, u32 totalCurves );
+					MOAITextFrame		();
 	virtual			~MOAITextFrame		();
 };
 

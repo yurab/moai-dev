@@ -4,8 +4,8 @@
 // http://getmoai.com
 //----------------------------------------------------------------//
 
-#import <aku/aku.h>
-#import <aku/aku-iphone.h>
+#import <aku/AKU.h>
+#import <aku/AKU-iphone.h>
 #import <moaiext-iphone/MOAIApp.h>
 #import <moaiext-iphone/MOAIStoreKitListener.h>
 
@@ -51,6 +51,8 @@
 
 	//----------------------------------------------------------------//
 	-( void ) request:( SKRequest* )request didFailWithError:( NSError* )error {
+		UNUSED ( request );
+	
 		NSLog ( @"StoreKit Request Error: %@", error.localizedDescription );
 		MOAIApp::Get().DidReceivePaymentQueueError(error, "request");
 	}

@@ -18,7 +18,7 @@ class MOAIFmodChannel :
 	public virtual MOAINode {
 private:
 
-	USRef < MOAIFmodSound > mSound;
+	MOAISharedPtr < MOAIFmodSound > mSound;
 	FMOD::Channel* mChannel;
 	
 	typedef enum {
@@ -54,13 +54,13 @@ public:
 	};
 
 	//----------------------------------------------------------------//
-	bool		ApplyAttrOp			( u32 attrID, USAttrOp& attrOp );
+	bool		ApplyAttrOp			( u32 attrID, MOAIAttrOp& attrOp, u32 op );
 	float		GetVolume			();
 				MOAIFmodChannel		();
 				~MOAIFmodChannel	();
 	void		Play				( MOAIFmodSound* sound, int loopCount );
-	void		RegisterLuaClass	( USLuaState& state );
-	void		RegisterLuaFuncs	( USLuaState& state );
+	void		RegisterLuaClass	( MOAILuaState& state );
+	void		RegisterLuaFuncs	( MOAILuaState& state );
 	void		SetPaused			( bool paused );
 	void		SetVolume			( float volume );
 	void		Stop				();

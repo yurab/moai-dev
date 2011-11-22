@@ -14,11 +14,11 @@
 	@text	Untz system singleton.
 */
 class MOAIUntzSystem :
-	public USGlobalClass < MOAIUntzSystem, USLuaObject > {
+	public MOAIGlobalClass < MOAIUntzSystem, MOAILuaObject > {
 private:
 
 	static const u32 DEFAULT_SAMPLE_RATE		= 44100;
-	static const u32 DEFAULT_FRAMES_PER_BUFFER	= 4096;
+	static const u32 DEFAULT_FRAMES_PER_BUFFER	= 8192;
 	static const u32 DEFAULT_OPTIONS			= 0;
 
 	//----------------------------------------------------------------//
@@ -41,8 +41,8 @@ public:
 	//----------------------------------------------------------------//
 					MOAIUntzSystem		();
 					~MOAIUntzSystem		();
-	void			RegisterLuaClass	( USLuaState& state );
-	void			RegisterLuaFuncs	( USLuaState& state );
+	void			RegisterLuaClass	( MOAILuaState& state );
+	void			RegisterLuaFuncs	( MOAILuaState& state );
 };
 
 #endif

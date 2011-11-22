@@ -24,7 +24,7 @@
 	@out	number maxAlloc
 */
 int	MOAIFmod::_getMemoryStats( lua_State* L ) {
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	bool blocking = state.GetValue < bool >( 1, false );
 	
@@ -47,7 +47,7 @@ int	MOAIFmod::_getMemoryStats( lua_State* L ) {
 */
 int MOAIFmod::_init ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 #ifdef MOAI_OS_NACL
 	printf ( "Cannot initialize fmod on background thread\n" );
@@ -120,7 +120,7 @@ void MOAIFmod::OpenSoundSystem () {
 }
 
 //----------------------------------------------------------------//
-void MOAIFmod::RegisterLuaClass ( USLuaState& state ) {
+void MOAIFmod::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	luaL_Reg regTable [] = {
 		{ "getMemoryStats",		_getMemoryStats },
@@ -132,7 +132,7 @@ void MOAIFmod::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIFmod::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIFmod::RegisterLuaFuncs ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
@@ -144,12 +144,3 @@ void MOAIFmod::Update () {
 	}
 }
 
-//----------------------------------------------------------------//
-STLString MOAIFmod::ToString () {
-
-	STLString repr;
-
-	PRETTY_PRINT ( repr, mSoundSys )
-
-	return repr;
-}

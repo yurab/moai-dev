@@ -6,6 +6,7 @@
 
 #include <moaicore/MOAIBlendMode.h>
 #include <moaicore/MOAIEventSource.h>
+#include <moaicore/MOAILua.h>
 
 class MOAIFrameBuffer;
 class MOAIGfxResource;
@@ -17,8 +18,11 @@ class MOAIViewport;
 //================================================================//
 // MOAIGfxDevice
 //================================================================//
+/**	@name	MOAIGfxDevice
+	@text	Interface to the graphics singleton.
+*/
 class MOAIGfxDevice :
-	public USGlobalClass < MOAIGfxDevice, MOAIEventSource > {
+	public MOAIGlobalClass < MOAIGfxDevice, MOAIGlobalEventSource > {
 public:
 	
 	enum {
@@ -97,11 +101,12 @@ private:
 	bool			mCpuUVTransform;
 	
 	bool			mHasContext;
-	bool			mIsES;
+	bool			mIsOpenGLES;
 	u32				mMajorVersion;
 	u32				mMinorVersion;
 	bool			mIsProgrammable;
 	
+	bool			mIsFramebufferSupported;
 	GLuint			mDefaultFrameBuffer;
 	
 	size_t			mTextureMemoryUsage;
@@ -139,15 +144,17 @@ public:
 	GET ( size_t, TextureMemoryUsage, mTextureMemoryUsage )
 	GET ( bool, HasContext, mHasContext )
 	
+	GET_BOOL ( IsOpenGLES, mIsOpenGLES )
+	GET_BOOL ( IsProgrammable, mIsProgrammable )
+	GET_BOOL ( IsFramebufferSupported, mIsFramebufferSupported )
+	
 	//----------------------------------------------------------------//
 	void					BeginDrawing			();
 	void					BeginPrim				();
 	void					BeginPrim				( u32 primType );
 	void					ClearColorBuffer		( u32 color );
-
-	void					ClearErrors				();
-	u32						CountErrors				() const;
 	
+	void					ClearErrors				();
 	void					DetectContext			();
 	void					DrawPrims				( const MOAIVertexFormat& format, GLenum primType, void* buffer, u32 size ); 
 	void					EndPrim					();
@@ -176,14 +183,12 @@ public:
 	USMatrix4x4				GetWndToModelMtx		() const;
 	USMatrix4x4				GetWndToWorldMtx		() const;
 	
-	bool					IsOpenGLES				();
-	bool					IsProgrammable			();
 	u32						LogErrors				();
 	
 							MOAIGfxDevice			();
 							~MOAIGfxDevice			();
 	
-	void					RegisterLuaClass		( USLuaState& state );
+	void					RegisterLuaClass		( MOAILuaState& state );
 	void					ReleaseResources		();
 	void					RenewResources			();
 	

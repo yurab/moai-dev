@@ -7,37 +7,6 @@
 #include <moaicore/MOAIImage.h>
 
 //================================================================//
-// libpng callbacks
-//================================================================//
-
-//----------------------------------------------------------------//
-static void _pngError ( png_structp png, png_const_charp err ) {
-	UNUSED ( png );
-	UNUSED ( err );
-}
-
-//----------------------------------------------------------------//
-static void _pngFlush ( png_structp png ) {
-
-	USStream* stream = ( USStream* )png_get_io_ptr ( png );
-	stream->Flush ();
-}
-
-//----------------------------------------------------------------//
-static void _pngRead ( png_structp png, png_bytep buffer, png_size_t size ) {
-
-	USStream* stream = ( USStream* )png_get_io_ptr ( png );
-	stream->ReadBytes ( buffer, ( u32 )size );
-}
-
-//----------------------------------------------------------------//
-static void _pngWrite ( png_structp png, png_bytep buffer, png_size_t size ) {
-
-	USStream* stream = ( USStream* )png_get_io_ptr ( png );
-	stream->WriteBytes ( buffer, ( u32 )size );
-}
-
-//================================================================//
 // local
 //================================================================//
 
@@ -141,6 +110,54 @@ int MOAIImage::_copyBits ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	copyRect
+	@text	Copy a section of one image to another. Accepts two rectangles.
+			Rectangles may be of different size and proportion. Section of
+			image may also be flipped horizontally or vertically by
+			reversing min/max of either rectangle.
+
+	@in		MOAIImage self
+	@in		MOAIImage source	Source image.
+	@in		number srcXMin
+	@in		number srcYMin
+	@in		number srcXMax
+	@in		number srcYMax
+	@in		number destXMin
+	@in		number destYMin
+	@opt	number destXMax		Default value is destXMin + srcXMax - srcXMin;
+	@opt	number destYMax		Default value is destYMin + srcYMax - srcYMin;
+	@opt	number filter		One of MOAIImage.FILTER_LINEAR, MOAIImage.FILTER_NEAREST.
+								Default value is MOAIImage.FILTER_LINEAR.
+	@out	nil
+*/
+int MOAIImage::_copyRect ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIImage, "UUNNNNNN" )
+	
+	MOAIImage* image = state.GetLuaObject < MOAIImage >( 2 );
+	if ( !image ) {
+		return 0;
+	}
+	
+	USIntRect srcRect;
+	srcRect.mXMin = state.GetValue < int >( 3, 0 );
+	srcRect.mYMin = state.GetValue < int >( 4, 0 );
+	srcRect.mXMax = state.GetValue < int >( 5, 0 );
+	srcRect.mYMax = state.GetValue < int >( 6, 0 );
+	
+	USIntRect destRect;
+	destRect.mXMin = state.GetValue < int >( 7, 0 );
+	destRect.mYMin = state.GetValue < int >( 8, 0 );
+	destRect.mXMax = state.GetValue < int >( 9, destRect.mXMin + srcRect.Width ());
+	destRect.mYMax = state.GetValue < int >( 10, destRect.mYMin + srcRect.Height ());
+	
+	u32 filter = state.GetValue < u32 >( 11, MOAIImage::FILTER_LINEAR );
+	
+	self->CopyRect ( *image, srcRect, destRect, filter );
+	
+	return 0;
+}
+
+//----------------------------------------------------------------//
 /**	@name	getColor32
 	@text	Returns a 32-bit packed RGBA value from the image for a
 			given pixel coordinate.
@@ -236,7 +253,8 @@ int MOAIImage::_getSize ( lua_State* L ) {
 	@in		number width
 	@in		number height
 	@opt	colorFmt		One of MOAIImage.COLOR_FMT_A_8, MOAIImage.COLOR_FMT_RGB_888, MOAIImage.COLOR_FMT_RGB_565,
-							MOAIImage.COLOR_FMT_RGBA_5551, MOAIImage.COLOR_FMT_RGBA_4444, COLOR_FMT_RGBA_8888
+							MOAIImage.COLOR_FMT_RGBA_5551, MOAIImage.COLOR_FMT_RGBA_4444, MOAIImage.COLOR_FMT_RGBA_8888.
+							Default valus is MOAIImage.COLOR_FMT_RGBA_8888.
 	@out	nil
 */
 int MOAIImage::_init ( lua_State* L ) {
@@ -273,7 +291,7 @@ int MOAIImage::_load ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
-/**	@name	copy
+/**	@name	padToPow2
 	@text	Copies an image and returns a new image padded to the next
 			power of 2 along each dimension. Original image will be
 			in the upper left hand corner of the new image.
@@ -287,6 +305,38 @@ int MOAIImage::_padToPow2 ( lua_State* L ) {
 	
 	MOAIImage* image = new MOAIImage ();
 	image->PadToPow2 ( *self );
+	image->PushLuaUserdata ( state );
+	
+	return 1;
+}
+
+//----------------------------------------------------------------//
+/**	@name	resize
+	@text	Copies the image to an image with a new size.
+
+	@in		MOAIImage self
+	@in		number width		New width of the image.
+	@in		number height		New height of the image.
+	@opt	number filter		One of MOAIImage.FILTER_LINEAR, MOAIImage.FILTER_NEAREST.
+								Default value is MOAIImage.FILTER_LINEAR.
+	@out	MOAIImage image
+*/
+int MOAIImage::_resize ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIImage, "UNN" )
+	
+	u32 width	= state.GetValue < u32 >( 2, 0 );
+	u32 height	= state.GetValue < u32 >( 3, 0 );
+	u32 filter	= state.GetValue < u32 >( 4, MOAIImage::FILTER_LINEAR );
+	
+	USIntRect srcRect;
+	USIntRect destRect;
+	
+	srcRect.Init ( 0, 0, self->mWidth, self->mHeight );
+	destRect.Init ( 0, 0, width, height );
+	
+	MOAIImage* image = new MOAIImage ();
+	image->Init ( width, height, self->mColorFormat, self->mPixelFormat );
+	image->CopyRect ( *self, srcRect, destRect, filter );
 	image->PushLuaUserdata ( state );
 	
 	return 1;
@@ -638,6 +688,185 @@ void MOAIImage::CopyBits ( const MOAIImage& image, int srcX, int srcY, int destX
 }
 
 //----------------------------------------------------------------//
+void MOAIImage::CopyRect ( const MOAIImage& image, USIntRect srcRect, USIntRect destRect, u32 filter ) {
+
+	float scale;
+
+	bool xFlip = srcRect.IsXFlipped () != destRect.IsXFlipped ();
+	bool yFlip = srcRect.IsYFlipped () != destRect.IsYFlipped ();
+
+	srcRect.Bless ();
+	destRect.Bless ();
+
+	if ( !( xFlip || yFlip )) {
+		if (( this->mPixelFormat == image.mPixelFormat ) && ( this->mColorFormat == image.mColorFormat )) {
+			if (( srcRect.Width () == destRect.Width ()) && ( srcRect.Height () == destRect.Height ())) {
+				this->CopyBits ( image, srcRect.mXMin, srcRect.mYMin, destRect.mXMin, destRect.mYMin, srcRect.Width (), srcRect.Height ());
+				return;
+			}
+		}
+	}
+
+	// prepare the rectangles
+	USIntRect srcBounds;
+	srcBounds.Init ( 0, 0, image.mWidth, image.mHeight );
+	
+	USIntRect destBounds;
+	destBounds.Init ( 0, 0, this->mWidth, this->mHeight );
+
+	if ( !srcRect.Overlap ( srcBounds )) return;
+	if ( !destRect.Overlap ( destBounds )) return;
+	
+	USIntRect srcClipA = srcRect;
+	USIntRect srcClipB = srcRect;
+	
+	USIntRect destClipA = destRect;
+	USIntRect destClipB = destRect;
+
+	// get the rects clipped against their respective bounds
+	srcBounds.Clip ( srcClipA );
+	destBounds.Clip ( destClipA );
+	
+	// now we need to get each rect's subrect adjust for the *other* rect's clip
+	scale = ( float )srcClipA.Width () / ( float )srcRect.Width ();
+	if ( scale < 1.0f ) {
+		
+		int offset = ( int )floor (( srcClipA.mXMin - srcRect.mXMin ) / scale );
+		int width = ( int )floor ( destClipB.Width () * scale );
+		
+		if ( xFlip ) {
+			destClipB.mXMax -= offset;
+			destClipB.mXMin = destClipB.mXMax - width;
+		}
+		else {
+			destClipB.mXMin += offset;
+			destClipB.mXMax = destClipB.mXMin + width;
+		}
+	}
+	
+	scale = ( float )srcClipA.Height () / ( float )srcRect.Height ();
+	if ( scale < 1.0f ) {
+	
+		int offset = ( int )floor (( srcClipA.mYMin - srcRect.mYMin ) / scale );
+		int height = ( int )floor ( destClipB.Height () * scale );
+	
+		if ( yFlip ) {
+			destClipB.mYMax -= offset;
+			destClipB.mYMin = destClipB.mYMax - height;
+		}
+		else {
+			destClipB.mYMin += offset;
+			destClipB.mYMax = destClipB.mYMin + height;
+		}
+	}
+	
+	scale = ( float )destClipA.Width () / ( float )destRect.Width ();
+	if ( scale < 1.0f ) {
+	
+		int offset = ( int )floor (( destClipA.mXMin - destRect.mXMin ) / scale );
+		int width = ( int )floor ( srcClipB.Width () * scale );
+	
+		if ( xFlip ) {
+			srcClipB.mXMax -= offset;
+			srcClipB.mXMin = srcClipB.mXMax - width;
+		}
+		else {
+			srcClipB.mXMin += offset;
+			srcClipB.mXMax = srcClipB.mXMin + width;
+		}
+	}
+	
+	scale = ( float )destClipA.Height () / ( float )destRect.Height ();
+	if ( scale < 1.0f ) {
+	
+		int offset = ( int )floor (( destClipA.mYMin - destRect.mYMin ) / scale );
+		int height = ( int )floor ( srcClipB.Height () * scale );
+	
+		if ( yFlip ) {
+			srcClipB.mYMax -= offset;
+			srcClipB.mYMin = srcClipB.mYMax - height;
+		}
+		else {
+			srcClipB.mYMin += offset;
+			srcClipB.mYMax = srcClipB.mYMin + height;
+		}
+	}
+	
+	// the final rects are the intersection of clipA and clipB
+	srcRect = srcClipA;
+	if ( !srcRect.Intersect ( srcClipB, srcRect )) return;
+	
+	destRect = destClipA;
+	if ( !destRect.Intersect ( destClipB, destRect )) return;
+
+	// now set up the copy
+	int srcWidth = srcRect.Width ();
+	int srcHeight = srcRect.Height ();
+	
+	int destWidth = destRect.Width ();
+	int destHeight = destRect.Height ();
+	
+	float xSrcStep = ( float )srcWidth / ( float )destWidth;
+	float ySrcStep = ( float )srcHeight / ( float )destHeight;
+	
+	float xSrcOrigin = ( float )srcRect.mXMin;
+	float ySrcOrigin = ( float )srcRect.mYMin;
+	
+	if ( xFlip ) {
+		xSrcOrigin = ( float )srcRect.mXMax;
+		xSrcStep = -xSrcStep;
+	}
+	
+	if ( yFlip ) {
+		ySrcOrigin = ( float )srcRect.mYMax;
+		ySrcStep = -ySrcStep;
+	}
+	
+	int yDest = destRect.mYMin;
+	float ySample = ySrcOrigin;
+	for ( int i = 0; i < destHeight; ++i, ySample += ySrcStep, yDest++ ) {
+		
+		int xDest = destRect.mXMin;
+		float xSample = xSrcOrigin;
+		for ( int j = 0; j < destWidth; ++j, xSample += xSrcStep, xDest++ ) {
+			
+			u32 x0 = ( u32 )floorf ( xSample );
+			u32 y0 = ( u32 )floorf ( ySample );
+			
+			u32 x1 = x0 + 1;
+			u32 y1 = y0 + 1;
+			
+			if ( x1 >= this->mWidth ) {
+				x1 = this->mWidth - 1;
+			}
+			
+			if ( y1 >= this->mHeight ) {
+				y1 = this->mHeight - 1;
+			}
+			
+			u32 c0 = image.GetColor ( x0, y0 );
+			u32 c1 = image.GetColor ( x1, y0 );
+			u32 c2 = image.GetColor ( x0, y1 );
+			u32 c3 = image.GetColor ( x1, y1 );
+
+			u8 xt = ( u8 )(( xSample - ( float )x0 ) * 255.0f );
+			u8 yt = ( u8 )(( ySample - ( float )y0 ) * 255.0f );
+			
+			u32 result;
+			
+			if ( filter == FILTER_LINEAR ) {
+				result = USColor::BilerpFixed ( c0, c1, c2, c3, xt, yt );
+			}
+			else {
+				result = USColor::NearestNeighbor ( c0, c1, c2, c3, xt, yt );
+			}
+			
+			this->SetColor ( xDest, yDest, result );
+		}
+	}
+}
+
+//----------------------------------------------------------------//
 u32 MOAIImage::GetBitmapSize () const {
 
 	return this->GetRowSize () * this->mHeight;
@@ -689,6 +918,8 @@ u32 MOAIImage::GetDataSize () const {
 
 //----------------------------------------------------------------//
 u32 MOAIImage::GetMinPowerOfTwo ( u32 size ) {
+
+	if ( MOAIImage::IsPow2 ( size )) return size;
 
 	u32 pow2 = 1;
 	while ( pow2 < size ) pow2 = pow2 << 0x01;
@@ -814,10 +1045,40 @@ void MOAIImage::Init ( const void* bitmap, u32 width, u32 height, USColor::Forma
 }
 
 //----------------------------------------------------------------//
+bool MOAIImage::IsJpg ( const void* buffer, u32 size ) {
+
+	u8 magic [] = { 0xFF, 0xD8, 0xFF, 0xE0 }; // <?> <?> <?> <?>
+
+	if ( size < 4 ) return false;
+	return ( memcmp ( buffer, magic, 4 ) == 0 );
+}
+
+//----------------------------------------------------------------//
+bool MOAIImage::IsPow2 () {
+
+	return ( MOAIImage::IsPow2 ( this->mWidth ) && MOAIImage::IsPow2 ( this->mHeight ));
+}
+
+//----------------------------------------------------------------//
+bool MOAIImage::IsPow2 ( u32 n ) {
+
+	return (( n == 1 ) || (( n & ( n - 1 )) == 0 ));
+}
+
+//----------------------------------------------------------------//
+bool MOAIImage::IsPng ( const void* buffer, u32 size ) {
+
+	u8 magic [] = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }; // <?> P N G <CR><LF><SUB><LF>
+
+	if ( size < 8 ) return false;
+	return ( memcmp ( buffer, magic, 8 ) == 0 );
+}
+
+//----------------------------------------------------------------//
 void MOAIImage::Load ( USData& data, u32 transform ) {
 
 	void* bytes;
-	u32 size;
+	size_t size;
 	data.Lock ( &bytes, &size );
 
 	this->Load ( bytes, size, transform );
@@ -848,243 +1109,16 @@ void MOAIImage::Load ( cc8* filename, u32 transform ) {
 void MOAIImage::Load ( const void* buffer, u32 size, u32 transform ) {
 
 	this->Clear ();
-	if ( size < 8 ) return;
 	
-	int isPng = ( png_sig_cmp (( png_bytep )buffer, 0, 8 ) == 0 );
+	USByteStream stream;
+	stream.SetBuffer (( void* )buffer, size );
+	stream.SetLength ( size );
 	
-	if ( isPng ) {
-		USByteStream stream;
-		stream.SetBuffer (( void* )buffer, size );
-		stream.SetLength ( size );
+	if ( MOAIImage::IsPng ( buffer, size )) {
 		this->LoadPng ( stream, transform );
 	}
-}
-
-//----------------------------------------------------------------//
-void MOAIImage::LoadPng ( USStream& stream, u32 transform ) {
-
-	png_structp png = png_create_read_struct ( PNG_LIBPNG_VER_STRING, 0, _pngError, 0 );
-	if ( !png ) return;
-
-	png_infop pngInfo = png_create_info_struct ( png );
-	if ( pngInfo ) {
-		png_set_read_fn ( png, &stream, _pngRead );
-		this->LoadPng ( png, pngInfo, transform );
-	}
-
-	png_destroy_read_struct ( &png, &pngInfo, NULL );
-}
-
-//----------------------------------------------------------------//
-void MOAIImage::LoadPng ( void* pngParam, void* pngInfoParam, u32 transform ) {
-	
-	png_structp png = ( png_structp )pngParam;
-	png_infop pngInfo = ( png_infop )pngInfoParam;
-	
-	if ( !( png && pngInfo )) return;
-	
-	png_uint_32 width;
-	png_uint_32 height;
-	int bitDepth;
-	int pngColorType;
-	int interlaceType;
-	
-	int paletteSize = 0;
-	png_colorp palette;
-	
-	int transSize = 0;
-	png_bytep trans;
-	
-	png_read_info ( png, pngInfo );
-	png_get_IHDR ( png, pngInfo, &width, &height, &bitDepth, &pngColorType, &interlaceType, 0, 0 );
-	png_get_PLTE ( png, pngInfo, &palette, &paletteSize );
-	png_get_tRNS ( png, pngInfo, &trans, &transSize, 0 );
-	
-	// we don't handle interlaced pngs at the moment
-	int passes = png_set_interlace_handling ( png );
-	
-	// no fat palettes
-	if ( paletteSize > 256 ) return;
-	
-	// set the dimensions, and padding (if any )
-	bool isPadded = false;
-	if ( transform & MOAIImageTransform::POW_TWO ) {
-		this->mWidth = this->GetMinPowerOfTwo ( width );
-		this->mHeight = this->GetMinPowerOfTwo ( height );
-		isPadded = true;
-	}
-	else {
-		this->mWidth = width;
-		this->mHeight = height;
-	}
-	
-	// now guess the format and color type, according to the png
-	USPixel::Format pngPixelFormat;
-	USColor::Format pngColorFormat;
-	
-	switch ( pngColorType ) {
-		
-		case PNG_COLOR_TYPE_GRAY:
-			pngPixelFormat = USPixel::TRUECOLOR;
-			pngColorFormat = USColor::A_8;
-			break;
-		
-		case PNG_COLOR_TYPE_PALETTE:
-			pngPixelFormat = ( paletteSize > 16 ) ? USPixel::INDEX_8 : USPixel::INDEX_4;
-			pngColorFormat = ( transSize ) ? USColor::RGBA_8888 : USColor::RGB_888;
-			break;
-		
-		case PNG_COLOR_TYPE_RGB:
-			pngPixelFormat = USPixel::TRUECOLOR;
-			pngColorFormat = USColor::RGB_888;
-			break;
-		
-		case PNG_COLOR_TYPE_RGB_ALPHA:
-			pngPixelFormat = USPixel::TRUECOLOR;
-			pngColorFormat = USColor::RGBA_8888;
-			break;
-		
-		default: return; // unsupported format
-	}
-	
-	// override the image settings
-	this->mPixelFormat = ( transform & MOAIImageTransform::TRUECOLOR ) ? USPixel::TRUECOLOR : pngPixelFormat;
-	this->mColorFormat = pngColorFormat;
-	
-	if (( transform & MOAIImageTransform::QUANTIZE ) && ( USColor::GetDepth ( pngColorFormat ) > 16 )) {
-		
-		switch ( pngColorFormat ) {
-			case USColor::RGB_888:
-				this->mColorFormat = USColor::RGB_565;
-				break;
-			case USColor::RGBA_8888:
-				this->mColorFormat = USColor::RGBA_4444;
-				break;
-			default:
-				break;
-		}
-	}
-	
-	if ( this->mPixelFormat == USPixel::TRUECOLOR ) {
-		
-		// expand lower bit depths to 8 bits per pixel
-		if ( bitDepth < 8 ) {
-			png_set_packing ( png );
-		}
-		
-		// reduce higher bit depths to 8 bits per pixel
-		if ( bitDepth == 16 ) {
-			png_set_strip_16 ( png );
-		}
-		
-		if ( paletteSize ) {
-			png_set_expand ( png );
-		}
-		
-		// ah, yes...
-		png_read_update_info ( png, pngInfo );
-		
-		this->Alloc ();
-		if ( isPadded ) {
-			this->ClearBitmap ();
-		}
-		
-		if ( this->mColorFormat == pngColorFormat ) {
-			
-			if ( this->GetRowSize () < png_get_rowbytes ( png, pngInfo )) return;
-			
-			for ( int i = 0; i < passes; ++i ) {
-				for ( u32 y = 0; y < height; ++y ) {
-					void* row = this->GetRowAddr ( y );
-					png_read_row ( png, ( png_bytep )row, 0 );
-				}
-			}
-			
-			if ( transform & MOAIImageTransform::PREMULTIPLY_ALPHA ) {
-				for ( u32 y = 0; y < height; ++y ) {
-					void* row = this->GetRowAddr ( y );
-					USColor::PremultiplyAlpha ( row, this->mColorFormat, width );
-				}
-			}
-		}
-		else {
-			
-			u32 srcRowSize = ( u32 )png_get_rowbytes ( png, pngInfo );
-			
-			if ( passes > 1 ) {
-				
-				u32 srcBuffSize = srcRowSize * height;
-				void* srcBuff = malloc ( srcBuffSize );
-				
-				for ( int i = 0; i < passes; ++i ) {
-					for ( u32 y = 0; y < height; ++y ) {
-						void* srcRow = ( void* )(( uintptr )srcBuff + ( srcRowSize * y ));
-						png_read_row ( png, ( png_bytep )srcRow, 0 );
-					}
-				}
-				
-				for ( u32 y = 0; y < height; ++y ) {
-					void* srcRow = ( void* )(( uintptr )srcBuff + ( srcRowSize * y ));
-					void* destRow = this->GetRowAddr ( y );
-					USColor::Convert ( destRow, this->mColorFormat, srcRow, pngColorFormat, width );
-					
-					if ( transform & MOAIImageTransform::PREMULTIPLY_ALPHA ) {
-						USColor::PremultiplyAlpha ( destRow, this->mColorFormat, width );
-					}
-				}
-				free ( srcBuff );
-			}
-			else {
-				
-				void* srcRow = malloc ( srcRowSize );
-				
-				for ( u32 y = 0; y < height; ++y ) {
-					png_read_row ( png, ( png_bytep )srcRow, 0 );
-					void* destRow = this->GetRowAddr ( y );
-					USColor::Convert ( destRow, this->mColorFormat, srcRow, pngColorFormat, width );
-					
-					if ( transform & MOAIImageTransform::PREMULTIPLY_ALPHA ) {
-						USColor::PremultiplyAlpha ( destRow, this->mColorFormat, width );
-					}
-				}
-				free ( srcRow );
-			}
-		}
-	}
-	else {
-	
-		u32 rowsize = this->GetRowSize ();
-		if ( rowsize < png_get_rowbytes ( png, pngInfo )) return;
-		
-		this->Alloc ();
-		if ( isPadded ) {
-			this->ClearBitmap ();
-		}
-
-		// copy the color values
-		for ( int i = 0; i < paletteSize; ++i ) {
-		
-			int r = palette [ i ].red;
-			int g = palette [ i ].green;
-			int b = palette [ i ].blue;
-			int a = i < transSize ? trans [ i ] : 0xff;
-			
-			if ( transform & MOAIImageTransform::PREMULTIPLY_ALPHA ) {
-				r = ( r * a ) >> 8;
-				g = ( g * a ) >> 8;
-				b = ( b * a ) >> 8;
-			}
-			
-			this->SetPaletteColor ( i, USColor::PackRGBA ( r, g, b, a ));
-		}
-		
-		// copy the rows
-		for ( int i = 0; i < passes; ++i ) {
-			for ( u32 y = 0; y < height; ++y ) {
-				void* row = this->GetRowAddr ( y );
-				png_read_row ( png, ( png_bytep )row, 0 );
-			}
-		}
+	else if ( MOAIImage::IsJpg ( buffer, size )) {
+		this->LoadJpg ( stream, transform );
 	}
 }
 
@@ -1104,7 +1138,7 @@ MOAIImage::MOAIImage () :
 	mPalette ( 0 ),
 	mBitmap ( 0 ) {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
@@ -1126,7 +1160,10 @@ void MOAIImage::PadToPow2 ( const MOAIImage& image ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIImage::RegisterLuaClass ( USLuaState& state ) {
+void MOAIImage::RegisterLuaClass ( MOAILuaState& state ) {
+	
+	state.SetField ( -1, "FILTER_LINEAR", ( u32 )MOAIImage::FILTER_LINEAR );
+	state.SetField ( -1, "FILTER_NEAREST", ( u32 )MOAIImage::FILTER_NEAREST );
 	
 	state.SetField ( -1, "POW_TWO", ( u32 )MOAIImageTransform::POW_TWO );
 	state.SetField ( -1, "QUANTIZE", ( u32 )MOAIImageTransform::QUANTIZE );
@@ -1146,7 +1183,7 @@ void MOAIImage::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIImage::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIImage::RegisterLuaFuncs ( MOAILuaState& state ) {
 	UNUSED ( state );
 
 	luaL_Reg regTable [] = {
@@ -1154,6 +1191,7 @@ void MOAIImage::RegisterLuaFuncs ( USLuaState& state ) {
 		{ "convertColors",		_convertColors },
 		{ "copy",				_copy },
 		{ "copyBits",			_copyBits },
+		{ "copyRect",			_copyRect },
 		{ "getColor32",			_getColor32 },
 		{ "getFormat",			_getFormat },
 		{ "getRGBA",			_getRGBA },
@@ -1161,6 +1199,7 @@ void MOAIImage::RegisterLuaFuncs ( USLuaState& state ) {
 		{ "init",				_init },
 		{ "load",				_load },
 		{ "padToPow2",			_padToPow2 },
+		{ "resize",				_resize },
 		{ "resizeCanvas",		_resizeCanvas },
 		{ "setColor32",			_setColor32 },
 		{ "setRGBA",			_setRGBA },
@@ -1254,13 +1293,13 @@ void MOAIImage::ResizeCanvas ( const MOAIImage& image, USIntRect rect ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIImage::SerializeIn ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIImage::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
 	UNUSED ( state );
 	UNUSED ( serializer );
 }
 
 //----------------------------------------------------------------//
-void MOAIImage::SerializeOut ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAIImage::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
 	UNUSED ( state );
 	UNUSED ( serializer );
 }
@@ -1337,106 +1376,4 @@ void MOAIImage::Take ( MOAIImage& image ) {
 //----------------------------------------------------------------//
 void MOAIImage::Transform ( u32 transform ) {
 	UNUSED ( transform );
-}
-
-//----------------------------------------------------------------//
-bool MOAIImage::WritePNG ( USStream& stream ) {
-
-	png_structp png_ptr;
-	png_infop info_ptr;
-	
-	png_ptr = png_create_write_struct ( PNG_LIBPNG_VER_STRING, 0, _pngError, 0 );
-	assert ( png_ptr ); // TODO
-
-	info_ptr = png_create_info_struct ( png_ptr );
-	assert ( png_ptr ); // TODO
-
-	png_set_write_fn ( png_ptr, &stream, _pngWrite, _pngFlush );
-
-	int bitDepth = 0;
-	int colorType = 0;
-	
-	switch ( this->mColorFormat ) {
-		
-		case USColor::A_8:
-			
-			bitDepth = 8;
-			colorType = PNG_COLOR_TYPE_GRAY;
-			break;
-		
-		case USColor::RGB_888:
-		
-			bitDepth = 8;
-			colorType = PNG_COLOR_TYPE_RGB;
-			break;
-		
-		case USColor::RGBA_4444:
-		
-			bitDepth = 4;
-			colorType = PNG_COLOR_TYPE_RGB_ALPHA;
-			break;
-		
-		case USColor::RGBA_8888:
-		
-			bitDepth = 8;
-			colorType = PNG_COLOR_TYPE_RGB_ALPHA;
-			break;
-		
-		// TODO: support these formats
-		case USColor::RGB_565:
-		case USColor::RGBA_5551:
-		default:
-			assert ( false ); // TODO
-	};
-	
-	// Set the image information here.  Width and height are up to 2^31,
-	// bit_depth is one of 1, 2, 4, 8, or 16, but valid values also depend on
-	// the color_type selected. color_type is one of PNG_COLOR_TYPE_GRAY,
-	// PNG_COLOR_TYPE_GRAY_ALPHA, PNG_COLOR_TYPE_PALETTE, PNG_COLOR_TYPE_RGB,
-	// or PNG_COLOR_TYPE_RGB_ALPHA.  interlace is either PNG_INTERLACE_NONE or
-	// PNG_INTERLACE_ADAM7, and the compression_type and filter_type MUST
-	// currently be PNG_COMPRESSION_TYPE_BASE and PNG_FILTER_TYPE_BASE. REQUIRED
-	png_set_IHDR (
-		png_ptr,
-		info_ptr,
-		this->mWidth,
-		this->mHeight,
-		bitDepth,
-		colorType,
-		PNG_INTERLACE_NONE,
-		PNG_COMPRESSION_TYPE_BASE,
-		PNG_FILTER_TYPE_BASE
-	);
-
-	// Set the palette if there is one.  REQUIRED for indexed-color images
-	//png_colorp palette;
-	//palette = ( png_colorp )png_malloc ( png_ptr, PNG_MAX_PALETTE_LENGTH * png_sizeof ( png_color ));
-	
-	// ... Set palette colors...
-	//png_set_PLTE ( png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH );
-
-	// Write the file header information.
-	png_write_info(png_ptr, info_ptr);
-
-	// Flip BGR pixels to RGB
-	//png_set_bgr(png_ptr);
-
-	for ( u32 y = 0; y < this->mHeight; y++ ) {
-		png_bytep row = ( png_bytep )this->GetRowAddr ( y );
-		png_write_row ( png_ptr, row );
-	}
-
-	png_write_end(png_ptr, info_ptr);
-
-	//if ( palette ) {
-	//	png_free ( png_ptr, palette );
-	//}
-
-	//if ( trans ) {
-	//	png_free ( png_ptr, trans );
-	//}
-
-	png_destroy_write_struct ( &png_ptr, &info_ptr );
-	
-	return true;
 }

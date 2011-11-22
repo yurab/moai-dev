@@ -389,7 +389,7 @@ void* moai_main ( void *_instance ) {
 		g_toggles[i] = true;
 	}
 
-	NaClGetUID ();
+	//NaClGetUID ();
 
 	while ( true ) {
 
@@ -737,7 +737,7 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 	NACL_LOG ( "OpenGLContext Created\n" );
 	if ( !g_bInitialized ) {
 
-		glClearColor(0,0,0,0);
+		glClearColor(0,0,0,1);
 		glClear(GL_COLOR_BUFFER_BIT);
 		glFinish ();
 		opengl_context->FlushContext();
@@ -775,7 +775,7 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 		AKUSetFunc_EnterFullscreenMode ( _AKUEnterFullscreenModeFunc );
 		AKUSetFunc_ExitFullscreenMode ( _AKUExitFullscreenModeFunc );
 		AKUSetFunc_OpenWindow ( _AKUOpenWindowFunc );
-		AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
+		//AKUSetFunc_StartGameLoop ( _AKUStartGameLoopFunc );
 
 		AKUSetFunc_SocialConnectInit( _AKUSocialConnectInit );
 		AKUSetFunc_SocialConnectLogout( _AKUSocialConnectLogout );
@@ -798,7 +798,7 @@ void MoaiInstance::DidChangeView ( const pp::Rect& position, const pp::Rect& cli
 
 	// AJV TODO :(
 	MOAIGfxDevice::Get ().SetRealSize ( g_width, g_height );
-	g_scale = ( g_width / 1024.0f );
+	g_scale = ( g_width / 960.0f );
 }
 
 //----------------------------------------------------------------//

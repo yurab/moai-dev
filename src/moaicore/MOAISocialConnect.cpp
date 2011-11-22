@@ -164,7 +164,7 @@ MOAISocialConnect::MOAISocialConnect()
 	RTTI_END
 	
 	// Use a lua table to store these structures.
-	USLuaStateHandle state = USLuaRuntime::Get().State();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get().State();
 	lua_newtable(state);
 	mRequestsTable = state.GetStrongRef ( -1 );
 	state.Pop(1);
@@ -177,7 +177,7 @@ MOAISocialConnect::~MOAISocialConnect()
 }
 
 //----------------------------------------------------------------//
-void MOAISocialConnect::RegisterLuaClass( USLuaState& state )
+void MOAISocialConnect::RegisterLuaClass( MOAILuaState& state )
 {
 	MOAIAction::RegisterLuaClass(state);
 	
@@ -186,7 +186,7 @@ void MOAISocialConnect::RegisterLuaClass( USLuaState& state )
 }
 
 //----------------------------------------------------------------//
-void MOAISocialConnect::RegisterLuaFuncs( USLuaState& state )
+void MOAISocialConnect::RegisterLuaFuncs( MOAILuaState& state )
 {
 	MOAIAction::RegisterLuaFuncs(state);
 
@@ -201,7 +201,7 @@ void MOAISocialConnect::RegisterLuaFuncs( USLuaState& state )
 }
 
 //----------------------------------------------------------------//
-void MOAISocialConnect::PushRequest( USLuaState& state, u32 requestId )
+void MOAISocialConnect::PushRequest( MOAILuaState& state, u32 requestId )
 {
 	mRequestsTable.PushRef(state);
 	state.GetField(-1, requestId);
@@ -209,7 +209,7 @@ void MOAISocialConnect::PushRequest( USLuaState& state, u32 requestId )
 }
 
 //----------------------------------------------------------------//
-void MOAISocialConnect::DeleteRequest( USLuaState& state, u32 requestId )
+void MOAISocialConnect::DeleteRequest( MOAILuaState& state, u32 requestId )
 {
 	mRequestsTable.PushRef(state);
 	lua_pushnumber(state, requestId);
@@ -223,7 +223,7 @@ void MOAISocialConnect::DeleteRequest( USLuaState& state, u32 requestId )
 void MOAISocialConnect::OnLoginSuccess()
 {
 	mConnected = true;
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_SOCIALCONNECT_LOGIN_STATUS, state ) )
 	{
 		state.Push(mConnected);
@@ -234,7 +234,7 @@ void MOAISocialConnect::OnLoginSuccess()
 void MOAISocialConnect::OnLoginFailed(const STLString &errorMsg, bool cancelled)
 {
 	mConnected = false;
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_SOCIALCONNECT_LOGIN_STATUS, state ) )
 	{
 		state.Push(mConnected);
@@ -247,7 +247,7 @@ void MOAISocialConnect::OnLoginFailed(const STLString &errorMsg, bool cancelled)
 void MOAISocialConnect::OnLogout()
 {
 	mConnected = false;
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_SOCIALCONNECT_LOGIN_STATUS, state ) )
 	{
 		state.Push(mConnected);
@@ -257,7 +257,7 @@ void MOAISocialConnect::OnLogout()
 
 void MOAISocialConnect::OnRequestSuccess(u32 requestId, const STLString &data)
 {
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_SOCIALCONNECT_REQUEST_STATUS, state ) )
 	{
 		PushRequest(state, requestId);
@@ -270,7 +270,7 @@ void MOAISocialConnect::OnRequestSuccess(u32 requestId, const STLString &data)
 
 void MOAISocialConnect::OnRequestFailed(u32 requestId, const STLString &errorMsg)
 {
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_SOCIALCONNECT_REQUEST_STATUS, state ) )
 	{
 		PushRequest(state, requestId);
@@ -286,7 +286,7 @@ void MOAISocialConnect::OnRequestPending(u32 requestId)
 	// Let's skip this for now. It kind of confuses the API a bit, for no real
 	// gain. Responses will not be super huge.
 
-//	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+//	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 //	if ( this->PushListener ( EVENT_SOCIALCONNECT_REQUEST_STATUS, state ) )
 //	{
 //		PushRequest(state, requestId);

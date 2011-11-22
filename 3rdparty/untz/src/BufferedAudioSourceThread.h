@@ -9,7 +9,7 @@
 #ifndef BUFFEREDAUDIOSOURCETHREAD_H_
 #define BUFFEREDAUDIOSOURCETHREAD_H_
 
-#include <Threading/Threading.h>
+#include <threading/Threading.h>
 #include <vector>
 
 class BufferedAudioSource;
@@ -23,7 +23,9 @@ public:
 	bool addSource(BufferedAudioSource *source);
 	bool removeSource(BufferedAudioSource *source);
 	void readMore();
-
+	
+	RCriticalSection& getLock() { return mLock; }
+	
 protected:	
 	// RThread
 	void run();

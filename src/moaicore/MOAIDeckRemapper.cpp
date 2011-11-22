@@ -75,13 +75,13 @@ int MOAIDeckRemapper::_setRemap ( lua_State* L ) {
 //================================================================//
 
 //----------------------------------------------------------------//
-bool MOAIDeckRemapper::ApplyAttrOp ( u32 attrID, USAttrOp& attrOp ) {
+bool MOAIDeckRemapper::ApplyAttrOp ( u32 attrID, MOAIAttrOp& attrOp, u32 op ) {
 	UNUSED ( attrID );
 	UNUSED ( attrOp );
 
 	attrID -=1;
 	if (( attrID >= this->mBase ) && ( attrID < this->mRemap.Size ())) {
-		this->mRemap [ attrID ] = attrOp.Op ( this->mRemap [ attrID ]);
+		this->mRemap [ attrID ] = USFloat::ToIndex ( attrOp.Apply (( float )this->mRemap [ attrID ], op, MOAINode::ATTR_READ_WRITE ));
 		return true;
 	}
 	return false;
@@ -101,13 +101,13 @@ MOAIDeckRemapper::~MOAIDeckRemapper () {
 }
 
 //----------------------------------------------------------------//
-void MOAIDeckRemapper::RegisterLuaClass ( USLuaState& state ) {
+void MOAIDeckRemapper::RegisterLuaClass ( MOAILuaState& state ) {
 
 	MOAINode::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIDeckRemapper::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIDeckRemapper::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	MOAINode::RegisterLuaFuncs ( state );
 	

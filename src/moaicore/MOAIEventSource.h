@@ -4,6 +4,8 @@
 #ifndef	MOAIEVENTSOURCE_H
 #define	MOAIEVENTSOURCE_H
 
+#include <moaicore/MOAILua.h>
+
 //================================================================//
 // MOAIEventSource
 //================================================================//
@@ -12,16 +14,67 @@
 			and have an event table.
 */
 class MOAIEventSource :
-	public virtual USLuaObject {
+	public virtual MOAILuaObject {
+protected:
+
+	//----------------------------------------------------------------//
+	virtual void	AffirmListenerTable		( MOAILuaState& state ) = 0;
+	bool			PushListener			( u32 eventID, MOAILuaState& state );
+	bool			PushListenerAndSelf		( u32 eventID, MOAILuaState& state );
+	virtual bool	PushListenerTable		( MOAILuaState& state ) = 0;
+	void			SetListener				( lua_State* L, u32 idx );
+
+public:
+
+	//----------------------------------------------------------------//
+	
+					MOAIEventSource			();
+	virtual			~MOAIEventSource		();
+};
+
+//================================================================//
+// MOAIInstanceEventSource
+//================================================================//
+/**	@name	MOAIInstanceEventSource
+	@text	Derivation of MOAIEventSource for non-global lua objects.
+*/
+class MOAIInstanceEventSource :
+	public virtual MOAIEventSource {
 private:
 
-	USLuaLocal			mListenerTable;
+	MOAILuaLocal		mListenerTable;
 
 	//----------------------------------------------------------------//
-	static int			_setListener			( lua_State* L );
+	static int		_setListener				( lua_State* L );
+
+protected:
 
 	//----------------------------------------------------------------//
-	void				AffirmListenerTable		( USLuaState& state );
+	void			AffirmListenerTable			( MOAILuaState& state );
+	bool			PushListenerTable			( MOAILuaState& state );
+
+public:
+
+	//----------------------------------------------------------------//
+					MOAIInstanceEventSource		();
+	virtual			~MOAIInstanceEventSource	();
+	void			RegisterLuaFuncs			( MOAILuaState& state );
+};
+
+//================================================================//
+// MOAIGlobalEventSource
+//================================================================//
+/**	@name	MOAIGlobalEventSource
+	@text	Derivation of MOAIEventSource for global lua objects.
+*/
+class MOAIGlobalEventSource :
+	public virtual MOAIEventSource {
+private:
+
+	MOAILuaRef		mListenerTable;
+
+	//----------------------------------------------------------------//
+	static int		_setListener				( lua_State* L );
 
 protected:
 
@@ -31,7 +84,7 @@ protected:
 	
 		u32 idx = 1;
 		
-		USLuaState state ( L );
+		MOAILuaState state ( L );
 		if ( !state.IsType ( idx, LUA_TNUMBER )) {
 			idx = 2;
 		}
@@ -45,18 +98,14 @@ protected:
 	}
 
 	//----------------------------------------------------------------//
-	bool				PushListener			( u32 eventID, USLuaState& state );
-	bool				PushListenerAndSelf		( u32 eventID, USLuaState& state );
-	void				SetListener				( lua_State* L, u32 idx );
+	void			AffirmListenerTable			( MOAILuaState& state );
+	bool			PushListenerTable			( MOAILuaState& state );
 
 public:
 
 	//----------------------------------------------------------------//
-	
-						MOAIEventSource			();
-	virtual				~MOAIEventSource		();
-	void				RegisterLuaClass		( USLuaState& state );
-	void				RegisterLuaFuncs		( USLuaState& state );
+					MOAIGlobalEventSource		();
+	virtual			~MOAIGlobalEventSource		();
 };
 
 #endif

@@ -4,6 +4,7 @@
 #ifndef	MOAILAYER2D_H
 #define	MOAILAYER2D_H
 
+#include <moaicore/MOAILua.h>
 #include <moaicore/MOAIPartition.h>
 #include <moaicore/MOAIProp2D.h>
 #include <moaicore/MOAIViewport.h>
@@ -23,18 +24,18 @@ class MOAILayer2D :
 	public virtual MOAIProp2D {
 private:
 
-	USRef < MOAITransformBase >		mCamera;
-	USRef < MOAIViewport >			mViewport;
-	USRef < MOAIPartition >			mPartition;
+	MOAILuaSharedPtr < MOAITransformBase >	mCamera;
+	MOAILuaSharedPtr < MOAIViewport >		mViewport;
+	MOAILuaSharedPtr < MOAIPartition >		mPartition;
 
-	USRef < MOAITexture >			mFrameBuffer;
+	MOAILuaSharedPtr < MOAITexture >		mFrameBuffer;
 
 	#if USE_CHIPMUNK
-		USRef < MOAICpSpace >		mCpSpace;
+		MOAILuaSharedPtr < MOAICpSpace >	mCpSpace;
 	#endif
 	
 	#if USE_BOX2D
-		USRef < MOAIBox2DWorld >	mBox2DWorld;
+		MOAILuaSharedPtr < MOAIBox2DWorld >	mBox2DWorld;
 	#endif
 
 	USVec2D							mParallax;
@@ -66,10 +67,6 @@ public:
 	
 	DECL_LUA_FACTORY ( MOAILayer2D )
 	
-	GET_SET ( MOAITransformBase*, Camera, mCamera )
-	GET_SET ( MOAIViewport*, Viewport, mViewport )
-	GET_SET ( MOAIPartition*, Partition, mPartition )
-	
 	//----------------------------------------------------------------//
 	void			Draw					();
 	float			GetFitting				( USRect& worldRect, float hPad, float vPad );
@@ -78,8 +75,8 @@ public:
 	void			GetWorldToWndMtx		( USAffine2D& worldToWnd );
 					MOAILayer2D				();
 					~MOAILayer2D			();
-	void			RegisterLuaClass		( USLuaState& state );
-	void			RegisterLuaFuncs		( USLuaState& state );
+	void			RegisterLuaClass		( MOAILuaState& state );
+	void			RegisterLuaFuncs		( MOAILuaState& state );
 };
 
 #endif

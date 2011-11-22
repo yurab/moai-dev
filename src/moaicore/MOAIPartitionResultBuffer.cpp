@@ -59,14 +59,14 @@ void MOAIPartitionResultBuffer::PushResult ( MOAIProp& result ) {
 
 //----------------------------------------------------------------//
 void MOAIPartitionResultBuffer::PushResultsList ( lua_State* L ) {
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 
 	u32 total = this->mTotalResults;
 	
 	lua_createtable ( state, total, 0 );
 	
 	for ( u32 i = 1; i <= total; ++i ) {
-		lua_pushnumber ( state, i++ );
+		lua_pushnumber ( state, i );
 		this->mResults [ i ].mData->PushLuaUserdata ( state );
 		lua_settable ( state, -3 );
 	}

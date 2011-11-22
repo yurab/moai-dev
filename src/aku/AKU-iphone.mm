@@ -39,6 +39,12 @@ void AKUAppDidStartSession () {
 }
 
 //-----------------------------------------------------------------//
+void AKUAppOpenFromURL ( NSURL* url ) {
+	
+	MOAIApp::Get ().AppOpenedFromURL ( url );
+}
+
+//-----------------------------------------------------------------//
 void AKUAppWillEndSession () {
 
 	MOAIApp::Get ().WillEndSession ();
@@ -106,7 +112,8 @@ void AKUIphoneInit ( UIApplication* application ) {
 	MOAIEnvironment::Get ().SetOSVersion ( [[ UIDevice currentDevice ].systemVersion UTF8String ] );
 	MOAIEnvironment::Get ().SetResourceDirectory ( [[[ NSBundle mainBundle ] resourcePath ] UTF8String ]);
 	MOAIEnvironment::Get ().SetUDID ( [[ UIDevice currentDevice ].uniqueIdentifier UTF8String ] );
-	
+	MOAIEnvironment::Get ().SetDevModel ( [[ UIDevice currentDevice ].model UTF8String ] );
+
 	if ([[ UIScreen mainScreen ] scale ] == 2.0 ) {
 		//this is retina
 		MOAIEnvironment::Get ().SetIsRetinaDisplay ( true );
@@ -119,6 +126,10 @@ void AKUIphoneInit ( UIApplication* application ) {
 	REGISTER_LUA_CLASS ( MOAIApp )
 	REGISTER_LUA_CLASS ( MOAIGameCenter )
 	REGISTER_LUA_CLASS ( MOAIWebView )
+			
+	#ifndef DISABLE_TAPJOY
+		REGISTER_LUA_CLASS ( MOAITapjoy )
+	#endif
 }
 
 //-----------------------------------------------------------------//

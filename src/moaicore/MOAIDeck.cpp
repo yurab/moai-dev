@@ -26,7 +26,7 @@
 int MOAIDeck::_setShader ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIDeck, "UU" )
 	
-	self->mShader = state.GetLuaObject < MOAIShader >( 2 );
+	self->mShader.Set ( *self, state.GetLuaObject < MOAIShader >( 2 ));
 	
 	return 0;
 }
@@ -124,20 +124,22 @@ void MOAIDeck::LoadShader () {
 MOAIDeck::MOAIDeck () :
 	mContentMask ( 0xffffffff ) {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
 MOAIDeck::~MOAIDeck () {
+
+	this->mShader.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
-void MOAIDeck::RegisterLuaClass ( USLuaState& state ) {
+void MOAIDeck::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIDeck::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIDeck::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "setShader",				_setShader },

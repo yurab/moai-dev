@@ -156,7 +156,7 @@ int MOAITexture::_getSize ( lua_State* L ) {
 
 //----------------------------------------------------------------//
 /**	@name	initFrameBuffer
-	@text	Initializes shader as a frame buffer.
+	@text	Initializes texture as a frame buffer.
 	
 	@in		MOAITexture self
 	@in		number width
@@ -277,7 +277,7 @@ int MOAITexture::_setWrap ( lua_State* L ) {
 //================================================================//
 
 //----------------------------------------------------------------//
-MOAITexture* MOAITexture::AffirmTexture ( USLuaState& state, int idx ) {
+MOAITexture* MOAITexture::AffirmTexture ( MOAILuaState& state, int idx ) {
 
 	MOAITexture* texture = state.GetLuaObject < MOAITexture >( idx );
 	if ( !texture ) {
@@ -324,6 +324,11 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 	// get the dimensions before trying to get the OpenGL texture ID
 	this->mWidth = image.GetWidth ();
 	this->mHeight = image.GetHeight ();
+
+	// warn if not a power of two
+	if ( !image.IsPow2 ()) {
+		MOAILog ( 0, MOAILogMessages::MOAITexture_NonPowerOfTwo_SDD, ( cc8* )this->mFilename, this->mWidth, this->mHeight );
+	}
 
 	glGenTextures ( 1, &this->mGLTexID );
 	if ( !this->mGLTexID ) return;
@@ -399,8 +404,11 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 			image.GetBitmap ()
 		);
 		
-		/*if ( glGetError () != 0 ) {
-			// we have an error
+		/*if ( MOAIGfxDevice::Get ().LogErrors ()) {
+
+			glDeleteTextures ( 1, &this->mGLTexID );
+			this->mGLTexID = 0;
+			
 			this->Clear ();
 			return;
 		}*/
@@ -669,7 +677,7 @@ void MOAITexture::Init ( cc8* filename, u32 transform ) {
 void MOAITexture::Init ( MOAIDataBuffer& data, u32 transform, cc8* debugname ) {
 
 	void* bytes;
-	u32 size;
+	size_t size;
 	data.Lock ( &bytes, &size );
 
 	this->Init ( bytes, size, transform, debugname );
@@ -697,17 +705,23 @@ void MOAITexture::Init ( const void* data, u32 size, u32 transform, cc8* debugna
 //----------------------------------------------------------------//
 void MOAITexture::InitFrameBuffer ( u32 width, u32 height, GLenum colorFormat, GLenum depthFormat, GLenum stencilFormat ) {
 
-	if ( !this->mFrameBuffer ) {
-		this->mFrameBuffer = new MOAIFrameBuffer ();
+	if ( MOAIGfxDevice::Get ().IsFramebufferSupported ()) {
+
+		if ( !this->mFrameBuffer ) {
+			this->mFrameBuffer = new MOAIFrameBuffer ();
+		}
+
+		this->mWidth = width;
+		this->mHeight = height;
+
+		this->mFrameBuffer->Init ( width, height, colorFormat, depthFormat, stencilFormat );
+		this->mIsRenewable = true;
+		
+		this->OnLoad ();
 	}
-
-	this->mWidth = width;
-	this->mHeight = height;
-
-	this->mFrameBuffer->Init ( width, height, colorFormat, depthFormat, stencilFormat );
-	this->mIsRenewable = true;
-	
-	this->OnLoad ();
+	else {
+		MOAILog ( 0, MOAILogMessages::MOAITexture_NoFramebuffer );
+	}
 }
 
 //----------------------------------------------------------------//
@@ -746,7 +760,7 @@ MOAITexture::MOAITexture () :
 	mTransform ( DEFAULT_TRANSFORM ) {
 	
 	RTTI_BEGIN
-		RTTI_EXTEND ( USLuaObject )
+		RTTI_EXTEND ( MOAILuaObject )
 		RTTI_EXTEND ( MOAIGfxResource )
 	RTTI_END
 
@@ -839,6 +853,11 @@ void MOAITexture::NaClUnLoadTexture ( void* userData, int32_t result ) {
 #endif
 
 void MOAITexture::OnLoad () {
+
+	if ( !MOAIGfxDevice::Get ().GetHasContext ()) {
+		MOAILog ( 0, MOAILogMessages::MOAITexture_MissingDevice_S, this->mFilename.str ());
+		return;
+	}
 
 	if ( this->mFrameBuffer ) {
 		
@@ -945,7 +964,7 @@ void MOAITexture::OnUnload () {
 }
 
 //----------------------------------------------------------------//
-void MOAITexture::RegisterLuaClass ( USLuaState& state ) {
+void MOAITexture::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	MOAIGfxResource::RegisterLuaClass ( state );
 	
@@ -975,7 +994,7 @@ void MOAITexture::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAITexture::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAITexture::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	MOAIGfxResource::RegisterLuaFuncs ( state );
 
@@ -994,7 +1013,7 @@ void MOAITexture::RegisterLuaFuncs ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAITexture::SerializeIn ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAITexture::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
 	UNUSED ( serializer );
 
 	STLString path = state.GetField ( -1, "mPath", "" );
@@ -1005,7 +1024,7 @@ void MOAITexture::SerializeIn ( USLuaState& state, USLuaSerializer& serializer )
 }
 
 //----------------------------------------------------------------//
-void MOAITexture::SerializeOut ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAITexture::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
 	UNUSED ( serializer );
 
 	STLString path = USFileSys::GetRelativePath ( this->mFilename );

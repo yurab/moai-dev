@@ -10,9 +10,9 @@
 #define BUFFEREDAUDIOSOURCE_H_
 
 #include "AudioSource.h"
-#include <Threading/Threading.h>
+#include <threading/Threading.h>
 
-#define SECONDS_TO_BUFFER (2)
+#define SECONDS_TO_BUFFER (4)
 
 class BufferedAudioSourceThread;
 

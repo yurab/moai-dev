@@ -222,8 +222,8 @@ int MOAIWebView::_initWebView ( lua_State* L ) {
 	
 	int left = lua_tointeger ( state, 2 );
 	int top = lua_tointeger ( state, 3 );
-	int right = lua_tointeger ( state, 4 );
-	int bottom = lua_tointeger ( state, 5 );
+	int width = lua_tointeger ( state, 4 );
+	int height = lua_tointeger ( state, 5 );
 	bool hidden = lua_toboolean ( state, 6 );
 			
 	if ( self->mWebView ) {
@@ -233,40 +233,29 @@ int MOAIWebView::_initWebView ( lua_State* L ) {
 		[ self->mWebView removeFromSuperview ];
 	}	
 	
-	UIWindow* window = [[ UIApplication sharedApplication ] keyWindow ];		
+	UIWindow* window = [[ UIApplication sharedApplication ] keyWindow ];
+	UIViewController* rootVC = [ window rootViewController ];		
 	
 	if ( self->mHasToolBar ) {
+				
+		self->mWebView = [[[ UIWebView alloc ] initWithFrame:CGRectMake ( left, top + TOOL_BAR_HEIGHT , width, height - TOOL_BAR_HEIGHT )] autorelease ];					
+		self->mWebView.transform = CGAffineTransformConcat ([ rootVC.view transform ], CGAffineTransformMakeRotation (( float )( M_PI / 2 + M_PI )));
 		
-		self->mToolBar.frame = CGRectMake( left, top, right, top + TOOL_BAR_HEIGHT );		
-		[ window addSubview:self->mToolBar ];	
-		self->mToolBar.hidden = true;	
-		
-		self->mWebView = [[[ UIWebView alloc ] initWithFrame:CGRectMake ( left, top + TOOL_BAR_HEIGHT, right, bottom - TOOL_BAR_HEIGHT )] autorelease ];		
-		
-		if ( right - left > bottom - top ) {
-		
-			self->mWebView = [[[ UIWebView alloc ] initWithFrame:CGRectMake ( left, top, right, bottom - TOOL_BAR_HEIGHT )] autorelease ];
-			self->mToolBar.center = CGPointMake( 0, 0 );
-			self->mToolBar.transform = CGAffineTransformConcat ( CGAffineTransformMakeRotation(( float )( M_PI / 2 + M_PI )), CGAffineTransformMakeTranslation ( TOOL_BAR_HEIGHT / 2, ( right - left ) / 2 ));
-			self->mWebView.center = CGPointMake( 0, 0 );
-			self->mWebView.transform = CGAffineTransformConcat ( CGAffineTransformMakeRotation(( float )( M_PI / 2 + M_PI )), CGAffineTransformMakeTranslation ((( bottom - top ) / 2 ) + ( TOOL_BAR_HEIGHT / 2 ), ( right - left ) / 2 ));
-		}
+		self->mToolBar.frame = CGRectMake( left, top, width, TOOL_BAR_HEIGHT );	
+		self->mToolBar.transform = CGAffineTransformConcat ([ rootVC.view transform ], CGAffineTransformMakeRotation(( float )( M_PI / 2 + M_PI )));
+		self->mToolBar.hidden = hidden;		
+		[ rootVC.view addSubview:self->mToolBar ];	
 	}
 	else {
 	
-		self->mWebView = [[[ UIWebView alloc ] initWithFrame:CGRectMake ( left, top, right, bottom )] autorelease ];		
-		
-		if ( right - left > bottom - top ) {
-				
-			self->mWebView.center = CGPointMake(0, 0);
-			self->mWebView.transform = CGAffineTransformConcat ( CGAffineTransformMakeRotation(( float )( M_PI / 2 + M_PI )), CGAffineTransformMakeTranslation (( bottom - top ) / 2, ( right - left ) / 2 ));
-		}			
+		self->mWebView = [[[ UIWebView alloc ] initWithFrame:CGRectMake ( left, top, width, height )] autorelease ];					
+		self->mWebView.transform = CGAffineTransformConcat ([ rootVC.view transform ], CGAffineTransformMakeRotation(( float )( M_PI / 2 + M_PI )));
 	}
 		
 	[ self->mWebView setDelegate:self->mWebViewDelegate ];
 	[ self->mWebView setScalesPageToFit:YES ];
 	[ self->mWebView setMultipleTouchEnabled:YES ];
-	[ window addSubview:self->mWebView ];
+	[ rootVC.view addSubview:self->mWebView ];
 
 	if ( hidden ) {
 		self->mWebView.hidden = true;
@@ -388,7 +377,7 @@ int MOAIWebView::_loadRequest ( lua_State* L ) {
 */
 int MOAIWebView::_openUrlInSafari ( lua_State* L ) {
 	
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	if ( !state.CheckParams ( 1, "S" )) return 0;
 	
 	cc8* urlStr = lua_tostring ( state, 1 );
@@ -502,17 +491,14 @@ void MOAIWebView::Hide () {
 MOAIWebView::MOAIWebView () :
 	mWebView ( 0 ) {
 
-	RTTI_BEGIN
-		RTTI_EXTEND ( MOAIEventSource )
-	RTTI_END
+	RTTI_SINGLE ( MOAIInstanceEventSource )
 	
-	mWebViewDelegate = [ MoaiUiWebViewDelegate alloc ];
+	mWebViewDelegate = [[ MoaiUiWebViewDelegate alloc ] retain ];
 	mWebViewDelegate.mMOAIWebView = this;
 
 	//create toolbar using new
 	mToolBar = [ UIToolbar new ];
 	mToolBar.barStyle = UIBarStyleDefault;
-	[ mToolBar sizeToFit] ;
 	mHasToolBar = true;
 	
 	UIBarButtonItem *done = [[ UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:mWebViewDelegate action:@selector ( doneButtonPressed: )];
@@ -540,7 +526,7 @@ MOAIWebView::~MOAIWebView () {
 //----------------------------------------------------------------//
 void MOAIWebView::RaiseDidFailLoadWithErrorEvent ( NSError* error ) {
 	
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 		if ( this->PushListenerAndSelf ( DID_FAIL_LOAD_WITH_ERROR, state )) {
 			[ error toLua:state ];
 			state.DebugCall ( 2, 0 );
@@ -553,9 +539,9 @@ BOOL MOAIWebView::RaiseShouldStartLoadWithRequestEvent ( NSURLRequest* request, 
 	cc8* urlString = [[ request.URL absoluteString ] UTF8String ];
 	int nav = navType;
 	bool result = true;
-
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
-		if ( this->PushListenerAndSelf ( SHOULD_START_LOAD_WITH_REQUEST, state )) {
+	
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
+	if ( this->PushListenerAndSelf ( SHOULD_START_LOAD_WITH_REQUEST, state )) {
 			lua_pushstring ( state, urlString );
 			lua_pushinteger ( state, nav );			
 			state.DebugCall ( 3, 1 );
@@ -568,8 +554,8 @@ BOOL MOAIWebView::RaiseShouldStartLoadWithRequestEvent ( NSURLRequest* request, 
 //----------------------------------------------------------------//
 void MOAIWebView::RaiseWebViewDidFinishLoadEvent () {
 
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
-		if ( this->PushListenerAndSelf ( WEB_VIEW_DID_FINISH_LOAD, state )) {
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
+	if ( this->PushListenerAndSelf ( WEB_VIEW_DID_FINISH_LOAD, state )) {
 			state.DebugCall ( 1, 0 );
 		}
 }
@@ -577,16 +563,14 @@ void MOAIWebView::RaiseWebViewDidFinishLoadEvent () {
 //----------------------------------------------------------------//
 void MOAIWebView::RaiseWebViewDidStartLoadEvent () {
 
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
-		if ( this->PushListenerAndSelf ( WEB_VIEW_DID_START_LOAD, state )) {
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
+	if ( this->PushListenerAndSelf ( WEB_VIEW_DID_START_LOAD, state )) {
 			state.DebugCall ( 1, 0 );
 		}
 }
 
 //----------------------------------------------------------------//
-void MOAIWebView::RegisterLuaClass ( USLuaState& state ) {
-
-	MOAIEventSource::RegisterLuaClass ( state );
+void MOAIWebView::RegisterLuaClass ( MOAILuaState& state ) {
 
 	// Event IDs
 	state.SetField ( -1, "DID_FAIL_LOAD_WITH_ERROR", ( u32 )DID_FAIL_LOAD_WITH_ERROR );
@@ -611,9 +595,9 @@ void MOAIWebView::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIWebView::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIWebView::RegisterLuaFuncs ( MOAILuaState& state ) {
 
-	MOAIEventSource::RegisterLuaFuncs ( state );
+	MOAIInstanceEventSource::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {
 		{ "canGoBack",						_canGoBack },

@@ -143,7 +143,7 @@ MOAIFmodSound::MOAIFmodSound () :
 	mSound ( 0 ),
 	mLoopCount ( 0 ) {
 
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 
 	memset ( mFileName, 0, 128 );
 }
@@ -153,6 +153,7 @@ MOAIFmodSound::~MOAIFmodSound () {
 
 	NACL_LOG ( " ~MOAIFmodSound file %s\n", mFileName );
 	this->Release ();
+	NACL_LOG ( " ~MOAIFmodSound Release done file %s\n", mFileName );
 }
 
 //----------------------------------------------------------------//
@@ -261,12 +262,12 @@ void MOAIFmodSound::Release () {
 }
 
 //----------------------------------------------------------------//
-void MOAIFmodSound::RegisterLuaClass ( USLuaState& state ) {
+void MOAIFmodSound::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIFmodSound::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIFmodSound::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "load",			_load },
@@ -279,13 +280,3 @@ void MOAIFmodSound::RegisterLuaFuncs ( USLuaState& state ) {
 	luaL_register ( state, 0, regTable );
 }
 
-//----------------------------------------------------------------//
-STLString MOAIFmodSound::ToString () {
-
-	STLString repr;
-
-	PRETTY_PRINT ( repr, mSound )
-	PRETTY_PRINT ( repr, mLoopCount )
-
-	return repr;
-}

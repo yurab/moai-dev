@@ -47,17 +47,3 @@ anchor = MOAICameraAnchor2D.new ()
 anchor:setParent ( prop )
 anchor:setRect ( -64, -64, 64, 64 )
 fitter:insertAnchor ( anchor )
-
-function spin ()
-
-	local r = 0
-
-	while true do
-		viewport:setRotation ( 0 )
-		r = r + 1
-		coroutine:yield ()
-	end
-end
-
-thread = MOAIThread.new ()
-thread:run ( spin )

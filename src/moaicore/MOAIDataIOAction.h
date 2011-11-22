@@ -5,6 +5,7 @@
 #define MOAIASYNCACTION_H
 
 #include <moaicore/MOAIAction.h>
+#include <moaicore/MOAILua.h>
 
 class MOAIDataBuffer;
 
@@ -26,10 +27,10 @@ private:
 		DONE,
 	};
 
-	STLString					mFilename;
-	USRef < MOAIDataBuffer >	mData;
-	USLuaLocal					mOnFinish;
-	u32							mState;
+	STLString							mFilename;
+	MOAILuaSharedPtr < MOAIDataBuffer >	mData;
+	MOAILuaLocal							mOnFinish;
+	u32									mState;
 
 	//----------------------------------------------------------------//
 	static int	_setCallback		( lua_State* L );
@@ -49,8 +50,8 @@ public:
 				MOAIDataIOAction	();
 				~MOAIDataIOAction	();
 	void		OnUpdate			( float step );
-	void		RegisterLuaClass	( USLuaState& state );
-	void		RegisterLuaFuncs	( USLuaState& state );
+	void		RegisterLuaClass	( MOAILuaState& state );
+	void		RegisterLuaFuncs	( MOAILuaState& state );
 	void		StartLoad			();
 	void		StartSave			();
 };

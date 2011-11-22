@@ -14,11 +14,13 @@
 #else
 	#include <sys/types.h>
 	#include <dirent.h>
+	#include <unistd.h>
 #endif
 
 #include <errno.h>
 
 #include <time.h>
+#include <tlsf.h>
 
 #ifdef _WIN32
 	#define S_ISDIR(B) (((B)&_S_IFDIR)!=0)
@@ -70,7 +72,9 @@ typedef struct ZIPFSDir {
 
 } ZIPFSDir;
 
+
 //----------------------------------------------------------------//
+int ZIPFSDir_ReadZipEntry ( ZIPFSDir* self );
 int ZIPFSDir_ReadZipEntry ( ZIPFSDir* self ) {
 
 	if ( self->mZipFileSubDir ) {
@@ -119,6 +123,16 @@ int ZIPFSDir_ReadZipEntry ( ZIPFSDir* self ) {
 }
 
 //================================================================//
+// ZIPFSTlsfPool
+//================================================================//
+typedef struct ZIPFSTlsfPool {
+
+	tlsf_pool	mPool;
+	void*		mBuffer;
+
+} ZIPFSTlsfPool;
+
+//================================================================//
 // local
 //================================================================//
 
@@ -132,6 +146,7 @@ ZIPFSFILE* zipfs_stdin	= 0;
 ZIPFSFILE* zipfs_stdout	= 0;
 
 //----------------------------------------------------------------//
+ZIPFSVirtualPath* find_best_virtual_path ( char const* path );
 ZIPFSVirtualPath* find_best_virtual_path ( char const* path ) {
 
 	size_t len = 0;
@@ -153,6 +168,7 @@ ZIPFSVirtualPath* find_best_virtual_path ( char const* path ) {
 }
 
 //----------------------------------------------------------------//
+ZIPFSVirtualPath* find_next_virtual_subdir ( char const* path, ZIPFSVirtualPath* cursor ) ;
 ZIPFSVirtualPath* find_next_virtual_subdir ( char const* path, ZIPFSVirtualPath* cursor ) {
 
 	size_t len = 0;
@@ -172,6 +188,7 @@ ZIPFSVirtualPath* find_next_virtual_subdir ( char const* path, ZIPFSVirtualPath*
 }
 
 //----------------------------------------------------------------//
+ZIPFSVirtualPath* find_virtual_path ( char const* path );
 ZIPFSVirtualPath* find_virtual_path ( char const* path ) {
 
 	size_t len = 0;
@@ -188,6 +205,7 @@ ZIPFSVirtualPath* find_virtual_path ( char const* path ) {
 }
 
 //----------------------------------------------------------------//
+ZIPFSZipStream* is_archive ( ZIPFSFILE* opaque );
 ZIPFSZipStream* is_archive ( ZIPFSFILE* opaque ) {
 
 	if ( opaque ) { 
@@ -198,6 +216,7 @@ ZIPFSZipStream* is_archive ( ZIPFSFILE* opaque ) {
 }
 
 //----------------------------------------------------------------//
+FILE* is_file ( ZIPFSFILE* opaque );
 FILE* is_file ( ZIPFSFILE* opaque ) {
 
 	if ( opaque ) { 
@@ -208,6 +227,7 @@ FILE* is_file ( ZIPFSFILE* opaque ) {
 }
 
 //----------------------------------------------------------------//
+int is_separator ( char c );
 int is_separator ( char c ) {
 
 	return ( c == '/' ) || ( c == '\\' ) ? 1 : 0; 
@@ -215,6 +235,7 @@ int is_separator ( char c ) {
 }
 
 //----------------------------------------------------------------//
+int is_virtual_path ( char const* path );
 int is_virtual_path ( char const* path ) {
 
 	size_t len = 0;
@@ -228,6 +249,89 @@ int is_virtual_path ( char const* path ) {
 		if ( !test [ len ]) return 1;
 	}
 	return 0;
+}
+
+//================================================================//
+// stdlib
+//================================================================//
+
+static ZIPFSTlsfPool* sTlsfPool = 0;
+
+//----------------------------------------------------------------//
+void* zipfs_calloc ( size_t num, size_t size ) {
+
+	if ( sTlsfPool ) {
+		void* ptr = tlsf_malloc ( sTlsfPool->mPool, num * size );
+		if ( ptr ) {
+			memset ( ptr, 0, num * size );
+		}
+		return ptr;
+	}
+	return calloc ( num, size );
+}
+
+//----------------------------------------------------------------//
+void zipfs_free ( void* ptr ) {
+
+	if ( sTlsfPool ) {
+		tlsf_free ( sTlsfPool->mPool, ptr );
+	}
+	else {
+		free ( ptr );
+	}
+}
+
+//----------------------------------------------------------------//
+void* zipfs_malloc ( size_t size ) {
+
+	if ( sTlsfPool ) {
+		return tlsf_malloc ( sTlsfPool->mPool, size );
+	}
+	return malloc ( size );
+}
+
+//----------------------------------------------------------------//
+void* zipfs_realloc ( void* ptr, size_t size ) {
+
+	if ( sTlsfPool ) {
+		return tlsf_realloc ( sTlsfPool->mPool, ptr, size );
+	}
+	return realloc ( ptr, size );
+}
+
+//----------------------------------------------------------------//
+ZIPFS_TLSF_POOL* zipfs_tlsf_create_pool ( size_t bytes ) {
+	
+	ZIPFSTlsfPool* pool = ( ZIPFSTlsfPool* )malloc ( sizeof ( ZIPFSTlsfPool ));
+	
+	pool->mBuffer = malloc ( bytes );
+	pool->mPool = tlsf_create ( pool->mBuffer, bytes );
+	
+	return ( ZIPFS_TLSF_POOL* )pool;
+}
+
+//----------------------------------------------------------------//
+void zipfs_tlsf_destroy_pool ( ZIPFS_TLSF_POOL* opaque ) {
+
+	ZIPFSTlsfPool* pool = ( ZIPFSTlsfPool* )opaque;
+
+	if ( pool ) {
+		tlsf_destroy ( pool->mPool );
+		free ( pool->mBuffer );
+		free ( pool );
+	}
+}
+
+//----------------------------------------------------------------//
+ZIPFS_TLSF_POOL* zipfs_tlsf_get_pool ( void ) {
+
+	return ( ZIPFS_TLSF_POOL* )sTlsfPool;
+}
+
+//----------------------------------------------------------------//
+void zipfs_tlsf_set_pool ( ZIPFS_TLSF_POOL* opaque ) {
+
+	sTlsfPool = ( ZIPFSTlsfPool* )opaque;
 }
 
 //================================================================//
@@ -359,6 +463,19 @@ char* zipfs_fgets ( char* string, int length, ZIPFSFILE* fp ) {
 }
 
 //----------------------------------------------------------------//
+int	zipfs_fileno ( ZIPFSFILE* fp ) {
+	
+	// TODO:
+	if ( fp ) {
+		ZIPFSFile* file = ( ZIPFSFile* )fp;
+		if ( !file->mIsArchive ) {
+			return fileno ( file->mPtr.mFile );
+		}
+	}
+	return -1;
+}
+
+//----------------------------------------------------------------//
 ZIPFSFILE* zipfs_fopen ( const char* filename, const char* mode ) {
 	
 	ZIPFSFile* file = 0;
@@ -399,6 +516,15 @@ ZIPFSFILE* zipfs_fopen ( const char* filename, const char* mode ) {
 
 	return ( ZIPFSFILE* )file;
 }
+
+//----------------------------------------------------------------//
+#ifdef MOAI_COMPILER_MSVC
+	errno_t zipfs_fopen_s ( ZIPFSFILE** fp, const char* filename, const char* mode ) {
+
+		*fp = fopen ( filename, mode );
+		return errno;
+	}
+#endif
 
 //----------------------------------------------------------------//
 int zipfs_fprintf ( ZIPFSFILE * fp, const char * format, ... ) {
@@ -532,6 +658,15 @@ int	zipfs_fseek ( ZIPFSFILE* fp, long offset, int origin ) {
 }
 
 //----------------------------------------------------------------//
+#ifdef MOAI_COMPILER_MSVC
+	int zipfs_fseeki64 ( ZIPFSFILE* fp, __int64 offset, int origin ) {
+
+		// TODO:
+		return zipfs_fseek ( fp, ( long )offset, origin );
+	}
+#endif
+
+//----------------------------------------------------------------//
 int zipfs_fsetpos ( ZIPFSFILE* fp, const fpos_t * pos ) {
 	(( void )fp );
 	(( void )pos );
@@ -566,6 +701,14 @@ size_t zipfs_fwrite ( const void* data, size_t size, size_t count, ZIPFSFILE* fp
 int zipfs_getc ( ZIPFSFILE* fp ) {
 
 	return zipfs_fgetc ( fp );
+}
+
+//----------------------------------------------------------------//
+int zipfs_getwc ( ZIPFSFILE* fp ) {
+	UNUSED ( fp );
+
+	assert ( 0 ); // TODO:
+	return -1;
 }
 
 //----------------------------------------------------------------//
@@ -617,7 +760,7 @@ int zipfs_setvbuf ( ZIPFSFILE* fp, char* buffer, int mode, size_t size ) {
 }
 
 //----------------------------------------------------------------//
-ZIPFSFILE* zipfs_tmpfile () {
+ZIPFSFILE* zipfs_tmpfile ( void ) {
 
 	FILE* fp = tmpfile ();
 	if ( fp ) {
@@ -782,7 +925,7 @@ int zipfs_chdir ( const char* path ) {
 }
 
 //----------------------------------------------------------------//
-void zipfs_cleanup () {
+void zipfs_cleanup ( void ) {
 
 	ZIPFSVirtualPath* cursor = sVirtualPaths;
 	while ( cursor ) {
@@ -847,7 +990,7 @@ int zipfs_dir_entry_is_subdir ( ZIPFSDIR* dir ) {
 }
 
 //----------------------------------------------------------------//
-ZIPFSDIR* zipfs_dir_open () {
+ZIPFSDIR* zipfs_dir_open ( void ) {
 
 	ZIPFSDir* self = ( ZIPFSDir* )calloc ( 1, sizeof ( ZIPFSDir ));
 	ZIPFSVirtualPath* mount = find_best_virtual_path ( sWorkingPath->mMem );
@@ -909,8 +1052,8 @@ int zipfs_dir_read_entry ( ZIPFSDIR* dir ) {
 		
 	#else
 	{
-		struct dirent* entry;
-		if ( entry = readdir ( self->mHandle )) {
+		struct dirent* entry = readdir ( self->mHandle );
+		if ( entry ) {
 			self->mName = entry->d_name;
 #ifndef NACL
 			self->mIsDir = ( entry->d_type == DT_DIR ) ? 1 : 0;
@@ -1064,7 +1207,7 @@ int zipfs_get_stat ( char const* path, zipfs_stat* filestat ) {
 		filestat->mExists = 1;
 		
 		filestat->mIsDir			= S_ISDIR ( s.st_mode );
-		filestat->mSize				= s.st_size;
+		filestat->mSize				= ( size_t )s.st_size;
 		filestat->mTimeCreated		= s.st_ctime;
 		filestat->mTimeModified		= s.st_mtime;
 		filestat->mTimeViewed		= s.st_atime;
@@ -1073,7 +1216,7 @@ int zipfs_get_stat ( char const* path, zipfs_stat* filestat ) {
 }
 
 //----------------------------------------------------------------//
-char* zipfs_get_working_path () {
+char* zipfs_get_working_path ( void ) {
 
 	char* result = 0;
 	
@@ -1113,7 +1256,7 @@ char* zipfs_getcwd ( char* buffer, size_t length ) {
 }
 
 //----------------------------------------------------------------//
-void zipfs_init () {
+void zipfs_init ( void ) {
 
 	ZIPFSFile* file;
 

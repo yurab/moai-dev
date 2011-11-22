@@ -56,10 +56,10 @@ private:
 	//----------------------------------------------------------------//
 	bool mConnected;
 	u32 mNextRequestId;
-	USLuaRef mRequestsTable;
+	MOAILuaRef mRequestsTable;
 	
-	void            PushRequest             ( USLuaState& state, u32 requestId );
-	void            DeleteRequest           ( USLuaState& state, u32 requestId );
+	void            PushRequest             ( MOAILuaState& state, u32 requestId );
+	void            DeleteRequest           ( MOAILuaState& state, u32 requestId );
 	
 public:
 	
@@ -84,8 +84,8 @@ public:
 	bool			IsDone					();
 	MOAISocialConnect			();
 	~MOAISocialConnect			();
-	void			RegisterLuaClass		( USLuaState& state );
-	void			RegisterLuaFuncs		( USLuaState& state );
+	void			RegisterLuaClass		( MOAILuaState& state );
+	void			RegisterLuaFuncs		( MOAILuaState& state );
 //	STLString		ToString				();
 };
 

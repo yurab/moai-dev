@@ -286,6 +286,23 @@ int MOAIEnvironment::_getResourceDirectory ( lua_State* L  ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	getScreenSize
+	@text	Gets the dimensions of the device screen as two return values (width, height).
+
+	@out	number width		The width of the device screen.
+	@out	number height		The height of the device screen.
+*/
+int MOAIEnvironment::_getScreenSize ( lua_State* L ) {
+
+	MOAIEnvironment& env = MOAIEnvironment::Get ();
+	
+	lua_pushnumber ( L, env.mScreenWidth );
+	lua_pushnumber ( L, env.mScreenHeight );
+
+	return 2;
+}
+
+//----------------------------------------------------------------//
 /**	@name	getUDID
 	@text	Returns the device unique identifier
 
@@ -366,13 +383,11 @@ MOAIEnvironment::MOAIEnvironment () :
 	mOSBrand ( "UNKNOWN" ),
 	mOSVersion ( "UNKNOWN" ),
 	mResourceDirectory ( "UNKNOWN" ),
-#if MOAI_OS_NACL
-	mUDID ( "NaCl" ) {
-#else
-	mUDID ( "UNKNOWN" ) {
-#endif
+	mUDID ( "UNKNOWN" ),
+	mScreenWidth ( 0 ),
+	mScreenHeight ( 0 ) {
 
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
@@ -380,7 +395,7 @@ MOAIEnvironment::~MOAIEnvironment () {
 }
 
 //----------------------------------------------------------------//
-void MOAIEnvironment::RegisterLuaClass ( USLuaState& state ) {
+void MOAIEnvironment::RegisterLuaClass ( MOAILuaState& state ) {
 
 	state.SetField ( -1, "CONNECTION_TYPE_NONE", ( u32 )CONNECTION_TYPE_NONE );
 	state.SetField ( -1, "CONNECTION_TYPE_WIFI", ( u32 )CONNECTION_TYPE_WIFI );
@@ -413,6 +428,7 @@ void MOAIEnvironment::RegisterLuaClass ( USLuaState& state ) {
 		{ "getOSBrand",						_getOSBrand						},
 		{ "getOSVersion",					_getOSVersion					},
 		{ "getResourceDirectory",			_getResourceDirectory			},
+		{ "getScreenSize",					_getScreenSize					},
 		{ "getUDID",						_getUDID						},
 		{ "getViewSize",					_getViewSize					},
 		{ "isRetinaDisplay",				_isRetinaDisplay				},
@@ -545,4 +561,10 @@ void MOAIEnvironment::SetResourceDirectory ( cc8* resDir ) {
 //----------------------------------------------------------------//
 void MOAIEnvironment::SetUDID ( cc8* udid ) {
 	mUDID = udid;
+}
+
+//----------------------------------------------------------------//
+void MOAIEnvironment::SetScreenSize ( long width, long height ) {
+	mScreenWidth = width;
+	mScreenHeight = height;
 }

@@ -50,7 +50,7 @@ int MOAITimer::_getTimesExecuted ( lua_State* L ) {
 int MOAITimer::_setCurve ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAITimer, "U" );
 
-	self->mCurve = state.GetLuaObject < MOAIAnimCurve >( 2 );
+	self->mCurve.Set ( *self, state.GetLuaObject < MOAIAnimCurve >( 2 ));
 	self->ScheduleUpdate ();
 
 	return 0;
@@ -150,13 +150,13 @@ int MOAITimer::_setTime ( lua_State* L ) {
 //================================================================//
 
 //----------------------------------------------------------------//
-bool MOAITimer::ApplyAttrOp ( u32 attrID, USAttrOp& attrOp ) {
+bool MOAITimer::ApplyAttrOp ( u32 attrID, MOAIAttrOp& attrOp, u32 op ) {
 
 	if ( MOAITimerAttr::Check ( attrID )) {
 		attrID = UNPACK_ATTR ( attrID );
 		
 		if ( attrID == ATTR_TIME ) {
-			this->mTime = attrOp.Op ( this->mTime );
+			this->mTime = attrOp.Apply ( this->mTime, op, MOAINode::ATTR_READ_WRITE );
 			return true;
 		}
 	}
@@ -303,7 +303,7 @@ void MOAITimer::GenerateCallbacks ( float t0, float t1, bool end ) {
 			if ( t0 < t1 ) {
 			
 				for ( ; keyID < size; ++keyID ) {
-					USAnimKey& key = ( *this->mCurve )[ keyID ];
+					MOAIAnimKey& key = ( *this->mCurve )[ keyID ];
 					
 					if (( end && ( key.mTime >= t1 )) || (( key.mTime >= t0 ) && ( key.mTime < t1 ))) {
 						this->OnKeyframe ( keyID, key.mTime, key.mValue );
@@ -315,7 +315,7 @@ void MOAITimer::GenerateCallbacks ( float t0, float t1, bool end ) {
 			else {
 			
 				for ( ; ( int )keyID >= -1; --keyID ) {
-					USAnimKey& key = ( *this->mCurve )[ keyID ];
+					MOAIAnimKey& key = ( *this->mCurve )[ keyID ];
 				
 					if (( end && ( key.mTime <= t1 )) || (( key.mTime <= t0 ) && ( key.mTime > t1 ))) {
 						this->OnKeyframe ( keyID, key.mTime, key.mValue );
@@ -360,6 +360,8 @@ MOAITimer::MOAITimer () :
 
 //----------------------------------------------------------------//
 MOAITimer::~MOAITimer () {
+
+	this->mCurve.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
@@ -369,7 +371,7 @@ void MOAITimer::OnDepNodeUpdate () {
 //----------------------------------------------------------------//
 void MOAITimer::OnKeyframe ( u32 idx, float time, float value ) {
 
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_TIMER_KEYFRAME, state )) {
 		state.Push ( idx + 1 );
 		state.Push ( time );
@@ -383,7 +385,7 @@ void MOAITimer::OnLoop () {
 	
 	this->mTimesExecuted++;
 	
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListenerAndSelf ( EVENT_TIMER_LOOP, state )) {
 		state.Push ( this->mTimesExecuted );
 		state.DebugCall ( 2, 0 );
@@ -408,7 +410,7 @@ void MOAITimer::OnUpdate ( float step ) {
 }
 
 //----------------------------------------------------------------//
-void MOAITimer::RegisterLuaClass ( USLuaState& state ) {
+void MOAITimer::RegisterLuaClass ( MOAILuaState& state ) {
 
 	MOAINode::RegisterLuaClass ( state );
 	MOAIAction::RegisterLuaClass ( state );
@@ -426,7 +428,7 @@ void MOAITimer::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAITimer::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAITimer::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	MOAINode::RegisterLuaFuncs ( state );
 	MOAIAction::RegisterLuaFuncs ( state );

@@ -26,12 +26,31 @@
 		03CC910C13B3C48400B2724C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC910B13B3C48400B2724C /* AudioToolbox.framework */; };
 		03CC911C13B3C49400B2724C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC911B13B3C49400B2724C /* SystemConfiguration.framework */; };
 		03CC912213B3C4A400B2724C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC912113B3C4A400B2724C /* QuartzCore.framework */; };
-		03CC912813B3C4B100B2724C /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC912713B3C4B100B2724C /* libz.1.2.3.dylib */; };
 		03CC912C13B3C4C000B2724C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC912B13B3C4C000B2724C /* StoreKit.framework */; };
 		0711070513C637F000EE7C53 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0711070413C637F000EE7C53 /* CoreTelephony.framework */; };
 		074C469E14240A180066B1EB /* lua in Resources */ = {isa = PBXBuildFile; fileRef = 074C469A14240A180066B1EB /* lua */; };
 		074C46A014240A250066B1EB /* moai-target in Resources */ = {isa = PBXBuildFile; fileRef = 074C469F14240A250066B1EB /* moai-target */; };
 		078D630113BA9EA30072F273 /* MoaiVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = 078D630013BA9EA30072F273 /* MoaiVC.mm */; };
+		079530891447A0D800143A72 /* close_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 07952FFF1447A0D800143A72 /* close_button.png */; };
+		0795308C1447A0D800143A72 /* TJCLoadingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079530041447A0D800143A72 /* TJCLoadingViewController.xib */; };
+		079530921447A0D800143A72 /* featured_app.sql in Resources */ = {isa = PBXBuildFile; fileRef = 079530121447A0D800143A72 /* featured_app.sql */; };
+		0795309E1447A0D800143A72 /* back_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795302C1447A0D800143A72 /* back_default.png */; };
+		0795309F1447A0D800143A72 /* button_highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795302D1447A0D800143A72 /* button_highlight.png */; };
+		079530A01447A0D800143A72 /* done_default.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795302E1447A0D800143A72 /* done_default.png */; };
+		079530A11447A0D800143A72 /* tapjoy_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795302F1447A0D800143A72 /* tapjoy_icon.png */; };
+		079530A21447A0D800143A72 /* tapjoy_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 079530301447A0D800143A72 /* tapjoy_logo.png */; };
+		079530A81447A0D800143A72 /* TJCVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0795303C1447A0D800143A72 /* TJCVideoView.xib */; };
+		079530AF1447A0D800143A72 /* localVGStore.sql in Resources */ = {isa = PBXBuildFile; fileRef = 0795304D1447A0D800143A72 /* localVGStore.sql */; };
+		079530B01447A0D800143A72 /* standard-black-button-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795304E1447A0D800143A72 /* standard-black-button-1.png */; };
+		079530B11447A0D800143A72 /* standard-black-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 0795304F1447A0D800143A72 /* standard-black-button.png */; };
+		079530B21447A0D800143A72 /* viewstyle_icon_page.png in Resources */ = {isa = PBXBuildFile; fileRef = 079530501447A0D800143A72 /* viewstyle_icon_page.png */; };
+		079530B31447A0D800143A72 /* viewstyle_icon_table.png in Resources */ = {isa = PBXBuildFile; fileRef = 079530511447A0D800143A72 /* viewstyle_icon_table.png */; };
+		079530B61447A0D800143A72 /* TJCVGItemButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079530571447A0D800143A72 /* TJCVGItemButton.xib */; };
+		079530B91447A0D800143A72 /* TJCVGItemDetail.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0795305C1447A0D800143A72 /* TJCVGItemDetail.xib */; };
+		079530BC1447A0D800143A72 /* TJCVGPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079530611447A0D800143A72 /* TJCVGPageView.xib */; };
+		079530BE1447A0D800143A72 /* TJCVGTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079530641447A0D800143A72 /* TJCVGTableViewCell.xib */; };
+		079530C01447A0D800143A72 /* TJCVGView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 079530671447A0D800143A72 /* TJCVGView.xib */; };
+		079530CE1447A0FF00143A72 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079530CD1447A0FF00143A72 /* MediaPlayer.framework */; };
 		07E6C6A1140C5EBD004D1227 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E6C6A0140C5EBD004D1227 /* GameKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		07E9F73E13B50582006396F3 /* libmoai-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC90BD13B3C39D00B2724C /* libmoai-ios.a */; };
 		07E9F73F13B50582006396F3 /* libmoai-ios-3rdparty.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 03CC90BF13B3C39D00B2724C /* libmoai-ios-3rdparty.a */; };
@@ -40,7 +59,9 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		CD464CE0147259EA00501E4E /* libmoai-ios-zipfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD04AF1214725736009C20E5 /* libmoai-ios-zipfs.a */; };
 		CD7C73AE13B95516006CFA19 /* ParticlePresets.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7C73AC13B95516006CFA19 /* ParticlePresets.cpp */; };
+		CDB9F12414593A66007DE94C /* libmoai-ios-tapjoy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CDB9F123145937C1007DE94C /* libmoai-ios-tapjoy.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +149,27 @@
 			remoteGlobalIDString = CD07C3A313A182AA00C9386C;
 			remoteInfo = "libmoai-iphone-untz";
 		};
+		CD04AF1114725736009C20E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CD04ACB414725568009C20E5;
+			remoteInfo = "libmoai-ios-zipfs";
+		};
+		CD04AF1314725736009C20E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CD04AE7F1472557F009C20E5;
+			remoteInfo = "libmoai-osx-zipfs";
+		};
+		CDB9F122145937C1007DE94C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 073D58591459269600289D5C;
+			remoteInfo = "libmoai-ios-tapjoy";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -159,13 +201,32 @@
 		03CC910B13B3C48400B2724C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		03CC911B13B3C49400B2724C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		03CC912113B3C4A400B2724C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		03CC912713B3C4B100B2724C /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		03CC912B13B3C4C000B2724C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		0711070413C637F000EE7C53 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		074C469A14240A180066B1EB /* lua */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lua; sourceTree = "<group>"; };
 		074C469F14240A250066B1EB /* moai-target */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "moai-target"; sourceTree = "<group>"; };
 		078D62FF13BA9EA30072F273 /* MoaiVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoaiVC.h; sourceTree = "<group>"; };
 		078D630013BA9EA30072F273 /* MoaiVC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MoaiVC.mm; sourceTree = "<group>"; };
+		07952FFF1447A0D800143A72 /* close_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = close_button.png; path = Libraries/TapjoyConnect/Components/TJCCore/Views/close_button.png; sourceTree = "<group>"; };
+		079530041447A0D800143A72 /* TJCLoadingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCLoadingViewController.xib; path = Libraries/TapjoyConnect/Components/TJCCore/Views/TJCLoadingViewController.xib; sourceTree = "<group>"; };
+		079530121447A0D800143A72 /* featured_app.sql */ = {isa = PBXFileReference; lastKnownFileType = file; name = featured_app.sql; path = Libraries/TapjoyConnect/Components/TJCFeaturedApp/featured_app.sql; sourceTree = "<group>"; };
+		0795302C1447A0D800143A72 /* back_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back_default.png; path = Libraries/TapjoyConnect/Components/TJCVideoAds/back_default.png; sourceTree = "<group>"; };
+		0795302D1447A0D800143A72 /* button_highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button_highlight.png; path = Libraries/TapjoyConnect/Components/TJCVideoAds/button_highlight.png; sourceTree = "<group>"; };
+		0795302E1447A0D800143A72 /* done_default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = done_default.png; path = Libraries/TapjoyConnect/Components/TJCVideoAds/done_default.png; sourceTree = "<group>"; };
+		0795302F1447A0D800143A72 /* tapjoy_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tapjoy_icon.png; path = Libraries/TapjoyConnect/Components/TJCVideoAds/tapjoy_icon.png; sourceTree = "<group>"; };
+		079530301447A0D800143A72 /* tapjoy_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tapjoy_logo.png; path = Libraries/TapjoyConnect/Components/TJCVideoAds/tapjoy_logo.png; sourceTree = "<group>"; };
+		0795303C1447A0D800143A72 /* TJCVideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVideoView.xib; path = Libraries/TapjoyConnect/Components/TJCVideoAds/TJCVideoView.xib; sourceTree = "<group>"; };
+		0795304D1447A0D800143A72 /* localVGStore.sql */ = {isa = PBXFileReference; lastKnownFileType = file; name = localVGStore.sql; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Resources/localVGStore.sql; sourceTree = "<group>"; };
+		0795304E1447A0D800143A72 /* standard-black-button-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "standard-black-button-1.png"; path = "Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Resources/standard-black-button-1.png"; sourceTree = "<group>"; };
+		0795304F1447A0D800143A72 /* standard-black-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "standard-black-button.png"; path = "Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Resources/standard-black-button.png"; sourceTree = "<group>"; };
+		079530501447A0D800143A72 /* viewstyle_icon_page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = viewstyle_icon_page.png; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Resources/viewstyle_icon_page.png; sourceTree = "<group>"; };
+		079530511447A0D800143A72 /* viewstyle_icon_table.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = viewstyle_icon_table.png; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Resources/viewstyle_icon_table.png; sourceTree = "<group>"; };
+		079530571447A0D800143A72 /* TJCVGItemButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVGItemButton.xib; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Views/TJCVGItemButton.xib; sourceTree = "<group>"; };
+		0795305C1447A0D800143A72 /* TJCVGItemDetail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVGItemDetail.xib; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Views/TJCVGItemDetail.xib; sourceTree = "<group>"; };
+		079530611447A0D800143A72 /* TJCVGPageView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVGPageView.xib; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Views/TJCVGPageView.xib; sourceTree = "<group>"; };
+		079530641447A0D800143A72 /* TJCVGTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVGTableViewCell.xib; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Views/TJCVGTableViewCell.xib; sourceTree = "<group>"; };
+		079530671447A0D800143A72 /* TJCVGView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TJCVGView.xib; path = Libraries/TapjoyConnect/Components/TJCVirtualGoods/TJCVG_Views/TJCVGView.xib; sourceTree = "<group>"; };
+		079530CD1447A0FF00143A72 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		07E6C6A0140C5EBD004D1227 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* MoaiSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoaiSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -181,9 +242,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD464CE0147259EA00501E4E /* libmoai-ios-zipfs.a in Frameworks */,
 				07E9F73E13B50582006396F3 /* libmoai-ios.a in Frameworks */,
 				07E9F73F13B50582006396F3 /* libmoai-ios-3rdparty.a in Frameworks */,
 				07E9F74013B50582006396F3 /* libmoai-ios-luaext.a in Frameworks */,
+				CDB9F12414593A66007DE94C /* libmoai-ios-tapjoy.a in Frameworks */,
 				07E9F74113B50582006396F3 /* libmoai-ios-untz.a in Frameworks */,
 				0711070513C637F000EE7C53 /* CoreTelephony.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
@@ -195,9 +258,9 @@
 				03CC910C13B3C48400B2724C /* AudioToolbox.framework in Frameworks */,
 				03CC911C13B3C49400B2724C /* SystemConfiguration.framework in Frameworks */,
 				03CC912213B3C4A400B2724C /* QuartzCore.framework in Frameworks */,
-				03CC912813B3C4B100B2724C /* libz.1.2.3.dylib in Frameworks */,
 				03CC912C13B3C4C000B2724C /* StoreKit.framework in Frameworks */,
 				07E6C6A1140C5EBD004D1227 /* GameKit.framework in Frameworks */,
+				079530CE1447A0FF00143A72 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,11 +273,14 @@
 				03CC90BD13B3C39D00B2724C /* libmoai-ios.a */,
 				03CC90BF13B3C39D00B2724C /* libmoai-ios-3rdparty.a */,
 				03CC90C113B3C39D00B2724C /* libmoai-ios-luaext.a */,
+				CDB9F123145937C1007DE94C /* libmoai-ios-tapjoy.a */,
 				03CC90C313B3C39D00B2724C /* libmoai-ios-untz.a */,
+				CD04AF1214725736009C20E5 /* libmoai-ios-zipfs.a */,
 				03CC90C513B3C39D00B2724C /* libmoai-osx.a */,
 				03CC90C713B3C39D00B2724C /* libmoai-osx-3rdparty.a */,
 				03CC90C913B3C39D00B2724C /* libmoai-osx-luaext.a */,
 				03CC90CB13B3C39D00B2724C /* libmoai-osx-untz.a */,
+				CD04AF1414725736009C20E5 /* libmoai-osx-zipfs.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -227,6 +293,13 @@
 				037ED45813CD1FD2009CBA72 /* package.sh */,
 			);
 			name = build;
+			sourceTree = "<group>";
+		};
+		07952FE71447A0D800143A72 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Libraries;
 			sourceTree = "<group>";
 		};
 		080E96DDFE201D6D7F000001 /* Classes */ = {
@@ -262,6 +335,7 @@
 			children = (
 				03CC90AE13B3C39D00B2724C /* libmoai.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Classes */,
+				07952FE71447A0D800143A72 /* Libraries */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -283,6 +357,7 @@
 			isa = PBXGroup;
 			children = (
 				03E2806113C7CC4800EE3B0D /* build */,
+				CDB607BA14527D39006EBFB5 /* Tapjoy */,
 				03CC90AA13B3C38800B2724C /* Entitlements.plist */,
 				03CC904F13B3C1B700B2724C /* Icon-72.png */,
 				03CC905013B3C1B700B2724C /* Icon-Small-50.png */,
@@ -305,7 +380,6 @@
 				288765A40DF7441C002DB57D /* CoreGraphics.framework */,
 				03CC90FD13B3C46A00B2724C /* CoreLocation.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
-				03CC912713B3C4B100B2724C /* libz.1.2.3.dylib */,
 				03CC90F713B3C45A00B2724C /* OpenGLES.framework */,
 				03CC912113B3C4A400B2724C /* QuartzCore.framework */,
 				03CC912B13B3C4C000B2724C /* StoreKit.framework */,
@@ -313,8 +387,35 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				0711070413C637F000EE7C53 /* CoreTelephony.framework */,
 				07E6C6A0140C5EBD004D1227 /* GameKit.framework */,
+				079530CD1447A0FF00143A72 /* MediaPlayer.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CDB607BA14527D39006EBFB5 /* Tapjoy */ = {
+			isa = PBXGroup;
+			children = (
+				079530571447A0D800143A72 /* TJCVGItemButton.xib */,
+				0795305C1447A0D800143A72 /* TJCVGItemDetail.xib */,
+				079530611447A0D800143A72 /* TJCVGPageView.xib */,
+				079530641447A0D800143A72 /* TJCVGTableViewCell.xib */,
+				079530671447A0D800143A72 /* TJCVGView.xib */,
+				0795302C1447A0D800143A72 /* back_default.png */,
+				0795302D1447A0D800143A72 /* button_highlight.png */,
+				0795302E1447A0D800143A72 /* done_default.png */,
+				0795302F1447A0D800143A72 /* tapjoy_icon.png */,
+				079530301447A0D800143A72 /* tapjoy_logo.png */,
+				0795303C1447A0D800143A72 /* TJCVideoView.xib */,
+				079530121447A0D800143A72 /* featured_app.sql */,
+				07952FFF1447A0D800143A72 /* close_button.png */,
+				079530041447A0D800143A72 /* TJCLoadingViewController.xib */,
+				0795304D1447A0D800143A72 /* localVGStore.sql */,
+				0795304E1447A0D800143A72 /* standard-black-button-1.png */,
+				0795304F1447A0D800143A72 /* standard-black-button.png */,
+				079530501447A0D800143A72 /* viewstyle_icon_page.png */,
+				079530511447A0D800143A72 /* viewstyle_icon_table.png */,
+			);
+			name = Tapjoy;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,6 +448,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MoaiSample" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -429,6 +533,27 @@
 			remoteRef = 03CC90CA13B3C39D00B2724C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		CD04AF1214725736009C20E5 /* libmoai-ios-zipfs.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libmoai-ios-zipfs.a";
+			remoteRef = CD04AF1114725736009C20E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CD04AF1414725736009C20E5 /* libmoai-osx-zipfs.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libmoai-osx-zipfs.a";
+			remoteRef = CD04AF1314725736009C20E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CDB9F123145937C1007DE94C /* libmoai-ios-tapjoy.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libmoai-ios-tapjoy.a";
+			remoteRef = CDB9F122145937C1007DE94C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -446,6 +571,25 @@
 				03CC906013B3C1B700B2724C /* MainWindow-iPhone.xib in Resources */,
 				074C469E14240A180066B1EB /* lua in Resources */,
 				074C46A014240A250066B1EB /* moai-target in Resources */,
+				079530891447A0D800143A72 /* close_button.png in Resources */,
+				0795308C1447A0D800143A72 /* TJCLoadingViewController.xib in Resources */,
+				079530921447A0D800143A72 /* featured_app.sql in Resources */,
+				0795309E1447A0D800143A72 /* back_default.png in Resources */,
+				0795309F1447A0D800143A72 /* button_highlight.png in Resources */,
+				079530A01447A0D800143A72 /* done_default.png in Resources */,
+				079530A11447A0D800143A72 /* tapjoy_icon.png in Resources */,
+				079530A21447A0D800143A72 /* tapjoy_logo.png in Resources */,
+				079530A81447A0D800143A72 /* TJCVideoView.xib in Resources */,
+				079530AF1447A0D800143A72 /* localVGStore.sql in Resources */,
+				079530B01447A0D800143A72 /* standard-black-button-1.png in Resources */,
+				079530B11447A0D800143A72 /* standard-black-button.png in Resources */,
+				079530B21447A0D800143A72 /* viewstyle_icon_page.png in Resources */,
+				079530B31447A0D800143A72 /* viewstyle_icon_table.png in Resources */,
+				079530B61447A0D800143A72 /* TJCVGItemButton.xib in Resources */,
+				079530B91447A0D800143A72 /* TJCVGItemDetail.xib in Resources */,
+				079530BC1447A0D800143A72 /* TJCVGPageView.xib in Resources */,
+				079530BE1447A0D800143A72 /* TJCVGTableViewCell.xib in Resources */,
+				079530C01447A0D800143A72 /* TJCVGView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,7 +656,6 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_THUMB_SUPPORT = YES;
 				PRODUCT_NAME = MoaiSample;
 			};
 			name = Debug;
@@ -531,9 +674,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRC_PATH)/src/hosts\"",
 					"\"$(SRC_PATH)/src\"",
@@ -541,7 +681,14 @@
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = NO;
-				PREBINDING = NO;
+				OTHER_CFLAGS = (
+					"-include",
+					"\"zipfs/zipfs_replace.h\"",
+				);
+				OTHER_LDFLAGS = (
+					"-force_load",
+					"$(BUILT_PRODUCTS_DIR)/libmoai-ios-tapjoy.a",
+				);
 				SDKROOT = iphoneos;
 				SRC_PATH = ../..;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -557,9 +704,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_THUMB_SUPPORT = NO;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRC_PATH)/src/hosts\"",
 					"\"$(SRC_PATH)/src\"",
@@ -567,8 +711,14 @@
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PREBINDING = NO;
+				OTHER_CFLAGS = (
+					"-include",
+					"\"zipfs/zipfs_replace.h\"",
+				);
+				OTHER_LDFLAGS = (
+					"-force_load",
+					"$(BUILT_PRODUCTS_DIR)/libmoai-ios-tapjoy.a",
+				);
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				SRC_PATH = ../..;

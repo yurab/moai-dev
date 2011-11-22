@@ -4,6 +4,8 @@
 #ifndef	MOAIIMAGE_H
 #define	MOAIIMAGE_H
 
+#include <moaicore/MOAILua.h>
+
 //================================================================//
 // MOAIImageTransform
 //================================================================//
@@ -22,6 +24,9 @@ namespace MOAIImageTransform {
 /**	@name	MOAIImage
 	@text	Image/bitmap class.
 	
+	@const	FILTER_LINEAR
+	@const	FILTER_NEAREST
+	
 	@flag	POW_TWO
 	@flag	QUANTIZE
 	@flag	TRUECOLOR
@@ -39,7 +44,7 @@ namespace MOAIImageTransform {
 	@flag	COLOR_FMT_RGBA_8888
 */
 class MOAIImage :
-	public virtual USLuaObject {
+	public virtual MOAILuaObject {
 private:
 
 	USPixel::Format		mPixelFormat;
@@ -57,6 +62,7 @@ private:
 	static int		_convertColors		( lua_State* L );
 	static int		_copy				( lua_State* L );
 	static int		_copyBits			( lua_State* L );
+	static int		_copyRect			( lua_State* L );
 	static int		_getColor32			( lua_State* L );
 	static int		_getFormat			( lua_State* L );
 	static int		_getRGBA			( lua_State* L );
@@ -64,6 +70,7 @@ private:
 	static int		_init				( lua_State* L );
 	static int		_load				( lua_State* L );
 	static int		_padToPow2			( lua_State* L );
+	static int		_resize				( lua_State* L );
 	static int		_resizeCanvas		( lua_State* L );
 	static int		_setColor32			( lua_State* L );
 	static int		_setRGBA			( lua_State* L );
@@ -73,6 +80,10 @@ private:
 	void			Alloc				();
 	static u32		GetMinPowerOfTwo	( u32 size ); // gets the smallest power of two greater than size
 	void			Init				( const void* bitmap, u32 width, u32 height, USColor::Format colorFmt, bool copy );
+	static bool		IsJpg				( const void* buffer, u32 size );
+	static bool		IsPng				( const void* buffer, u32 size );
+	void			LoadJpg				( USStream& stream, u32 transform );
+	void			LoadJpg				( void* jpgInfoParam, u32 transform );
 	void			LoadPng				( USStream& stream, u32 transform );
 	void			LoadPng				( void* pngParam, void* pngInfoParam, u32 transform );
 
@@ -90,6 +101,11 @@ public:
 	GET ( void*, Palette, mPalette )
 	GET ( void*, Bitmap, mBitmap )
 	
+	enum {
+		FILTER_LINEAR,
+		FILTER_NEAREST,
+	};
+	
 	//----------------------------------------------------------------//
 	void				BleedRect				( int xMin, int yMin, int xMax, int yMax );
 	void				Clear					();
@@ -97,6 +113,7 @@ public:
 	void				ConvertColors			( const MOAIImage& image, USColor::Format colorFmt );
 	void				Copy					( const MOAIImage& image );
 	void				CopyBits				( const MOAIImage& image, int srcX, int srcY, int destX, int destY, int width, int height );
+	void				CopyRect				( const MOAIImage& image, USIntRect srcRect, USIntRect destRest, u32 filter );
 	u32					GetBitmapSize			() const;
 	u32					GetColor				( u32 i ) const;
 	u32					GetColor				( u32 x, u32 y ) const;
@@ -110,6 +127,8 @@ public:
 	u32					GetRowSize				() const;
 	void				Init					( u32 width, u32 height, USColor::Format colorFmt, USPixel::Format pixelFmt );
 	void				Init					( const void* bitmap, u32 width, u32 height, USColor::Format colorFmt );
+	bool				IsPow2					();
+	static bool			IsPow2					( u32 n );
 	void				Load					( USData& data, u32 transform = 0 );
 	void				Load					( cc8* filename, u32 transform = 0 );
 	void				Load					( const void* buffer, u32 size, u32 transform = 0 );
@@ -117,11 +136,11 @@ public:
 						MOAIImage				();
 						~MOAIImage				();
 	void				PadToPow2				( const MOAIImage& image );
-	void				RegisterLuaClass		( USLuaState& state );
-	void				RegisterLuaFuncs		( USLuaState& state );
+	void				RegisterLuaClass		( MOAILuaState& state );
+	void				RegisterLuaFuncs		( MOAILuaState& state );
 	void				ResizeCanvas			( const MOAIImage& image, USIntRect rect );
-	void				SerializeIn				( USLuaState& state, USLuaSerializer& serializer );
-	void				SerializeOut			( USLuaState& state, USLuaSerializer& serializer );
+	void				SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	void				SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 	void				SetColor				( u32 x, u32 y, u32 color );
 	void				SetPaletteColor			( u32 idx, u32 rgba );
 	void				SetPixel				( u32 x, u32 y, u32 pixel );

@@ -15,8 +15,6 @@
 #include <moaicore/MOAITouchSensor.h>
 #include <moaicore/MOAISensor.h>
 
-#define LUAVAR_SENSORS "sensors"
-
 //================================================================//
 // MOAIInputDevice
 //================================================================//
@@ -43,15 +41,21 @@ void MOAIInputDevice::HandleEvent ( u8 sensorID, USStream& eventStream ) {
 MOAIInputDevice::MOAIInputDevice () :
 	mIsActive ( true ) {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
 MOAIInputDevice::~MOAIInputDevice () {
+
+	for ( u32 i = 0; i < this->mSensors.Size (); ++i ) {
+		if ( this->mSensors [ i ]) {
+			this->LuaRelease ( *this->mSensors [ i ]);
+		}
+	}
 }
 
 //----------------------------------------------------------------//
-void MOAIInputDevice::RegisterLuaClass ( USLuaState& state ) {
+void MOAIInputDevice::RegisterLuaClass ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "new",					MOAILogMessages::_alertNewIsUnsupported },
@@ -62,14 +66,15 @@ void MOAIInputDevice::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIInputDevice::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIInputDevice::RegisterLuaFuncs ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
 //----------------------------------------------------------------//
 void MOAIInputDevice::ReserveSensors ( u8 total ) {
 
-	this->mSensors.Resize ( total );
+	this->mSensors.Init ( total );
+	this->mSensors.Fill ( 0 );
 }
 
 //----------------------------------------------------------------//
@@ -85,6 +90,8 @@ void MOAIInputDevice::Reset () {
 
 //----------------------------------------------------------------//
 void MOAIInputDevice::SetSensor ( u8 sensorID, cc8* name, u32 type ) {
+
+	if ( !( sensorID < this->mSensors.Size ())) return;
 
 	MOAISensor* sensor = 0;
 
@@ -128,14 +135,16 @@ void MOAIInputDevice::SetSensor ( u8 sensorID, cc8* name, u32 type ) {
 	sensor->mType = type;
 	sensor->mName = name;
 	
-	this->mSensors.Grow ( sensorID + 1 );
-	this->mSensors [ sensorID ] = sensor;
+	if ( this->mSensors [ sensorID ]) {
+		this->LuaRelease ( *this->mSensors [ sensorID ]);
+	}
 	
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	this->mSensors [ sensorID ] = sensor;
+	this->LuaRetain ( *sensor );
+	
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	this->PushLuaUserdata ( state );
 	
-	//if ( state.GetFieldWithType ( -1, LUAVAR_SENSORS, LUA_TTABLE )) {
-		sensor->PushLuaUserdata ( state );
-		lua_setfield ( state, -2, name );
-	//}
+	sensor->PushLuaUserdata ( state );
+	lua_setfield ( state, -2, name );
 }

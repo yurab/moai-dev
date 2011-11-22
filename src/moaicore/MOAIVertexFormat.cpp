@@ -307,7 +307,7 @@ MOAIVertexFormat::MOAIVertexFormat () :
 	mTotalAttributes ( 0 ),
 	mVertexSize ( 0 ) {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 	
 	this->mAttributes.Init ( TOTAL_ARRAY_TYPES );
 	
@@ -322,7 +322,7 @@ MOAIVertexFormat::~MOAIVertexFormat () {
 }
 
 //----------------------------------------------------------------//
-void MOAIVertexFormat::RegisterLuaClass ( USLuaState& state ) {
+void MOAIVertexFormat::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	state.SetField ( -1, "GL_BYTE", ( u32 )GL_BYTE );
 	//state.SetField ( -1, "GL_FIXED", ( u32 )GL_FIXED );
@@ -333,7 +333,7 @@ void MOAIVertexFormat::RegisterLuaClass ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAIVertexFormat::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIVertexFormat::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "declareAttribute",		_declareAttribute },

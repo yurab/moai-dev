@@ -9,10 +9,8 @@ extern "C" {
 }
 
 // vfs
-extern "C" {
-	#include <zipfs/pch.h>
-	#include <zipfs/zipfs.h>
-}
+#include <zipfs/pch.h>
+#include <zipfs/zipfs.h>
 
 #ifdef MOAI_OS_NACL
 	#define PATH_MAX FILENAME_MAX

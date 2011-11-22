@@ -100,7 +100,7 @@ int	MOAITileDeck2D::_setSize ( lua_State* L ) {
 int	MOAITileDeck2D::_setTexture ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAITileDeck2D, "U" )
 	
-	self->mTexture = MOAITexture::AffirmTexture ( state, 2 );
+	self->mTexture.Set ( *self, MOAITexture::AffirmTexture ( state, 2 ));
 	if ( self->mTexture ) {
 		self->mTexture->PushLuaUserdata ( state );
 		return 1;
@@ -158,16 +158,18 @@ MOAITileDeck2D::MOAITileDeck2D () {
 
 //----------------------------------------------------------------//
 MOAITileDeck2D::~MOAITileDeck2D () {
+
+	this->mTexture.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
-void MOAITileDeck2D::RegisterLuaClass ( USLuaState& state ) {
+void MOAITileDeck2D::RegisterLuaClass ( MOAILuaState& state ) {
 
 	this->MOAIDeck2D::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAITileDeck2D::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAITileDeck2D::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	this->MOAIDeck2D::RegisterLuaFuncs ( state );
 
@@ -182,17 +184,17 @@ void MOAITileDeck2D::RegisterLuaFuncs ( USLuaState& state ) {
 }
 
 //----------------------------------------------------------------//
-void MOAITileDeck2D::SerializeIn ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAITileDeck2D::SerializeIn ( MOAILuaState& state, MOAIDeserializer& serializer ) {
 
 	MOAIGridSpace::SerializeIn ( state );
 	
-	this->mTexture = serializer.GetRefField < MOAITexture >( state, -1, "mTexture" );
+	this->mTexture.Set ( *this, serializer.MemberIDToObject < MOAITexture >( state.GetField < uintptr >( -1, "mTexture", 0 )));
 }
 
 //----------------------------------------------------------------//
-void MOAITileDeck2D::SerializeOut ( USLuaState& state, USLuaSerializer& serializer ) {
+void MOAITileDeck2D::SerializeOut ( MOAILuaState& state, MOAISerializer& serializer ) {
 
 	MOAIGridSpace::SerializeOut ( state );
 	
-	serializer.SetRefField ( state, -1, "mTexture", this->mTexture );
+	state.SetField ( -1, "mTexture", serializer.AffirmMemberID ( this->mTexture ));
 }

@@ -56,6 +56,11 @@ int MOAIBox2DGearJoint::_getJointB ( lua_State* L ) {
 int MOAIBox2DGearJoint::_getRatio ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DGearJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2GearJoint* joint = ( b2GearJoint* )self->mJoint;
 	state.Push ( joint->GetRatio ());
 	
@@ -72,6 +77,11 @@ int MOAIBox2DGearJoint::_getRatio ( lua_State* L ) {
 */
 int MOAIBox2DGearJoint::_setRatio ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DGearJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	float ratio = state.GetValue < float >( 1, 0.0f );
 
@@ -95,15 +105,18 @@ MOAIBox2DGearJoint::MOAIBox2DGearJoint () {
 
 //----------------------------------------------------------------//
 MOAIBox2DGearJoint::~MOAIBox2DGearJoint () {
+
+	this->mJointA.Set ( *this, 0 );
+	this->mJointB.Set ( *this, 0 );
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DGearJoint::RegisterLuaClass ( USLuaState& state ) {
+void MOAIBox2DGearJoint::RegisterLuaClass ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DGearJoint::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIBox2DGearJoint::RegisterLuaFuncs ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {

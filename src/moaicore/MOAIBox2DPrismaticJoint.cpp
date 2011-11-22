@@ -27,6 +27,11 @@ int MOAIBox2DPrismaticJoint::_getJointSpeed ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->GetJointSpeed () / unitsToMeters );
 	
@@ -43,6 +48,11 @@ int MOAIBox2DPrismaticJoint::_getJointSpeed ( lua_State* L ) {
 int MOAIBox2DPrismaticJoint::_getJointTranslation ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->GetJointTranslation () / unitsToMeters );
@@ -61,6 +71,11 @@ int MOAIBox2DPrismaticJoint::_getLowerLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->GetLowerLimit () / unitsToMeters );
 	
@@ -78,8 +93,14 @@ int MOAIBox2DPrismaticJoint::_getMotorForce ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
-	state.Push ( joint->GetMotorForce () / unitsToMeters );
+
+	state.Push ( joint->GetMotorForce (1.0f) / unitsToMeters );
 	
 	return 1;
 }
@@ -94,6 +115,11 @@ int MOAIBox2DPrismaticJoint::_getMotorForce ( lua_State* L ) {
 int MOAIBox2DPrismaticJoint::_getMotorSpeed ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->GetMotorSpeed () / unitsToMeters );
@@ -112,6 +138,11 @@ int MOAIBox2DPrismaticJoint::_getUpperLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->GetUpperLimit () / unitsToMeters );
 	
@@ -128,6 +159,11 @@ int MOAIBox2DPrismaticJoint::_getUpperLimit ( lua_State* L ) {
 int MOAIBox2DPrismaticJoint::_isLimitEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->IsLimitEnabled ());
 	
@@ -143,6 +179,11 @@ int MOAIBox2DPrismaticJoint::_isLimitEnabled ( lua_State* L ) {
 */
 int MOAIBox2DPrismaticJoint::_isMotorEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
 	state.Push ( joint->IsMotorEnabled ());
@@ -161,6 +202,11 @@ int MOAIBox2DPrismaticJoint::_isMotorEnabled ( lua_State* L ) {
 */
 int MOAIBox2DPrismaticJoint::_setLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	float lower	= state.GetValue < float >( 2, 0.0f );
 	float upper	= state.GetValue < float >( 3, 0.0f );
@@ -185,6 +231,11 @@ int MOAIBox2DPrismaticJoint::_setLimit ( lua_State* L ) {
 int MOAIBox2DPrismaticJoint::_setLimitEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+	
 	bool enabled = state.GetValue < bool >( 2, true );
 	
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
@@ -205,6 +256,11 @@ int MOAIBox2DPrismaticJoint::_setMaxMotorForce ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
 	float unitsToMeters = self->GetUnitsToMeters ();
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	float maxMotorForce = state.GetValue < float >( 1, 0.0f );
 
 	b2PrismaticJoint* joint = ( b2PrismaticJoint* )self->mJoint;
@@ -224,6 +280,11 @@ int MOAIBox2DPrismaticJoint::_setMaxMotorForce ( lua_State* L ) {
 */
 int MOAIBox2DPrismaticJoint::_setMotor ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	float speed	= state.GetValue < float >( 2, 0.0f );
 	float max	= state.GetValue < float >( 3, 0.0f );
@@ -248,6 +309,11 @@ int MOAIBox2DPrismaticJoint::_setMotor ( lua_State* L ) {
 */
 int MOAIBox2DPrismaticJoint::_setMotorEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DPrismaticJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	bool enabled = state.GetValue < bool >( 2, true );
 	
@@ -274,12 +340,12 @@ MOAIBox2DPrismaticJoint::~MOAIBox2DPrismaticJoint () {
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DPrismaticJoint::RegisterLuaClass ( USLuaState& state ) {
+void MOAIBox2DPrismaticJoint::RegisterLuaClass ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DPrismaticJoint::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIBox2DPrismaticJoint::RegisterLuaFuncs ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {

@@ -5,6 +5,7 @@
 #define	MOAIPARTICLEEMITTER_H
 
 #include <moaicore/MOAIAction.h>
+#include <moaicore/MOAILua.h>
 #include <moaicore/MOAITransform.h>
 
 class MOAIParticleSystem;
@@ -35,7 +36,7 @@ protected:
 	float	mMinMagnitude;
 	float	mMaxMagnitude;
 
-	USRef < MOAIParticleSystem > mSystem;
+	MOAILuaSharedPtr < MOAIParticleSystem > mSystem;
 
 	//----------------------------------------------------------------//
 	static int		_setAngle				( lua_State* L );
@@ -63,14 +64,15 @@ public:
 
 	SET ( USRect, Rect, mRect )
 	SET ( u32, ShapeID, mShapeID )
-	SET ( MOAIParticleSystem*, System, mSystem )
 
 	//----------------------------------------------------------------//
 	bool			IsDone					();
 					MOAIParticleEmitter		();
 					~MOAIParticleEmitter	();
-	void			RegisterLuaClass		( USLuaState& state );
-	void			RegisterLuaFuncs		( USLuaState& state );
+	void			RegisterLuaClass		( MOAILuaState& state );
+	void			RegisterLuaFuncs		( MOAILuaState& state );
+	void			SerializeIn				( MOAILuaState& state, MOAIDeserializer& serializer );
+	void			SerializeOut			( MOAILuaState& state, MOAISerializer& serializer );
 	void			SetAngleRange			( float min, float max );
 	void			SetEmissionRange		( u32 min, u32 max );
 	void			SetMagnitudeRange		( float min, float max );

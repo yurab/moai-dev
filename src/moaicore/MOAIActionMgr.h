@@ -4,6 +4,9 @@
 #ifndef	MOAIACTIONMGR_H
 #define	MOAIACTIONMGR_H
 
+#include <moaicore/MOAIGlobals.h>
+#include <moaicore/MOAILua.h>
+
 class MOAIAction;
 
 //================================================================//
@@ -13,7 +16,7 @@ class MOAIAction;
 	@text Manager class for MOAIActions.
 */
 class MOAIActionMgr :
-	public USGlobalClass < MOAIActionMgr, USLuaObject > {
+	public MOAIGlobalClass < MOAIActionMgr, MOAILuaObject > {
 private:
 
 	static const u32 RESET_PASS	= 0xffffffff;
@@ -24,7 +27,7 @@ private:
 	bool mProfilingEnabled;
 	bool mThreadInfoEnabled;
 
-	USRef < MOAIAction > mRoot;
+	MOAIAction* mRoot;
 	MOAIAction* mCurrentAction;
 
 	//----------------------------------------------------------------//
@@ -34,7 +37,6 @@ private:
 	static int			_setThreadInfoEnabled	( lua_State* L );
 
 	//----------------------------------------------------------------//
-	MOAIAction*			AffirmRoot				();
 	u32					GetNextPass				();
 
 public:
@@ -49,10 +51,11 @@ public:
 	GET_SET ( bool, ThreadInfoEnabled, mThreadInfoEnabled )
 
 	//----------------------------------------------------------------//
+	MOAIAction*			AffirmRoot				();
 	void				Clear					();
 						MOAIActionMgr			();
 						~MOAIActionMgr			();
-	void				RegisterLuaClass		( USLuaState& state );
+	void				RegisterLuaClass		( MOAILuaState& state );
 	void				StartAction				( MOAIAction& action );
 	void				Update					( float step );
 };

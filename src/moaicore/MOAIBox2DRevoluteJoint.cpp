@@ -8,6 +8,7 @@
 #include <moaicore/MOAIBox2DRevoluteJoint.h>
 #include <moaicore/MOAIBox2DWorld.h>
 #include <moaicore/MOAILogMessages.h>
+#include <moaicore/MOAISim.h>
 
 SUPPRESS_EMPTY_FILE_WARNING
 #if USE_BOX2D
@@ -26,6 +27,11 @@ SUPPRESS_EMPTY_FILE_WARNING
 int MOAIBox2DRevoluteJoint::_getJointAngle ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->GetJointAngle () * ( float )R2D );
 	
@@ -41,6 +47,11 @@ int MOAIBox2DRevoluteJoint::_getJointAngle ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_getJointSpeed ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->GetJointSpeed () * ( float )R2D );
@@ -58,6 +69,11 @@ int MOAIBox2DRevoluteJoint::_getJointSpeed ( lua_State* L ) {
 int MOAIBox2DRevoluteJoint::_getLowerLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->GetLowerLimit () * ( float )R2D );
 	
@@ -73,6 +89,11 @@ int MOAIBox2DRevoluteJoint::_getLowerLimit ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_getMotorSpeed ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->GetMotorSpeed () * ( float )R2D );
@@ -90,8 +111,14 @@ int MOAIBox2DRevoluteJoint::_getMotorSpeed ( lua_State* L ) {
 int MOAIBox2DRevoluteJoint::_getMotorTorque ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
-	state.Push ( joint->GetMotorTorque () * ( float )R2D );
+	float step = ( float )( 1.0 / MOAISim::Get ().GetStep ());
+	state.Push ( joint->GetMotorTorque (step) * ( float )R2D );
 	
 	return 1;
 }
@@ -105,6 +132,11 @@ int MOAIBox2DRevoluteJoint::_getMotorTorque ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_getUpperLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->GetUpperLimit () * ( float )R2D );
@@ -122,6 +154,11 @@ int MOAIBox2DRevoluteJoint::_getUpperLimit ( lua_State* L ) {
 int MOAIBox2DRevoluteJoint::_isLimitEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
 
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->IsLimitEnabled ());
 	
@@ -137,6 +174,11 @@ int MOAIBox2DRevoluteJoint::_isLimitEnabled ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_isMotorEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
 	state.Push ( joint->IsMotorEnabled ());
@@ -155,6 +197,11 @@ int MOAIBox2DRevoluteJoint::_isMotorEnabled ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_setLimit ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	float lower	= state.GetValue < float >( 2, 0.0f );
 	float upper	= state.GetValue < float >( 3, 0.0f );
@@ -177,6 +224,11 @@ int MOAIBox2DRevoluteJoint::_setLimit ( lua_State* L ) {
 int MOAIBox2DRevoluteJoint::_setLimitEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
 	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
+	
 	bool enabled = state.GetValue < bool >( 2, true );
 	
 	b2RevoluteJoint* joint = ( b2RevoluteJoint* )self->mJoint;
@@ -195,6 +247,11 @@ int MOAIBox2DRevoluteJoint::_setLimitEnabled ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_setMaxMotorTorque ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 
 	float maxMotorTorque = state.GetValue < float >( 1, 0.0f ) * ( float )D2R;
 
@@ -215,6 +272,11 @@ int MOAIBox2DRevoluteJoint::_setMaxMotorTorque ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_setMotor ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	float speed	= state.GetValue < float >( 2, 0.0f );
 	float max	= state.GetValue < float >( 3, 0.0f );
@@ -237,6 +299,11 @@ int MOAIBox2DRevoluteJoint::_setMotor ( lua_State* L ) {
 */
 int MOAIBox2DRevoluteJoint::_setMotorEnabled ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIBox2DRevoluteJoint, "U" )
+	
+	if ( !self->mJoint ) {
+		MOAILog ( state, MOAILogMessages::MOAIBox2DJoint_MissingInstance );
+		return 0;
+	}
 	
 	bool enabled = state.GetValue < bool >( 2, true );
 	
@@ -263,12 +330,12 @@ MOAIBox2DRevoluteJoint::~MOAIBox2DRevoluteJoint () {
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DRevoluteJoint::RegisterLuaClass ( USLuaState& state ) {
+void MOAIBox2DRevoluteJoint::RegisterLuaClass ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaClass ( state );
 }
 
 //----------------------------------------------------------------//
-void MOAIBox2DRevoluteJoint::RegisterLuaFuncs ( USLuaState& state ) {
+void MOAIBox2DRevoluteJoint::RegisterLuaFuncs ( MOAILuaState& state ) {
 	MOAIBox2DJoint::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {

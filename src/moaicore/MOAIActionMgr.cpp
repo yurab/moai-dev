@@ -18,7 +18,7 @@
 */
 int MOAIActionMgr::_getRoot ( lua_State* L ) {
 	
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	MOAIAction* root = MOAIActionMgr::Get ().AffirmRoot ();
 	root->PushLuaUserdata ( state );
@@ -35,7 +35,7 @@ int MOAIActionMgr::_getRoot ( lua_State* L ) {
 */
 int MOAIActionMgr::_setProfilingEnabled ( lua_State* L ) {
 	
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	bool enable = state.GetValue < bool >( -1, false );
 	MOAIActionMgr::Get ().SetProfilingEnabled ( enable );
 
@@ -51,7 +51,7 @@ int MOAIActionMgr::_setProfilingEnabled ( lua_State* L ) {
 */
 int MOAIActionMgr::_setRoot ( lua_State* L ) {
 	
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	
 	MOAIAction* root = state.GetLuaObject < MOAIAction >( -1 );
 	MOAIActionMgr::Get ().mRoot = root;
@@ -68,7 +68,7 @@ int MOAIActionMgr::_setRoot ( lua_State* L ) {
 */
 int MOAIActionMgr::_setThreadInfoEnabled ( lua_State* L ) {
 	
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 	bool enable = state.GetValue < bool >( -1, false );
 	MOAIActionMgr::Get ().SetThreadInfoEnabled ( enable );
 
@@ -84,7 +84,7 @@ MOAIAction* MOAIActionMgr::AffirmRoot () {
 
 	if ( !this->mRoot ) {
 		this->mRoot = new MOAIAction ();
-		assert ( this->mRoot );
+		this->LuaRetain ( *this->mRoot );
 	}
 	return this->mRoot;
 }
@@ -92,7 +92,11 @@ MOAIAction* MOAIActionMgr::AffirmRoot () {
 //----------------------------------------------------------------//
 void MOAIActionMgr::Clear () {
 
-	this->mRoot = 0;
+	if ( this->mRoot ) {
+		this->LuaRelease ( *this->mRoot );
+		this->mRoot = 0;
+	}
+	this->AffirmRoot ();
 }
 
 //----------------------------------------------------------------//
@@ -107,9 +111,10 @@ MOAIActionMgr::MOAIActionMgr () :
 	mPass ( RESET_PASS ),
 	mProfilingEnabled ( false ),
 	mThreadInfoEnabled ( false ),
+	mRoot ( 0 ),
 	mCurrentAction ( 0 ) {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 }
 
 //----------------------------------------------------------------//
@@ -119,7 +124,7 @@ MOAIActionMgr::~MOAIActionMgr () {
 }
 
 //----------------------------------------------------------------//
-void MOAIActionMgr::RegisterLuaClass ( USLuaState& state ) {
+void MOAIActionMgr::RegisterLuaClass ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "getRoot",				_getRoot },

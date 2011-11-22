@@ -48,7 +48,7 @@ int MOAIGfxDevice::_isProgrammable ( lua_State* L ) {
 */
 int MOAIGfxDevice::_setPenColor ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 
 	float r = state.GetValue < float >( 1, 1.0f );
 	float g = state.GetValue < float >( 2, 1.0f );
@@ -67,7 +67,7 @@ int MOAIGfxDevice::_setPenColor ( lua_State* L ) {
 */
 int MOAIGfxDevice::_setPenWidth ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 
 	float width = state.GetValue < float >( 1, 1.0f );
 	MOAIGfxDevice::Get ().SetPenWidth ( width );
@@ -82,7 +82,7 @@ int MOAIGfxDevice::_setPenWidth ( lua_State* L ) {
 */
 int MOAIGfxDevice::_setPointSize ( lua_State* L ) {
 
-	USLuaState state ( L );
+	MOAILuaState state ( L );
 
 	float size = state.GetValue < float >( 1, 1.0f );
 	MOAIGfxDevice::Get ().SetPointSize ( size );
@@ -185,15 +185,9 @@ void MOAIGfxDevice::ClearColorBuffer ( u32 color ) {
 //----------------------------------------------------------------//
 void MOAIGfxDevice::ClearErrors () {
 
-	//while ( glGetError () != GL_NO_ERROR );
-}
-
-//----------------------------------------------------------------//
-u32 MOAIGfxDevice::CountErrors () const {
-
-	u32 count = 0;
-	//while ( glGetError () != GL_NO_ERROR ) count++;
-	return count;
+	if ( this->mHasContext ) {
+		//while ( glGetError () != GL_NO_ERROR );
+	}
 }
 
 //----------------------------------------------------------------//
@@ -217,7 +211,7 @@ void MOAIGfxDevice::DetectContext () {
 	STLString gles = "opengl es";
 	
 	if ( version.find ( gles ) != version.npos ) {
-		this->mIsES = true;
+		this->mIsOpenGLES = true;
 		version = version.substr ( gles.length ());
 		
 		size_t space = version.find ( ' ' );
@@ -226,7 +220,7 @@ void MOAIGfxDevice::DetectContext () {
 		}
 	}
 	else {
-		this->mIsES = false;
+		this->mIsOpenGLES = false;
 	}
 	
 	version = version.substr ( 0, 3 );
@@ -235,28 +229,38 @@ void MOAIGfxDevice::DetectContext () {
 	this->mMinorVersion = version.at ( 2 ) - '0';
 	
 	this->mIsProgrammable = ( this->mMajorVersion >= 2 );
+	this->mIsFramebufferSupported = true;
 	
 	#if defined ( __GLEW_H__ )
 	
-		#if GL_EXT_framebuffer_object
-	  
-			REMAP_EXTENSION_PTR ( glBindFramebuffer,						glBindFramebufferEXT )
-			REMAP_EXTENSION_PTR ( glCheckFramebufferStatus,					glCheckFramebufferStatusEXT )
-			REMAP_EXTENSION_PTR ( glDeleteFramebuffers,						glDeleteFramebuffersEXT )
-			REMAP_EXTENSION_PTR ( glDeleteRenderbuffers,					glDeleteRenderbuffersEXT )
-			REMAP_EXTENSION_PTR ( glFramebufferRenderbuffer,				glFramebufferRenderbufferEXT )
-			REMAP_EXTENSION_PTR ( glFramebufferTexture1D,					glFramebufferTexture1DEXT )
-			REMAP_EXTENSION_PTR ( glFramebufferTexture2D,					glFramebufferTexture2DEXT )
-			REMAP_EXTENSION_PTR ( glFramebufferTexture3D,					glFramebufferTexture3DEXT )
-			REMAP_EXTENSION_PTR ( glGenFramebuffers,						glGenFramebuffersEXT )
-			REMAP_EXTENSION_PTR ( glGenRenderbuffers,						glGenRenderbuffersEXT )
-			REMAP_EXTENSION_PTR ( glGenerateMipmap,							glGenerateMipmapEXT )
-			REMAP_EXTENSION_PTR ( glGetFramebufferAttachmentParameteriv,	glGetFramebufferAttachmentParameterivEXT )
-			REMAP_EXTENSION_PTR ( glGetRenderbufferParameteriv,				glGetRenderbufferParameterivEXT )
-			REMAP_EXTENSION_PTR ( glIsFramebuffer,							glIsFramebufferEXT )
-			REMAP_EXTENSION_PTR ( glIsRenderbuffer,							glIsRenderbufferEXT )
-			REMAP_EXTENSION_PTR ( glRenderbufferStorage,					glRenderbufferStorageEXT )
-		#endif
+		// if framebuffer object is not in code, check to see if it's available as
+		// an extension and remap to core function pointers if so
+		if (( this->mIsOpenGLES == false ) && ( this->mMajorVersion < 3 )) {
+			
+			if ( glewIsSupported ( "GL_EXT_framebuffer_object" )) {
+		  
+				REMAP_EXTENSION_PTR ( glBindFramebuffer,						glBindFramebufferEXT )
+				REMAP_EXTENSION_PTR ( glCheckFramebufferStatus,					glCheckFramebufferStatusEXT )
+				REMAP_EXTENSION_PTR ( glDeleteFramebuffers,						glDeleteFramebuffersEXT )
+				REMAP_EXTENSION_PTR ( glDeleteRenderbuffers,					glDeleteRenderbuffersEXT )
+				REMAP_EXTENSION_PTR ( glFramebufferRenderbuffer,				glFramebufferRenderbufferEXT )
+				REMAP_EXTENSION_PTR ( glFramebufferTexture1D,					glFramebufferTexture1DEXT )
+				REMAP_EXTENSION_PTR ( glFramebufferTexture2D,					glFramebufferTexture2DEXT )
+				REMAP_EXTENSION_PTR ( glFramebufferTexture3D,					glFramebufferTexture3DEXT )
+				REMAP_EXTENSION_PTR ( glGenFramebuffers,						glGenFramebuffersEXT )
+				REMAP_EXTENSION_PTR ( glGenRenderbuffers,						glGenRenderbuffersEXT )
+				REMAP_EXTENSION_PTR ( glGenerateMipmap,							glGenerateMipmapEXT )
+				REMAP_EXTENSION_PTR ( glGetFramebufferAttachmentParameteriv,	glGetFramebufferAttachmentParameterivEXT )
+				REMAP_EXTENSION_PTR ( glGetRenderbufferParameteriv,				glGetRenderbufferParameterivEXT )
+				REMAP_EXTENSION_PTR ( glIsFramebuffer,							glIsFramebufferEXT )
+				REMAP_EXTENSION_PTR ( glIsRenderbuffer,							glIsRenderbufferEXT )
+				REMAP_EXTENSION_PTR ( glRenderbufferStorage,					glRenderbufferStorageEXT )	
+			}
+			else {
+				// looks like frame buffer isn't supported
+				this->mIsFramebufferSupported = false;
+			}
+		}
 	#endif
 	
 	this->RenewResources ();
@@ -539,23 +543,14 @@ void MOAIGfxDevice::InsertGfxResource ( MOAIGfxResource& resource ) {
 }
 
 //----------------------------------------------------------------//
-bool MOAIGfxDevice::IsOpenGLES () {
-
-	return this->mIsES;
-}
-
-//----------------------------------------------------------------//
-bool MOAIGfxDevice::IsProgrammable () {
-
-	return this->mIsProgrammable;
-}
-
-//----------------------------------------------------------------//
 u32 MOAIGfxDevice::LogErrors () {
 
 	u32 count = 0;
-	/*for ( int error = glGetError (); error != GL_NO_ERROR; error = glGetError (), ++count ) {
-		MOAILog ( 0, MOAILogMessages::MOAIGfxDevice_OpenGLError_S, this->GetErrorString ( error ));
+
+	/*if ( this->mHasContext ) {
+		for ( int error = glGetError (); error != GL_NO_ERROR; error = glGetError (), ++count ) {
+			MOAILog ( 0, MOAILogMessages::MOAIGfxDevice_OpenGLError_S, this->GetErrorString ( error ));
+		}
 	}*/
 	return count;
 }
@@ -586,14 +581,15 @@ MOAIGfxDevice::MOAIGfxDevice () :
 	mCpuVertexTransform ( false ),
 	mCpuUVTransform ( false ),
 	mHasContext ( false ),
-	mIsES ( false ),
+	mIsOpenGLES ( false ),
 	mMajorVersion ( 0 ),
 	mMinorVersion ( 0 ),
 	mIsProgrammable ( false ),
+	mIsFramebufferSupported ( 0 ),
 	mDefaultFrameBuffer ( 0 ),
 	mTextureMemoryUsage ( 0 ) {
 	
-	RTTI_SINGLE ( MOAIEventSource )
+	RTTI_SINGLE ( MOAIGlobalEventSource )
 	
 	this->Reserve ( DEFAULT_BUFFER_SIZE );
 	
@@ -615,13 +611,13 @@ MOAIGfxDevice::~MOAIGfxDevice () {
 }
 
 //----------------------------------------------------------------//
-void MOAIGfxDevice::RegisterLuaClass ( USLuaState& state ) {
+void MOAIGfxDevice::RegisterLuaClass ( MOAILuaState& state ) {
 
 	state.SetField ( -1, "EVENT_RESIZE", ( u32 )EVENT_RESIZE );
 
 	luaL_Reg regTable [] = {
 		{ "isProgrammable",				_isProgrammable },
-		{ "setListener",				&MOAIEventSource::_setListener < MOAIGfxDevice > },
+		{ "setListener",				&MOAIGlobalEventSource::_setListener < MOAIGfxDevice > },
 		{ "setPenColor",				_setPenColor },
 		{ "setPenWidth",				_setPenWidth },
 		{ "setPointSize",				_setPointSize },
@@ -775,7 +771,9 @@ void MOAIGfxDevice::SetFrameBuffer ( MOAITexture* texture ) {
 		frameBuffer->Bind ();
 	}
 	else {
-		glBindFramebuffer ( GL_FRAMEBUFFER, this->mDefaultFrameBuffer );
+		if ( this->mIsFramebufferSupported ) {
+			glBindFramebuffer ( GL_FRAMEBUFFER, this->mDefaultFrameBuffer ); // TODO: crash?
+		}
 	}
 }
 
@@ -792,9 +790,9 @@ void MOAIGfxDevice::SetPenColor ( const USColorVec& colorVec ) {
 	this->mPenColor = colorVec;
 	this->mPackedColor = this->mPenColor.PackRGBA ();
 
-	if ( this->mShader ) {
+	/*if ( this->mShader ) {
 		this->mShader->UpdateColor ( colorVec.mR, colorVec.mG, colorVec.mB, colorVec.mA );
-	}
+	}*/
 }
 
 //----------------------------------------------------------------//
@@ -803,9 +801,9 @@ void MOAIGfxDevice::SetPenColor ( float r, float g, float b, float a ) {
 	this->mPenColor.Set ( r, g, b, a );
 	this->mPackedColor = this->mPenColor.PackRGBA ();
 
-	if ( this->mShader ) {
+	/*if ( this->mShader ) {
 		this->mShader->UpdateColor ( r, g, b, a );
-	}
+	}*/
 }
 
 //----------------------------------------------------------------//
@@ -926,7 +924,7 @@ void MOAIGfxDevice::SetSize ( u32 width, u32 height ) {
 	this->mWidth = width;
 	this->mHeight = height;
 	
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	if ( this->PushListener ( EVENT_RESIZE, state )) {
 		lua_pushnumber ( state, width );
 		lua_pushnumber ( state, height );
@@ -1084,15 +1082,17 @@ void MOAIGfxDevice::SetVertexTransform ( u32 id, const USMatrix4x4& transform ) 
 		else {
 			this->UpdateGpuVertexMtx ();
 		}
-		
-		if ( this->mShader ) {
-			this->mShader->UpdatePipelineTransforms (
-				this->mVertexTransforms [ VTX_WORLD_TRANSFORM ],
-				this->mVertexTransforms [ VTX_VIEW_TRANSFORM ],
-				this->mVertexTransforms [ VTX_PROJ_TRANSFORM ]
-			);
-		}
 	//}
+	
+	// update any transforms in the shader that rely on the pipeline
+	// the shader caches the state of each uniform; only reloads when changed
+	if ( this->mShader ) {
+		this->mShader->UpdatePipelineTransforms (
+			this->mVertexTransforms [ VTX_WORLD_TRANSFORM ],
+			this->mVertexTransforms [ VTX_VIEW_TRANSFORM ],
+			this->mVertexTransforms [ VTX_PROJ_TRANSFORM ]
+		);
+	}
 }
 
 //----------------------------------------------------------------//
@@ -1120,7 +1120,7 @@ void MOAIGfxDevice::SetViewport ( const USRect& viewport ) {
 	GLsizei w = ( GLsizei )( viewport.Width () + 0.5f );
 	GLsizei h = ( GLsizei )( viewport.Height () + 0.5f );
 	
-	float scale = this->mRealWidth / 1024.0f;
+	float scale = this->mRealWidth / 960.0f;
 
 	//printf (" Set View port %d, %d, %d, %d, scale %f\n", x, y, w, h, scale );
 	glViewport ( x* scale, y * scale, w * scale, h * scale );

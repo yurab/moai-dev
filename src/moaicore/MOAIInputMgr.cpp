@@ -16,7 +16,6 @@
 #include <moaicore/MOAISensor.h>
 #include <moaicore/MOAITouchSensor.h>
 
-#define LUAVAR_DEVICES			"devices"
 #define LUAVAR_CONFIGURATION	"configuration"
 
 //================================================================//
@@ -128,27 +127,31 @@ MOAISensor* MOAIInputMgr::GetSensor ( u8 deviceID, u8 sensorID ) {
 //----------------------------------------------------------------//
 MOAIInputMgr::MOAIInputMgr () {
 	
-	RTTI_SINGLE ( USLuaObject )
+	RTTI_SINGLE ( MOAILuaObject )
 	
 	this->mInput.SetChunkSize ( 1024 );
 }
 
 //----------------------------------------------------------------//
 MOAIInputMgr::~MOAIInputMgr () {
+
+	for ( u32 i = 0; i < this->mDevices.Size (); ++i ) {
+		if ( this->mDevices [ i ]) {
+			this->LuaRelease ( *this->mDevices [ i ]);
+		}
+	}
 }
 
 //----------------------------------------------------------------//
-void MOAIInputMgr::RegisterLuaClass ( USLuaState& state ) {
+void MOAIInputMgr::RegisterLuaClass ( MOAILuaState& state ) {
 	UNUSED ( state );
-
-	//lua_newtable ( state );
-	//lua_setfield ( state, -2, LUAVAR_DEVICES );
 }
 
 //----------------------------------------------------------------//
 void MOAIInputMgr::ReserveDevices ( u8 total ) {
 
-	this->mDevices.Resize ( total );
+	this->mDevices.Init ( total );
+	this->mDevices.Fill ( 0 );
 }
 
 //----------------------------------------------------------------//
@@ -169,14 +172,13 @@ void MOAIInputMgr::Reset () {
 			device->Reset ();
 		}
 	}
-	
 	this->mInput.Seek ( 0, SEEK_SET );
 }
 
 //----------------------------------------------------------------//
 void MOAIInputMgr::SetConfigurationName ( cc8* name ) {
 
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	this->PushLuaClassTable ( state );
 	
 	state.SetField ( -1, LUAVAR_CONFIGURATION, name );
@@ -185,20 +187,23 @@ void MOAIInputMgr::SetConfigurationName ( cc8* name ) {
 //----------------------------------------------------------------//
 void MOAIInputMgr::SetDevice ( u8 deviceID, cc8* name ) {
 
-	MOAIInputDevice* device = new MOAIInputDevice ();
-	
-	device->SetName ( name );
+	if ( !( deviceID < this->mDevices.Size ())) return;
 
-	this->mDevices.Grow ( deviceID + 1 );
-	this->mDevices [ deviceID ] = device;
+	MOAIInputDevice* device = new MOAIInputDevice ();
+	device->SetName ( name );
 	
-	USLuaStateHandle state = USLuaRuntime::Get ().State ();
+	if ( this->mDevices [ deviceID ]) {
+		this->LuaRelease ( *this->mDevices [ deviceID ]);
+	}
+	
+	this->mDevices [ deviceID ] = device;
+	this->LuaRetain ( *device );
+	
+	MOAILuaStateHandle state = MOAILuaRuntime::Get ().State ();
 	this->PushLuaClassTable ( state );
 	
-	//if ( state.GetFieldWithType ( -1, LUAVAR_DEVICES, LUA_TTABLE )) {
-		device->PushLuaUserdata ( state );
-		lua_setfield ( state, -2, name );
-	//}
+	device->PushLuaUserdata ( state );
+	lua_setfield ( state, -2, name );
 }
 
 //----------------------------------------------------------------//
