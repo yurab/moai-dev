@@ -316,6 +316,8 @@ MOAITexture* MOAITexture::AffirmTexture ( MOAILuaState& state, int idx ) {
 //----------------------------------------------------------------//
 void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 
+	bool error = false;
+
 	if ( !image.IsOK ()) return;
 	if ( !MOAIGfxDevice::Get ().GetHasContext ()) return;
 
@@ -339,15 +341,13 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 	USColor::Format colorFormat = image.GetColorFormat ();
 
 	// generate mipmaps if set up to use them
-#if USE_OPENGLES1
-	if (	( this->mMinFilter == GL_LINEAR_MIPMAP_LINEAR ) ||
-			( this->mMinFilter == GL_LINEAR_MIPMAP_NEAREST ) ||
-			( this->mMinFilter == GL_NEAREST_MIPMAP_LINEAR ) ||
-			( this->mMinFilter == GL_NEAREST_MIPMAP_NEAREST )) {
-		
-		glTexParameteri ( GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE );
-	}
-#endif
+	bool genMipMaps = (
+		( this->mMinFilter == GL_LINEAR_MIPMAP_LINEAR ) ||
+		( this->mMinFilter == GL_LINEAR_MIPMAP_NEAREST ) ||
+		( this->mMinFilter == GL_NEAREST_MIPMAP_LINEAR ) ||
+		( this->mMinFilter == GL_NEAREST_MIPMAP_NEAREST )
+	);
+
 
 	if ( pixelFormat == USPixel::TRUECOLOR ) {
 
@@ -398,22 +398,53 @@ void MOAITexture::CreateTextureFromImage ( MOAIImage& image ) {
 			this->mGLInternalFormat,
 			this->mWidth,  
 			this->mHeight,  
-			0,  
+			0,
 			this->mGLInternalFormat,
 			this->mGLPixelType,  
 			image.GetBitmap ()
 		);
 		
+		this->mDataSize = image.GetBitmapSize ();
+		
 		/*if ( MOAIGfxDevice::Get ().LogErrors ()) {
-
+			error = true;
+		}*/
+		if ( genMipMaps ) {
+		
+			u32 mipLevel = 1;
+			
+			MOAIImage mipmap;
+			mipmap.Copy ( image );
+			
+			while ( mipmap.MipReduce ()) {
+				
+				glTexImage2D (
+					GL_TEXTURE_2D,
+					mipLevel++,  
+					this->mGLInternalFormat,
+					mipmap.GetWidth (),  
+					mipmap.GetHeight (),  
+					0,
+					this->mGLInternalFormat,
+					this->mGLPixelType,  
+					mipmap.GetBitmap ()
+				);
+				
+				if ( MOAIGfxDevice::Get ().LogErrors ()) {
+					error = true;
+					break;
+				}
+				this->mDataSize += mipmap.GetBitmapSize ();
+			}
+		}
+		
+		if ( error ) {
+			this->mDataSize = 0;
 			glDeleteTextures ( 1, &this->mGLTexID );
 			this->mGLTexID = 0;
-			
 			this->Clear ();
 			return;
-		}*/
-		
-		this->mDataSize = image.GetBitmapSize ();
+		}
 	}
 	else {
 	
@@ -580,19 +611,14 @@ void MOAITexture::CreateTextureFromPVR ( void* data, size_t size ) {
 			
 			if ( compressed ) {
 				glCompressedTexImage2D ( GL_TEXTURE_2D, 0, this->mGLInternalFormat, width, height, 0, currentSize, imageData );
-				if ( glGetError () != 0 ) {
-					// we have an error
-					this->mGLTexID = 0;
-					return;
-				}
 			}
 			else {
-				glTexImage2D( GL_TEXTURE_2D, 0, this->mGLInternalFormat, width, height, 0, this->mGLInternalFormat, this->mGLPixelType, imageData);
-				if ( glGetError () != 0 ) {
-					// we have an error
-					this->Clear ();
-					return;
-				}
+				glTexImage2D( GL_TEXTURE_2D, 0, this->mGLInternalFormat, width, height, 0, this->mGLInternalFormat, this->mGLPixelType, imageData );	
+			}
+			
+			if ( glGetError () != 0 ) {
+				this->Clear ();
+				return;
 			}
 		}
 		else {
@@ -601,21 +627,16 @@ void MOAITexture::CreateTextureFromPVR ( void* data, size_t size ) {
 			
 				if ( compressed ) {
 					glCompressedTexImage2D ( GL_TEXTURE_2D, level, this->mGLInternalFormat, width, height, 0, currentSize, imageData );
-					if ( glGetError () != 0 ) {
-						// we have an error
-						this->Clear ();
-						return;
-					}
 				}
 				else {
-					glTexImage2D( GL_TEXTURE_2D, level, this->mGLInternalFormat, width, height, 0, this->mGLInternalFormat, this->mGLPixelType, imageData);
-					if ( glGetError () != 0 ) {
-						// we have an error
-						this->Clear ();
-						return;
-					}
+					glTexImage2D( GL_TEXTURE_2D, level, this->mGLInternalFormat, width, height, 0, this->mGLInternalFormat, this->mGLPixelType, imageData );
 				}
-			
+				
+				if ( glGetError () != 0 ) {
+					this->Clear ();
+					return;
+				}
+				
 				imageData += currentSize;
 				this->mDataSize += currentSize;
 				
@@ -752,12 +773,13 @@ MOAITexture::MOAITexture () :
 	mHeight ( 0 ),
 	mMinFilter ( GL_LINEAR ),
 	mMagFilter ( GL_NEAREST ),
-	mWrap ( GL_REPEAT ),
+	mWrap ( GL_CLAMP_TO_EDGE ),
 	mLoader ( 0 ),
 	mFrameBuffer ( 0 ),
 	mDataSize ( 0 ),
 	mIsRenewable ( false ),
-	mTransform ( DEFAULT_TRANSFORM ) {
+	mTransform ( DEFAULT_TRANSFORM ),
+	mIsDirty ( false ) {
 	
 	RTTI_BEGIN
 		RTTI_EXTEND ( MOAILuaObject )
@@ -779,19 +801,23 @@ void MOAITexture::OnBind () {
 	if ( !this->mGLTexID ) return;
 
 	glBindTexture ( GL_TEXTURE_2D, this->mGLTexID );
-	//glEnable ( GL_TEXTURE_2D );
-
-#if USE_OPENGLES1
-	if ( !MOAIGfxDevice::Get ().IsProgrammable ()) {
-		glTexEnvf ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	}
+	
+	if ( this->mIsDirty ) {
+	
+#if USE_OPENGLES1	
+		if ( !MOAIGfxDevice::Get ().IsProgrammable ()) {
+			glTexEnvf ( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+		}
 #endif
-	
-	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->mWrap );
-	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->mWrap );
-	
-	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->mMinFilter );
-	glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->mMagFilter );
+		
+		glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->mWrap );
+		glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->mWrap );
+		
+		glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->mMinFilter );
+		glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->mMagFilter );
+		
+		this->mIsDirty = false;
+	}
 }
 
 //----------------------------------------------------------------//
@@ -921,6 +947,9 @@ void MOAITexture::OnLoad () {
 			// done with the loader entirely
 			delete this->mLoader;
 			this->mLoader = 0;
+			
+			// refresh tex params on next bind
+			this->mIsDirty = true;
 		}
 	}
 }
@@ -1042,10 +1071,13 @@ void MOAITexture::SetFilter ( int min, int mag ) {
 
 	this->mMinFilter = min;
 	this->mMagFilter = mag;
+	
+	this->mIsDirty = true;
 }
 
 //----------------------------------------------------------------//
 void MOAITexture::SetWrap ( int wrap ) {
 
 	this->mWrap = wrap;
+	this->mIsDirty = true;
 }

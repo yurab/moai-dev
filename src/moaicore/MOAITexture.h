@@ -65,6 +65,8 @@ private:
 
 	bool				mIsRenewable;
 	u32					mTransform;
+	
+	bool				mIsDirty;
 
 	char				mFileName[128];
 

@@ -29,6 +29,7 @@ private:
 
 	float	mVolume;
 	bool	mPaused;
+	bool	mLooping;
 	PlayState mPlayState;
 
 	//----------------------------------------------------------------//'
@@ -39,6 +40,7 @@ private:
 	static int	_seekVolume			( lua_State* L );
 	static int	_setPaused			( lua_State* L );
 	static int	_setVolume			( lua_State* L );
+	static int  _setLooping			( lua_State* L );
 	static int	_stop				( lua_State* L );
 
 public:

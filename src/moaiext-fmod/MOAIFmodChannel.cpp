@@ -127,6 +127,23 @@ int MOAIFmodChannel::_seekVolume ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	setLooping
+	@text	Immediately sets the volume of this channel.
+
+	@in		MOAIFmodChannel self
+	@in		number volume			The volume of this channel.
+	@out	nil
+*/
+int MOAIFmodChannel::_setVolume ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIFmodChannel, "UN" )
+
+	float volume = state.GetValue < float >( 2, 0.0f );
+	self->SetVolume ( volume );
+
+	return 0;
+}
+
+//----------------------------------------------------------------//
 /**	@name	setPaused
 	@text	Sets whether this channel is paused and hence does not play any sounds.
 
@@ -152,11 +169,12 @@ int MOAIFmodChannel::_setPaused ( lua_State* L ) {
 	@in		number volume			The volume of this channel.
 	@out	nil
 */
-int MOAIFmodChannel::_setVolume ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIFmodChannel, "UN" )
+int MOAIFmodChannel::_setLooping ( lua_State* L ) {
+	MOAI_LUA_SETUP ( MOAIFmodChannel, "UB" )
 
-	float volume = state.GetValue < float >( 2, 0.0f );
-	self->SetVolume ( volume );
+	float looping = state.GetValue < bool >( 2, false );
+
+	self->mLooping = looping;
 
 	return 0;
 }
@@ -205,7 +223,8 @@ float MOAIFmodChannel::GetVolume () {
 MOAIFmodChannel::MOAIFmodChannel () :
 	mChannel ( 0 ),
 	mVolume ( 1.0f ),
-	mPaused ( false ) {
+	mPaused ( false ) ,
+	mLooping ( false ) {
 	
 	RTTI_SINGLE ( MOAINode )
 }
@@ -239,7 +258,13 @@ void MOAIFmodChannel::Play ( MOAIFmodSound* sound, int loopCount ) {
 	
 	this->mChannel = channel;
 	this->mChannel->setMode ( FMOD_LOOP_NORMAL );
-	this->mChannel->setLoopCount ( loopCount );
+
+	if ( mLooping ) {
+		this->mChannel->setLoopCount ( -1 );
+	}
+	else {
+		this->mChannel->setLoopCount ( 0 );
+	}
 	
 	this->SetVolume ( this->mVolume );
 	this->SetPaused ( this->mPaused );
@@ -261,6 +286,7 @@ void MOAIFmodChannel::RegisterLuaFuncs ( MOAILuaState& state ) {
 		{ "play",			_play },
 		{ "seekVolume",		_seekVolume },
 		{ "setPaused",		_setPaused },
+		{ "setLooping",		_setLooping },
 		{ "setVolume",		_setVolume },
 		{ "stop",			_stop },
 		{ NULL, NULL }
