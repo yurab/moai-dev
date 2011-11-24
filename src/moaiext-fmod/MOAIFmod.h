@@ -29,6 +29,7 @@ private:
 	//----------------------------------------------------------------//
 	static int	_getMemoryStats		( lua_State* L );
 	static int	_init				( lua_State* L );
+	static int _mute				( lua_State* L );
 
 public:
 

@@ -59,6 +59,14 @@ int MOAIFmod::_init ( lua_State* L ) {
 	return 0;
 }
 
+int MOAIFmod::_mute ( lua_State* L ) {
+	MOAILuaState state ( L );
+	
+	bool mute = state.GetValue < bool >( 1, false );
+
+	MOAIFmod::Get().MuteChannels ( mute );
+}
+
 //================================================================//
 // MOAIFmod
 //================================================================//
@@ -125,6 +133,7 @@ void MOAIFmod::RegisterLuaClass ( MOAILuaState& state ) {
 	luaL_Reg regTable [] = {
 		{ "getMemoryStats",		_getMemoryStats },
 		{ "init",				_init },
+		{ "mute",				_mute },
 		{ NULL, NULL }
 	};
 	
