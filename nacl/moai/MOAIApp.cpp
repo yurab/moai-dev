@@ -6,7 +6,7 @@
 std::string g_openID;
 std::string g_productID;
 
-#define PRODUCTION_URLS 0
+#define PRODUCTION_URLS 1
 
 void MOAIApp::HttpLoaded ( GetURLHandler *handler, const char *buffer, int32_t size ) {
 
