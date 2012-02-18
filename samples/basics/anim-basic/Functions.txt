@@ -1,0 +1,27 @@
+MOAITransform.cpp
+
+x addLoc
+x addPiv
+x addRot
+x addScl
+x getLoc
+x getPiv
+x getRot
+x getScl
+modelToWorld
+move
+moveLoc
+movePiv
+moveRot
+moveScl
+seek
+seekLoc
+seekPiv
+seekRot
+seekScl
+setLoc
+setParent
+setPiv
+setRot
+setScl
+worldToModel

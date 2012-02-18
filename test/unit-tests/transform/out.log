@@ -1,25 +1,13 @@
 Failed tests:
 
-----------------------------------------------------------------table: 025BD328
-	1 = "FAILED Move Rotation using r = 360, timer = 0, mode = 0",
-	2 = "FAILED Move Rotation using r = 360, timer = 0, mode = 1",
-	3 = "FAILED Move Rotation using r = 360, timer = 0, mode = 2",
-	4 = "FAILED Move Rotation using r = 360, timer = 0, mode = 3",
-	5 = "FAILED Move Rotation using r = 360, timer = 0, mode = 7",
-	6 = "FAILED Move Rotation using r = 360, timer = 0, mode = 8",
-	7 = "FAILED Move Rotation using r = 360, timer = 0, mode = 9",
-	8 = "FAILED Move Rotation using r = 360, timer = 0, mode = 10",
-	9 = "FAILED Move Rotation using r = 180, timer = 2",
-	10 = "FAILED Move Rotation using r = 500, timer = 3",
-	11 = "FAILED Move Rotation using r = -180, timer = 4",
-	12 = "FAILED Move Rotation using r = -500, timer = 5",
-	13 = "FAILED Move Rotation using r = 360, timer = 5, mode = 0",
-	14 = "FAILED Move Rotation using r = 360, timer = 5, mode = 1",
-	15 = "FAILED Move Rotation using r = 360, timer = 5, mode = 2",
-	16 = "FAILED Move Rotation using r = 360, timer = 5, mode = 3",
-	17 = "FAILED Move Rotation using r = 360, timer = 5, mode = 7",
-	18 = "FAILED Move Rotation using r = 360, timer = 5, mode = 8",
-	19 = "FAILED Move Rotation using r = 360, timer = 5, mode = 9",
-	20 = "FAILED Move Rotation using r = 360, timer = 5, mode = 10",
+----------------------------------------------------------------table: 0216A6D8
+	1 = "FAILED Model to World with x = 1, y = 1",
+	2 = "FAILED Model to World with x = 5000, y = 1",
+	3 = "FAILED Model to World with x = -5000, y = 5000",
+	4 = "FAILED Model to World with x = 5000, y = -5000",
+	5 = "FAILED World to Model with x = 4997, y = -2",
+	6 = "FAILED World to Model with x = -10000, y = -2",
+	7 = "FAILED World to Model with x = 20000, y = -14999",
+	8 = "FAILED World to Model with x = -10000, y = 15001",
 
 ----------------------------------------------------------------
