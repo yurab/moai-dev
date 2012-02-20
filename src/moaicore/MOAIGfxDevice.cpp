@@ -18,6 +18,41 @@
 #define REMAP_EXTENSION_PTR(target, ext) target = target ? target : ext;
 
 //================================================================//
+// MOAIGfxDeleter
+//================================================================//
+
+//----------------------------------------------------------------//
+void MOAIGfxDeleter::Delete () {
+
+	switch ( this->mType ) {
+
+		case DELETE_BUFFER:
+			glDeleteBuffers ( 1, &this->mResourceID );
+			break;
+
+		case DELETE_FRAMEBUFFER:
+			glDeleteFramebuffers ( 1, &this->mResourceID );
+			break;
+
+		case DELETE_PROGRAM:
+			glDeleteProgram ( this->mResourceID );
+			break;
+
+		case DELETE_SHADER:
+			glDeleteShader ( this->mResourceID );
+			break;
+
+		case DELETE_TEXTURE:
+			glDeleteTextures ( 1, &this->mResourceID );
+			break;
+
+		case DELETE_RENDERBUFFER:
+			glDeleteRenderbuffers ( 1, &this->mResourceID );
+			break;
+	}
+}
+
+//================================================================//
 // local
 //================================================================//
 
@@ -363,8 +398,9 @@ void MOAIGfxDevice::DetectContext () {
 			}
 		}
 	#endif
-	
-	this->RenewResources ();
+
+	this->mDeleterStack.Reset ();
+	this->ResetResources ();
 }
 
 //----------------------------------------------------------------//
@@ -719,6 +755,27 @@ MOAIGfxDevice::~MOAIGfxDevice () {
 }
 
 //----------------------------------------------------------------//
+void MOAIGfxDevice::ProcessDeleters () {
+
+	u32 top = this->mDeleterStack.GetTop ();
+	for ( u32 i = 0; i < top; ++i ) {
+		MOAIGfxDeleter& deleter = this->mDeleterStack [ i ];
+		deleter.Delete ();
+	}
+	this->mDeleterStack.Reset ();
+}
+
+//----------------------------------------------------------------//
+void MOAIGfxDevice::PushDeleter ( u32 type, GLuint id ) {
+
+	MOAIGfxDeleter deleter;
+	deleter.mType = type;
+	deleter.mResourceID = id;
+
+	this->mDeleterStack.Push ( deleter );
+}
+
+//----------------------------------------------------------------//
 void MOAIGfxDevice::RegisterLuaClass ( MOAILuaState& state ) {
 
 	state.SetField ( -1, "EVENT_RESIZE", ( u32 )EVENT_RESIZE );
@@ -783,6 +840,15 @@ void MOAIGfxDevice::Reserve ( u32 size ) {
 	this->mSize = size;
 	this->mTop = 0;
 	this->mBuffer = malloc ( size );
+}
+
+//----------------------------------------------------------------//
+void MOAIGfxDevice::ResetResources () {
+
+	ResourceIt resourceIt = this->mResources.Head ();
+	for ( ; resourceIt; resourceIt = resourceIt->Next ()) {
+		resourceIt->Data ()->ResetGfxResource ();
+	}
 }
 
 //----------------------------------------------------------------//

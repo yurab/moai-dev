@@ -12,9 +12,23 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.MotionEvent;
+
+// README: Aku is a thread-unaware platform, by design. Therefore, it is important
+// for hosts in a mult-threaded environment such as Android ensure that Aku calls
+// are made on the appropriate thread. Furthermore, because some Aku callbacks
+// that occur during application run-time need to be run on the Android main (UI)
+// thread, we choose to run ALL Aku callbacks that CAN be run on the main thread 
+// on the main thread. Notable exceptions include creating and release the graphics
+// context and the call to render the scene. Otherwise, all threading decisions 
+// regarding Aku in this, and the activity class, are precisely determined in order
+// to guarantee reliable execution. WARNING: Moving ANY call to Aku MAY result in
+// its execution on a different thread and MAY affect execution and/or result in
+// thead deadlocking.
 
 //================================================================//
 // MoaiView
@@ -23,52 +37,70 @@ public class MoaiView extends GLSurfaceView {
 
 	private MoaiActivity 	mActivity;
 	private int 			mAku;
-	private String 			mAssetDirectory;
 	private Context			mContext;
+	private Handler			mHandler;
 	private int 		 	mHeight;
+	private Runnable		mUpdateRunnable;
 	private int 		 	mWidth;
 	
-	protected static native int	 AKUCreateContext 				();
-	protected static native void AKUDeleteContext 				( int akuContextId );
-	protected static native void AKUDetectGfxContext 			();
-	protected static native void AKUEnqueueTouchEvent 			( int deviceId, int sensorId, int touchId, boolean down, int x, int y, int tapCount );
-	protected static native void AKUExtLoadLuacrypto			();
-	protected static native void AKUExtLoadLuacurl				();
-	protected static native void AKUExtLoadLuasocket			();
-	protected static native void AKUExtLoadLuasql				();
-	protected static native void AKUInit 						( MoaiView view, MoaiActivity activity );
-	protected static native void AKUPause 						( boolean paused );
-	protected static native void AKUReleaseGfxContext			();
-	protected static native void AKURender	 					();
-	protected static native void AKUReserveInputDevices			( int total );
-	protected static native void AKUReserveInputDeviceSensors	( int deviceId, int total );
-	protected static native void AKURunScript 					( String filename );
-	protected static native void AKUSetContext 					( int akuContextId );
-	protected static native void AKUSetDeviceProperties 		( String appName, String appId, String appVersion, String abi, String devBrand, String devName, String devManufacturer, String devModel, String devProduct, String osBrand, String osVersion, String udid );	
-	protected static native void AKUSetInputConfigurationName	( String name );
-	protected static native void AKUSetInputDevice		 		( int deviceId, String name );
-	protected static native void AKUSetInputDeviceCompass 		( int deviceId, int sensorId, String name );
-	protected static native void AKUSetInputDeviceLevel 		( int deviceId, int sensorId, String name );
-	protected static native void AKUSetInputDeviceLocation 		( int deviceId, int sensorId, String name );
-	protected static native void AKUSetInputDeviceTouch 		( int deviceId, int sensorId, String name );
-	protected static native void AKUSetScreenSize				( int width, int height );
-	protected static native void AKUSetViewSize					( int width, int height );
-	protected static native void AKUSetWorkingDirectory 		( String path ); 
-	protected static native void AKUUntzInit			 		();
-	protected static native void AKUUpdate				 		();
+	private static final Object		sAkuLock = new Object ();
+	private static final long		AKU_UPDATE_FREQUENCY = 1000 / 60; // 60 Hz, in milliseconds
+	
+	// Threading indications; M = Runs on Main thread, R = Runs on GL thread,
+	// ? = Runs on arbitrary thread.
+	// NOTE that this is based on the current Android host setup; if you move
+	// any one of these calls elesewhere in the host, you may alter what thread
+	// it executes on. 
+	protected static native int	 AKUCreateContext 				(); // M
+	protected static native void AKUDetectGfxContext 			(); // R
+	protected static native void AKUAppDidStartSession			( boolean resumed ); // M
+	protected static native void AKUEnqueueTouchEvent 			( int deviceId, int sensorId, int touchId, boolean down, int x, int y, int tapCount ); // M
+	protected static native void AKUExtLoadLuacrypto			(); // M
+	protected static native void AKUExtLoadLuacurl				(); // M
+	protected static native void AKUExtLoadLuasocket			(); // M
+	protected static native void AKUExtLoadLuasql				(); // M
+	protected static native void AKUInit 						( MoaiView view, MoaiActivity activity ); // M
+	protected static native void AKUPause 						( boolean paused ); // M
+	protected static native void AKURender	 					(); // R
+	protected static native void AKUReserveInputDevices			( int total ); // M 
+	protected static native void AKUReserveInputDeviceSensors	( int deviceId, int total ); // M
+	protected static native void AKURunScript 					( String filename ); // M
+	protected static native void AKUSetContext 					( int akuContextId ); // M
+	protected static native void AKUSetDeviceProperties 		( String appName, String appId, String appVersion, String abi, String devBrand, String devName, String devManufacturer, String devModel, String devProduct, String osBrand, String osVersion, String udid ); // M
+	protected static native void AKUSetInputConfigurationName	( String name ); // M
+	protected static native void AKUSetInputDevice		 		( int deviceId, String name ); // M
+	protected static native void AKUSetInputDeviceCompass 		( int deviceId, int sensorId, String name ); // M
+	protected static native void AKUSetInputDeviceLevel 		( int deviceId, int sensorId, String name ); // M
+	protected static native void AKUSetInputDeviceLocation 		( int deviceId, int sensorId, String name ); // M
+	protected static native void AKUSetInputDeviceTouch 		( int deviceId, int sensorId, String name ); // M
+	protected static native void AKUSetScreenSize				( int width, int height ); // M
+	protected static native void AKUSetViewSize					( int width, int height ); // R
+	protected static native void AKUUntzInit			 		(); // M
+	protected static native void AKUUpdate				 		(); // M
 
     //----------------------------------------------------------------//
-	public MoaiView ( Context context, MoaiActivity activity, int width, int height, int glesVersion, String assetDirectory ) {
+	public MoaiView ( Context context, MoaiActivity activity, int width, int height, int glesVersion ) {
 
 		super ( context );
 		
 		mContext = context;
 		mActivity = activity;
-		mHeight = height;
-		mWidth = width;
-		mAssetDirectory = assetDirectory;
+		
+		// If the screen is locked when the view is created, the orientation 
+		// will initially be portrait, so we need to compensate. This, of 
+		// course, assumes that you're locking your application to landscape
+		// mode in the manifest.
+		if ( height > width ) {
+			mWidth = height;
+			mHeight = width;
+		}
+		else {
+			mWidth = width;
+			mHeight = height;
+		}
 		
 		mAku = AKUCreateContext ();
+		AKUSetContext ( mAku );
 		
 		AKUExtLoadLuasql ();
 		AKUExtLoadLuacurl ();
@@ -127,27 +159,32 @@ public class MoaiView extends GLSurfaceView {
 			// NOTE: Must be set before the renderer is set.
 			setEGLContextClientVersion ( 2 );
 		}
+		
+		// Create a handler that we can use to post to the main thread and a pseudo-
+		// periodic runnable that will handle calling AKUUpdate on the main thread.
+		mHandler = new Handler ( Looper.getMainLooper ());
+		mUpdateRunnable = new Runnable () {
+
+			public void run () {
+			
+				synchronized ( sAkuLock ) {
+				
+					AKUUpdate ();
+				}
+
+				mHandler.postDelayed ( mUpdateRunnable , AKU_UPDATE_FREQUENCY );
+			}
+		};
 
         setRenderer ( new MoaiRenderer ());
 		onPause (); // Pause rendering until restarted by the activity lifecycle.
 		
-		// Enqueue an initialization event on the GL thread. This will run as soon as
-		// the GL thread is active. NOTE: This method cannot be called until the 
-		// renderer has been set.
-		queueEvent ( new Runnable () {
-
-			public void run () {
+		AKUInit ( this, mActivity );
 		
-				log ( "MoaiRenderer initializing" );
-		
-				AKUInit ( MoaiView.this, mActivity );
-				
-				// TODO: At the moment, enabling accelerometer events before AKU is initialized
-				// can cause a crash, so we wait until here. Once the bug is fixed, this line 
-				// of code can be moved anywhere.
-				mActivity.enableAccelerometerEvents ( false );
-			}
-		});
+		// TODO: At the moment, enabling accelerometer events before AKU is initialized
+		// can cause a crash, so we wait until here. Once the bug is fixed, this line 
+		// of code can be moved anywhere.
+		mActivity.enableAccelerometerEvents ( false );
 	}		
 	
 	//================================================================//
@@ -167,40 +204,25 @@ public class MoaiView extends GLSurfaceView {
 	}
 		
 	//----------------------------------------------------------------//
-	public void pauseAku ( boolean paused ) {
+	public void pause ( boolean paused ) {
 	
 		if ( paused ) {
+
+			mHandler.removeCallbacks ( mUpdateRunnable );
+			
 			AKUPause ( true );
-		}
-		else {
-			AKUPause ( false );
-		}
-	}
-
-	//----------------------------------------------------------------//
-	public void pauseGLSurface ( boolean paused ) {
-
-		if ( paused ) {
 			setRenderMode ( GLSurfaceView.RENDERMODE_WHEN_DIRTY );
-			onPause ();
+			onPause ();			
 		}
 		else {
+
 			onResume ();
 			setRenderMode ( GLSurfaceView.RENDERMODE_CONTINUOUSLY );
+			AKUPause ( false );
+
+			mHandler.postDelayed ( mUpdateRunnable , AKU_UPDATE_FREQUENCY );
 		}
 	}
-
-	//================================================================//
-	// Private methods
-	//================================================================//
-
-    //----------------------------------------------------------------//
-	private void runScript ( String filename ) {
-
-		AKUSetContext ( mAku );
-		AKUSetViewSize ( mWidth, mHeight );
-		AKURunScript ( filename );
-	}	
 
 	//================================================================//
 	// Touch methods
@@ -235,7 +257,7 @@ public class MoaiView extends GLSurfaceView {
 	//================================================================//
 	// MoaiRenderer
 	//================================================================//
-	public class MoaiRenderer implements GLSurfaceView.Renderer {
+	private class MoaiRenderer implements GLSurfaceView.Renderer {
 
 		private boolean mRunScriptsExecuted = false;
 
@@ -243,10 +265,10 @@ public class MoaiView extends GLSurfaceView {
 		@Override
 		public void onDrawFrame ( GL10 gl ) {
 
-			AKUSetContext ( mAku );
-			AKUSetViewSize ( mWidth, mHeight );
-			AKUUpdate ();
-			AKURender ();
+			synchronized ( sAkuLock ) {
+				
+				AKURender ();
+			}
 		}
 
 	    //----------------------------------------------------------------//
@@ -257,6 +279,8 @@ public class MoaiView extends GLSurfaceView {
 
 			mWidth = width;
 			mHeight = height;
+			
+			AKUSetViewSize ( mWidth, mHeight );
 		}
         
 	    //----------------------------------------------------------------//
@@ -265,26 +289,58 @@ public class MoaiView extends GLSurfaceView {
 
 			log ( "MoaiRenderer onSurfaceCreated called" );
 
-			AKUReleaseGfxContext ();
-			AKUDetectGfxContext ();
-
-			// TODO: startSesssion is mismatched with stopSession.
-			mActivity.startSession ();
+			synchronized ( sAkuLock ) {
+				
+				AKUDetectGfxContext ();
+			}
 			
 			if ( !mRunScriptsExecuted ) {
-				
-				log ( "Running game scripts" );
-				
-				// TODO: Move this init script to the initialization routine in the constructor
-				// as soon as the bug is fixed that will allow the virutal directory to be 
-				// mounted before the MoaiView is created.
-				AKUSetWorkingDirectory ( mAssetDirectory + "/@WORKING_DIR@" );				
-				runScript ( "@RUN_INIT_DIR@/init.lua" );
-			
-				@RUN_COMMAND@
-				
+
 				mRunScriptsExecuted = true;
+
+				mHandler.postAtFrontOfQueue ( new Runnable () {
+
+					public void run () {
+				
+						log ( "Running game scripts" );
+				
+						@RUN_COMMAND@
+
+						synchronized ( sAkuLock ) {
+
+							// Sessions are ended in MoaiActivity.
+							AKUAppDidStartSession ( false );
+						}
+					}
+				});
+			} else {
+				
+				mHandler.post ( new Runnable () {
+
+					public void run () {
+				
+						synchronized ( sAkuLock ) {
+
+							// Sessions are ended in MoaiActivity.
+							AKUAppDidStartSession ( true );
+						}
+					}
+				});
 			}
-		}		
+		}	
+		
+	    //----------------------------------------------------------------//
+		private void runScripts ( String [] filenames ) {
+
+			for ( String file : filenames ) {
+				
+				synchronized ( sAkuLock ) {
+					
+					log ("Running " + file + " script" );
+					
+					AKURunScript ( file );
+				}
+			}
+		}	
 	}
 }

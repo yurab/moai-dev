@@ -685,7 +685,8 @@ void MOAITexture::CreateTextureFromPVR ( void* data, size_t size ) {
 
 //----------------------------------------------------------------//
 void MOAITexture::DeleteTexture	() {
-	glDeleteTextures ( 1, &this->mGLTexID );
+	MOAIGfxDevice::Get ().PushDeleter ( MOAIGfxDeleter::DELETE_TEXTURE, this->mGLTexID );
+	this->mGLTexID = 0;
 }
 
 //----------------------------------------------------------------//
@@ -710,7 +711,13 @@ void MOAITexture::Init ( MOAIImage& image, cc8* debugname ) {
 	
 	this->mTransform = 0;
 	
-	this->OnLoad ();
+	this->mLoader->Load ();
+	
+	if ( this->mLoader->mType == MOAITextureLoader::TYPE_MOAI_IMAGE ) {
+		MOAIImage& image = this->mLoader->mImage;
+		this->mWidth = image.GetWidth ();
+		this->mHeight = image.GetHeight ();
+	}
 }
 
 //----------------------------------------------------------------//
@@ -730,7 +737,13 @@ void MOAITexture::Init ( cc8* filename, u32 transform ) {
 	
 	this->mTransform = transform;
 	
-	this->OnLoad ();
+	this->mLoader->Load ();
+	
+	if ( this->mLoader->mType == MOAITextureLoader::TYPE_MOAI_IMAGE ) {
+		MOAIImage& image = this->mLoader->mImage;
+		this->mWidth = image.GetWidth ();
+		this->mHeight = image.GetHeight ();
+	}
 }
 
 //----------------------------------------------------------------//
@@ -759,7 +772,13 @@ void MOAITexture::Init ( const void* data, u32 size, u32 transform, cc8* debugna
 	
 	this->mTransform = transform;
 	
-	this->OnLoad ();
+	this->mLoader->Load ();
+	
+	if ( this->mLoader->mType == MOAITextureLoader::TYPE_MOAI_IMAGE ) {
+		MOAIImage& image = this->mLoader->mImage;
+		this->mWidth = image.GetWidth ();
+		this->mHeight = image.GetHeight ();
+	}
 }
 
 //----------------------------------------------------------------//
@@ -777,7 +796,7 @@ void MOAITexture::InitFrameBuffer ( u32 width, u32 height, GLenum colorFormat, G
 		this->mFrameBuffer->Init ( width, height, colorFormat, depthFormat, stencilFormat );
 		this->mIsRenewable = true;
 		
-		this->OnLoad ();
+		this->mLoader->Load ();
 	}
 	else {
 		MOAILog ( 0, MOAILogMessages::MOAITexture_NoFramebuffer );
@@ -860,8 +879,6 @@ void MOAITexture::OnBind () {
 //----------------------------------------------------------------//
 void MOAITexture::OnClear () {
 
-	this->OnUnload ();
-	
 	this->mWidth = 0;
 	this->mHeight = 0;
 	
@@ -949,10 +966,14 @@ void MOAITexture::OnLoad () {
 //----------------------------------------------------------------//
 void MOAITexture::OnRenew () {
 
+	this->mGLTexID = 0;
+
 	if ( !this->mFrameBuffer ) {
 		STLString filename = this->mFilename;
 		this->Init ( filename, this->mTransform );
 	}
+	
+	this->OnLoad ();
 }
 
 //----------------------------------------------------------------//

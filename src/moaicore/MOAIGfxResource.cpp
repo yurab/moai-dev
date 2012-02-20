@@ -117,7 +117,9 @@ bool MOAIGfxResource::Bind () {
 //----------------------------------------------------------------//
 void MOAIGfxResource::Clear () {
 
-	this->OnUnload ();
+	if ( MOAIGfxDevice::IsValid ()) {
+		this->OnUnload ();
+	}
 	this->OnClear ();
 	this->mState = STATE_CLEAR;
 }
@@ -176,6 +178,12 @@ void MOAIGfxResource::RenewGfxResource () {
 	if ( this->mState == STATE_WAIT_RENEW ) {
 		this->mState = STATE_RENEW;
 	}
+}
+
+//----------------------------------------------------------------//
+void MOAIGfxResource::ResetGfxResource () {
+
+	this->mState = STATE_RENEW;
 }
 
 //----------------------------------------------------------------//

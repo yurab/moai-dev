@@ -294,8 +294,8 @@ LockingQueue<InputEvent> *g_InputQueue = NULL;
 	}
 
 	//----------------------------------------------------------------//
-	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiActivity_AKUAppDidStartSession ( JNIEnv* env, jclass obj ) {
-		MOAIApp::Get ().DidStartSession ();
+	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiView_AKUAppDidStartSession ( JNIEnv* env, jclass obj, jboolean resumed ) {
+		MOAIApp::Get ().DidStartSession ( resumed );
 	}
 
 	//----------------------------------------------------------------//
@@ -626,6 +626,17 @@ LockingQueue<InputEvent> *g_InputQueue = NULL;
 	}
 
 	//----------------------------------------------------------------//
+	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiActivity_AKUSetWorkingDirectory ( JNIEnv* env, jclass obj, jstring jpath ) {
+
+		GET_CSTRING ( jpath, path );
+
+		USFileSys::SetCurrentPath ( path );
+		MOAILuaRuntime::Get ().SetPath ( path );
+	
+		RELEASE_CSTRING ( jpath, path );
+	}
+
+	//----------------------------------------------------------------//
 	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiView_AKUSetInputConfigurationName ( JNIEnv* env, jclass obj, jstring jname ) {
 		GET_CSTRING ( jname, name );
 		AKUSetInputConfigurationName ( name );
@@ -675,17 +686,6 @@ LockingQueue<InputEvent> *g_InputQueue = NULL;
 	//----------------------------------------------------------------//
 	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiView_AKUSetViewSize ( JNIEnv* env, jclass obj, jint width, jint height ) {
 		AKUSetViewSize ( width, height );
-	}
-
-	//----------------------------------------------------------------//
-	extern "C" void Java_@PACKAGE_UNDERSCORED@_MoaiView_AKUSetWorkingDirectory ( JNIEnv* env, jclass obj, jstring jpath ) {
-
-		GET_CSTRING ( jpath, path );
-
-		USFileSys::SetCurrentPath ( path );
-		MOAILuaRuntime::Get ().SetPath ( path );
-	
-		RELEASE_CSTRING ( jpath, path );
 	}
 
 	//----------------------------------------------------------------//
