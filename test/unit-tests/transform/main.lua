@@ -9,14 +9,26 @@ MOAIFileSystem.setWorkingDirectory ( ".." )
 require "testhelpers"
 MOAIFileSystem.setWorkingDirectory ( workingDir )
 
-local prop = MOAIProp2D.new ()
-local runall = false
+local prop = MOAITransform.new ()
+local runall = true
 
 local modes 	= { MOAIEaseType.EASE_IN, MOAIEaseType.EASE_OUT, MOAIEaseType.FLAT,
 					MOAIEaseType.LINEAR, MOAIEaseType.SMOOTH, MOAIEaseType.SOFT_EASE_IN,
 					MOAIEaseType.SOFT_EASE_OUT, MOAIEaseType.SOFT_SMOOTH }
 
-MOAISim.openWindow ( "test", 320, 480 )
+MOAISim.openWindow ( "test", 512, 512 )
+					
+viewport = MOAIViewport.new ()
+viewport:setSize ( 512, 512 )
+viewport:setScale ( 512, 512 )
+
+layer = MOAILayer2D.new ()
+layer:setViewport ( viewport )
+MOAISim.pushRenderPass ( layer )
+
+gfxQuad = MOAIGfxQuad2D.new ()
+gfxQuad:setTexture ( "cathead.png" )
+gfxQuad:setRect ( -64, -64, 64, 64 )
 
 -- addLoc
 local function addLocTest ( xloc, yloc )
@@ -71,6 +83,8 @@ local function addSclTest ( xscl, ... )
 		
 		local x, y = prop:getScl ()
 		
+		print ( x, y )
+		
 		test.evaluate ( test.epsilon ( x, xexp ) and test.epsilon ( y, yexp ),
 			"Adding to Scale by x = " .. xscl .. ", y = " .. ... )
 	
@@ -82,6 +96,8 @@ local function addSclTest ( xscl, ... )
 		
 		local x, y = prop:getScl ()
 		
+		print ( x, y )
+		
 		test.evaluate ( test.epsilon ( x, xexp ) and test.epsilon ( y, yexp ),
 			"Adding to Scale by x = " .. xscl )
 	end
@@ -92,7 +108,7 @@ local function modelToWorldTest ( xin, yin, xout, yout )
 	x, y = prop:modelToWorld ( xin, yin )
 	
 	test.evaluate ( test.epsilon ( x, xout ) and test.epsilon ( y, yout ),
-		"Model to World with x = " .. xin .. ", y = " .. yin )
+		"Model to World with x = " .. xin .. ", y = " .. yin .. ", xexp = " .. xout .. ", yexp = " .. yout )
 end
 
 -- move
@@ -574,6 +590,82 @@ local function setLocTest ( x, y )
 end
 
 -- setParent
+-- TODO: Revisit this function
+local function setParentTest ( child, parent )
+
+	child:setParent ( parent )
+	child:forceUpdate ()
+	
+	xlocbef, ylocbef = child:getWorldLoc ()
+	rotbef = child:getWorldRot ()
+	xsclbef, ysclbef = child:getWorldScl ()
+	
+	parent:addLoc ( 50, 50 )
+	child:forceUpdate ()
+	parent:forceUpdate ()
+	
+	xlocfin, ylocfin = child:getWorldLoc ()
+	
+	test.evaluate ( test.epsilon ( xlocfin, xlocbef + 50 ) and test.epsilon ( ylocfin, ylocbef + 50 ),
+		"Setting parent location" )
+	
+	xlocbef, ylocbef = child:getWorldLoc ()
+	rotbef = child:getWorldRot ()
+	xsclbef, ysclbef = child:getWorldScl ()
+		
+	parent:addLoc ( -5000, 5000 )
+	child:forceUpdate ()
+	parent:forceUpdate ()
+	
+	xlocfin, ylocfin = child:getWorldLoc ()
+	
+	test.evaluate ( test.epsilon ( xlocfin, xlocbef + -5000 ) and test.epsilon ( ylocfin, ylocbef + 5000 ),
+		"Setting parent location" )
+	
+	xlocbef, ylocbef = child:getWorldLoc ()
+	rotbef = child:getWorldRot ()
+	xsclbef, ysclbef = child:getWorldScl ()
+		
+	parent:addScl ( 10, 10 )
+	child:forceUpdate ()
+	parent:forceUpdate ()
+	
+	xsclfin, ysclfin = parent:getWorldScl ()
+	
+	test.evaluate ( test.epsilon ( xsclfin, xsclbef + 10 ) and test.epsilon ( ysclfin, ysclbef + 10 ),
+		"Setting parent scale" )
+	
+	xlocbef, ylocbef = child:getWorldLoc ()
+	rotbef = child:getWorldRot ()
+	xsclbef, ysclbef = child:getWorldScl ()
+		
+	parent:addScl ( -20, -20 )
+	child:forceUpdate ()
+	parent:forceUpdate ()
+	
+	xsclfin, ysclfin = parent:getWorldScl ()
+	
+	test.evaluate ( test.epsilon ( xsclfin, 9 ) and test.epsilon ( ysclfin, 9 ),
+		"Setting parent scale" )
+	
+	xlocbef, ylocbef = child:getWorldLoc ()
+	rotbef = child:getWorldRot ()
+	xsclbef, ysclbef = child:getWorldScl ()
+	xpar, ypar = parent:getWorldLoc ()
+		
+	parent:addRot ( 180 )
+	child:forceUpdate ()
+	parent:forceUpdate ()
+	
+	xlocfin, ylocfin = child:getWorldLoc ()
+	rotfin = child:getWorldRot ()
+	
+	test.evaluate ( test.epsilon ( rotfin, rotbef + 180 ),
+		"Setting parent rotation" )
+	
+	test.evaluate ( test.epsilon ( xlocfin, 2 * xpar - xlocbef ) and test.epsilon ( ylocfin, 2 * ypar - ylocbef ),
+		"Setting parent rotation" )
+end
 
 -- setPiv
 local index = 1
@@ -603,7 +695,6 @@ local function setSclTest ( x, y )
 	prop:setScl ( x, y )
 	
 	local xfin, yfin = prop:getScl ()
-	print ( xfin, yfin )
 	
 	test.evaluate ( test.epsilon ( x, xfin ) and test.epsilon ( y, yfin ),
 		"Setting Scale to x = " .. x .. ", y = " .. y )
@@ -614,64 +705,10 @@ local function worldToModelTest ( xin, yin, xout, yout )
 	x, y = prop:worldToModel ( xin, yin )
 	
 	test.evaluate ( test.epsilon ( x, xout ) and test.epsilon ( y, yout ),
-		"World to Model with x = " .. xin .. ", y = " .. yin )
+		"World to Model with x = " .. xin .. ", y = " .. yin .. ", xexp = " .. xout .. ", yexp = " .. yout)
 end
 
 -- tests
-
-prop:setLoc ( 0, 0 )
-prop:setRot ( 0 )
-prop:setScl ( 1, 1 )
-prop:forceUpdate ()
-modelToWorldTest ( 1, 1, 1, 1 )
-modelToWorldTest ( 5000, 1, 5000, 1 )
-modelToWorldTest ( -5000, 5000, -5000, 5000 )
-modelToWorldTest ( 5000, -5000, 5000, -5000 )
-
-prop:setLoc ( 5000, 1 )
-prop:setRot ( 180 )
-prop:setScl ( 3, 3 )
-prop:forceUpdate ()
-modelToWorldTest ( 1, 1, 4997, -2 )
-modelToWorldTest ( 5000, 1, -10000, -2 )
-modelToWorldTest ( -5000, 5000, 20000, -14999 )
-modelToWorldTest ( 5000, -5000, -10000, 15001 )
-
-prop:setLoc ( -10, -5000 )
-prop:setRot ( -400 )
-prop:setScl ( 10 )
-prop:forceUpdate ()
-modelToWorldTest ( 1, 1, -4990, -2 )
-modelToWorldTest ( 5000, 1, -10000, -2 )
-modelToWorldTest ( -5000, 5000, 20000, -14999 )
-modelToWorldTest ( 5000, -5000, -10000, 15001 )
-
-prop:setLoc ( 0, 0 )
-prop:setRot ( 0 )
-prop:setScl ( 1, 1 )
-prop:forceUpdate ()
-worldToModelTest ( 1, 1, 1, 1 )
-worldToModelTest ( 5000, 1, 5000, 1 )
-worldToModelTest ( -5000, 5000, -5000, 5000 )
-worldToModelTest ( 5000, -5000, 5000, -5000 )
-
-prop:setLoc ( 5000, 1 )
-prop:setRot ( 180 )
-prop:setScl ( 3, 3 )
-prop:forceUpdate ()
-worldToModelTest ( 4997, -2, 1, 1 )
-worldToModelTest ( -10000, -2, 5000, 1 )
-worldToModelTest ( 20000, -14999, -5000, 5000 )
-worldToModelTest ( -10000, 15001, 5000, -5000 )
-
-prop:setLoc ( -10, -5000 )
-prop:setRot ( -400 )
-prop:setScl ( 10 )
-prop:forceUpdate ()
-worldToModelTest ( 4997, -2, 1, 1 )
-worldToModelTest ( -10000, -2, 5000, 1 )
-worldToModelTest ( 20000, -14999, -5000, 5000 )
-worldToModelTest ( -10000, 15001, 5000, -5000 )
 
 if runall then
 
@@ -711,6 +748,33 @@ if runall then
 	end
 	
 	-- modelToWorld
+	prop = MOAITransform.new ()
+	prop:setLoc ( 0, 0 )
+	prop:setRot ( 0 )
+	prop:setScl ( 1, 1 )
+	prop:forceUpdate ()
+	modelToWorldTest ( 1, 1, 1, 1 )
+	modelToWorldTest ( 5000, 1, 5000, 1 )
+	modelToWorldTest ( -5000, 5000, -5000, 5000 )
+	modelToWorldTest ( 5000, -5000, 5000, -5000 )
+
+	prop:setLoc ( 5000, 1 )
+	prop:setRot ( 180 )
+	prop:setScl ( 3, 3 )
+	prop:forceUpdate ()
+	modelToWorldTest ( 1, 1, 4997, -2 )
+	modelToWorldTest ( 5000, 1, -10000, -2 )
+	modelToWorldTest ( -5000, 5000, 20000, -14999 )
+	modelToWorldTest ( 5000, -5000, -10000, 15001 )
+
+	prop:setLoc ( -10, -5000 )
+	prop:setRot ( -450 )
+	prop:setScl ( 10, 10 )
+	prop:forceUpdate ()
+	modelToWorldTest ( 1, 1, 0, -5010 )
+	modelToWorldTest ( 5000, 1, 0, -55000 )
+	modelToWorldTest ( -5000, 5000, 49990, 45000 )
+	modelToWorldTest ( 5000, -5000, -50010, -55000 )
 	
 	-- move
 	moveTest ( 0, 0, 0, 0, 0, 1 )
@@ -856,6 +920,15 @@ if runall then
 	end
 	
 	-- setParent
+	local parent = MOAITransform.new ()
+	parent:setLoc ( 0, 0 )
+	parent:setRot ( 0 )
+	parent:setScl ( 1, 1 )
+	local child = MOAITransform.new ()
+	child:setLoc ( 10, 0 )
+	child:setRot ( 0 )
+	child:setScl ( 1, 1 )
+	setParentTest ( child, parent )
 	
 	-- setPiv
 	local values = { 0, 1, 5000, -1, -5000 }
@@ -883,6 +956,33 @@ if runall then
 	end
 	
 	-- worldToModel
+	prop = MOAITransform.new ()
+	prop:setLoc ( 0, 0 )
+	prop:setRot ( 0 )
+	prop:setScl ( 1, 1 )
+	prop:forceUpdate ()
+	worldToModelTest ( 1, 1, 1, 1 )
+	worldToModelTest ( 5000, 1, 5000, 1 )
+	worldToModelTest ( -5000, 5000, -5000, 5000 )
+	worldToModelTest ( 5000, -5000, 5000, -5000 )
+
+	prop:setLoc ( 5000, 1 )
+	prop:setRot ( 180 )
+	prop:setScl ( 3, 3 )
+	prop:forceUpdate ()
+	worldToModelTest ( 4997, -2, 1, 1 )
+	worldToModelTest ( -10000, -2, 5000, 1 )
+	worldToModelTest ( 20000, -14999, -5000, 5000 )
+	worldToModelTest ( -10000, 15001, 5000, -5000 )
+
+	prop:setLoc ( -10, -5000 )
+	prop:setRot ( -450 )
+	prop:setScl ( 10 )
+	prop:forceUpdate ()
+	worldToModelTest ( 0, -5010, 1, 1 )
+	worldToModelTest ( 0, -55000, 5000, 1 )
+	worldToModelTest ( 49990, 45000, -5000, 5000 )
+	worldToModelTest ( -50010, -55000, 5000, -5000 )
 	
 end
 

@@ -6,7 +6,7 @@
 
 module ( "test", package.seeall )
 
-local eps = .001
+local eps = .1
 local pass = 0
 local fail = 0
 
