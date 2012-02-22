@@ -22,8 +22,8 @@ private:
 	static int		_checkPathExists			( lua_State* L );
 	static int		_deleteDirectory			( lua_State* L );
 	static int		_deleteFile					( lua_State* L );
-	static int		_getAbsoluteFilePath		( lua_State* L );
 	static int		_getAbsoluteDirectoryPath	( lua_State* L );
+	static int		_getAbsoluteFilePath		( lua_State* L );
 	static int		_getRelativePath			( lua_State* L );
 	static int		_getWorkingDirectory		( lua_State* L );
 	static int		_listDirectories			( lua_State* L );
