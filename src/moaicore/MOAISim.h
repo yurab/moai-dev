@@ -86,7 +86,6 @@ private:
 	double			mTimerError;
 	
 	//----------------------------------------------------------------//
-	static int		_clearLoopFlags				( lua_State* L );
 	static int		_clearRenderStack			( lua_State* L );
 	static int		_enterFullscreenMode		( lua_State* L );
 	static int		_exitFullscreenMode			( lua_State* L );

@@ -27,19 +27,6 @@
 //================================================================//
 
 //----------------------------------------------------------------//
-/**	@name	clearLoopFlags
-	@text	Uses the mask provided to clear the loop flags.
-
-	@opt	number mask		Default value is 0xffffffff.
-	@out	nil
-*/
-int MOAISim::_clearLoopFlags ( lua_State* L ) {
-	MOAILuaState state ( L );
-	MOAISim::Get ().mLoopFlags &= ~state.GetValue < u32 >( 1, 0xffffffff );
-	return 0;
-}
-
-//----------------------------------------------------------------//
 /**	@name	clearRenderStack
 	@text	Clears the render stack.
 
@@ -531,14 +518,14 @@ int MOAISim::_setLongDelayThreshold ( lua_State* L ) {
 			Three presets are provided: MOAISim.LOOP_FLAGS_DEFAULT, MOAISim.LOOP_FLAGS_FIXED,
 			and MOAISim.LOOP_FLAGS_MULTISTEP.
 
-	@opt	number flags		Mask or a combination of MOAISim.SIM_LOOP_FORCE_STEP, MOAISim.SIM_LOOP_ALLOW_BOOST,
+	@opt	number flags		A combination of MOAISim.SIM_LOOP_FORCE_STEP, MOAISim.SIM_LOOP_ALLOW_BOOST,
 								MOAISim.SIM_LOOP_ALLOW_SPIN, MOAISim.SIM_LOOP_NO_DEFICIT, MOAISim.SIM_LOOP_NO_SURPLUS,
-								MOAISim.SIM_LOOP_RESET_CLOCK. Default value is 0.
+								MOAISim.SIM_LOOP_LONG_DELAY, MOAISim.SIM_LOOP_RESET_CLOCK. Default value is 0.
 	@out	nil	
 */
 int MOAISim::_setLoopFlags ( lua_State* L ) {
 	MOAILuaState state ( L );
-	MOAISim::Get ().mLoopFlags |= state.GetValue < u32 >( 1, 0 );
+	MOAISim::Get ().mLoopFlags = state.GetValue < u32 >( 1, 0 );
 	return 0;
 }
 
@@ -736,6 +723,7 @@ void MOAISim::RegisterLuaClass ( MOAILuaState& state ) {
 	state.SetField ( -1, "SIM_LOOP_ALLOW_SPIN", ( u32 )SIM_LOOP_ALLOW_SPIN );
 	state.SetField ( -1, "SIM_LOOP_NO_DEFICIT", ( u32 )SIM_LOOP_NO_DEFICIT );
 	state.SetField ( -1, "SIM_LOOP_NO_SURPLUS", ( u32 )SIM_LOOP_NO_SURPLUS );
+	state.SetField ( -1, "SIM_LOOP_LONG_DELAY", ( u32 )SIM_LOOP_LONG_DELAY );
 	state.SetField ( -1, "SIM_LOOP_RESET_CLOCK", ( u32 )SIM_LOOP_RESET_CLOCK );
 
 	state.SetField ( -1, "LOOP_FLAGS_DEFAULT", ( u32 )LOOP_FLAGS_DEFAULT );
@@ -751,7 +739,6 @@ void MOAISim::RegisterLuaClass ( MOAILuaState& state ) {
 	state.SetField ( -1, "DEFAULT_STEP_MULTIPLIER", ( u32 )DEFAULT_STEP_MULTIPLIER );
 
 	luaL_Reg regTable [] = {
-		{ "clearLoopFlags",				_clearLoopFlags },
 		{ "clearRenderStack",			_clearRenderStack },
 		{ "enterFullscreenMode",		_enterFullscreenMode },
 		{ "exitFullscreenMode",			_exitFullscreenMode },

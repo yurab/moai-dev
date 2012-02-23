@@ -26,24 +26,6 @@ int MOAICameraFitter2D::_clearAnchors ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
-/**	@name	clearFitMode
-	@text	Clears bits in the fitting mask.
-	
-	@in		MOAICameraFitter2D self
-	@opt	number mask		Default value is FITTING_MODE_MASK
-	@out	nil
-*/
-int MOAICameraFitter2D::_clearFitMode( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAICameraFitter2D, "U" )
-	
-	u32 mask = state.GetValue < u32 >( 2, FITTING_MODE_MASK );
-	
-	self->mFittingMode &= ~mask;
-
-	return 0;
-}
-
-//----------------------------------------------------------------//
 /**	@name	getFitDistance
 	@text	Returns the distance between the camera's current x, y, scale and
 			the target x, y, scale. As the camera approaches its target, the
@@ -88,7 +70,7 @@ int MOAICameraFitter2D::_getFitMode ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAICameraFitter2D, "U" )
 	
 	state.Push ( self->mFittingMode );
-	return 0;
+	return 1;
 }
 
 //----------------------------------------------------------------//
@@ -286,7 +268,7 @@ int MOAICameraFitter2D::_setFitLoc ( lua_State* L ) {
 int MOAICameraFitter2D::_setFitMode ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAICameraFitter2D, "U" )
 	
-	self->mFittingMode |= state.GetValue < u32 >( 2, FITTING_MODE_DEFAULT );
+	self->mFittingMode = state.GetValue < u32 >( 2, FITTING_MODE_DEFAULT );
 	return 0;
 }
 
@@ -660,7 +642,6 @@ void MOAICameraFitter2D::RegisterLuaFuncs ( MOAILuaState& state ) {
 	
 	luaL_Reg regTable [] = {
 		{ "clearAnchors",		_clearAnchors },
-		{ "clearFitMode",		_clearFitMode },
 		{ "getFitDistance",		_getFitDistance },
 		{ "getFitLoc",			_getFitLoc },
 		{ "getFitMode",			_getFitMode },

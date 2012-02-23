@@ -10,32 +10,6 @@
 //================================================================//
 
 //----------------------------------------------------------------//
-/**	@name	clearTileFlags
-	@text	Clears bits specified in mask.
-
-	@in		MOAIGrid self
-	@in		number xTile
-	@in		number yTile
-	@in		number mask
-	@out	nil
-*/
-int MOAIGrid::_clearTileFlags ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIGrid, "UNNN" )
-
-	int xTile	= state.GetValue < int >( 2, 1 ) - 1;
-	int yTile	= state.GetValue < int >( 3, 1 ) - 1;
-	u32 mask	= state.GetValue < u32 >( 4, 0 );
-	
-	u32 tile = self->GetTile ( xTile, yTile );
-	
-	tile = tile & ~mask;
-	
-	self->SetTile ( xTile, yTile, tile );
-	
-	return 0;
-}
-
-//----------------------------------------------------------------//
 /**	@name	getTile
 	@text	Returns the value of a given tile.
 
@@ -57,24 +31,20 @@ int MOAIGrid::_getTile ( lua_State* L ) {
 
 //----------------------------------------------------------------//
 /**	@name	getTileFlags
-	@text	Returns the masked value of a given tile.
+	@text	Returns the flags of a given tile.
 
 	@in		MOAIGrid self
 	@in		number xTile
 	@in		number yTile
-	@in		number mask
-	@out	number tile
+	@out	number flags
 */
 int MOAIGrid::_getTileFlags ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIGrid, "UNNN" )
+	MOAI_LUA_SETUP ( MOAIGrid, "UNN" )
 
 	int xTile	= state.GetValue < int >( 2, 1 ) - 1;
 	int yTile	= state.GetValue < int >( 3, 1 ) - 1;
-	u32 mask	= state.GetValue < u32 >( 4, 0 );
 	
 	u32 tile = self->GetTile ( xTile, yTile );
-	
-	tile = tile & mask;
 	
 	lua_pushnumber ( state, tile );
 	
@@ -129,12 +99,12 @@ int MOAIGrid::_setTile ( lua_State* L ) {
 
 //----------------------------------------------------------------//
 /**	@name	setTileFlags
-	@text	Sets a tile's flags given a mask.
+	@text	Sets a tile's flags.
 
 	@in		MOAIGrid self
 	@in		number xTile
 	@in		number yTile
-	@in		number mask
+	@in		number flags
 	@out	nil
 */
 int MOAIGrid::_setTileFlags ( lua_State* L ) {
@@ -144,37 +114,7 @@ int MOAIGrid::_setTileFlags ( lua_State* L ) {
 	int yTile	= state.GetValue < int >( 3, 1 ) - 1;
 	u32 mask	= state.GetValue < u32 >( 4, 0 );
 	
-	u32 tile = self->GetTile ( xTile, yTile );
-	
-	tile = tile | mask;
-	
-	self->SetTile ( xTile, yTile, tile );
-	
-	return 0;
-}
-
-//----------------------------------------------------------------//
-/**	@name	toggleTileFlags
-	@text	Toggles a tile's flags given a mask.
-
-	@in		MOAIGrid self
-	@in		number xTile
-	@in		number yTile
-	@in		number mask
-	@out	nil
-*/
-int MOAIGrid::_toggleTileFlags ( lua_State* L ) {
-	MOAI_LUA_SETUP ( MOAIGrid, "UNNN" )
-
-	int xTile	= state.GetValue < int >( 2, 1 ) - 1;
-	int yTile	= state.GetValue < int >( 3, 1 ) - 1;
-	u32 mask	= state.GetValue < u32 >( 4, 0 );
-	
-	u32 tile = self->GetTile ( xTile, yTile );
-	
-	tile = tile ^ mask;
-	
-	self->SetTile ( xTile, yTile, tile );
+	self->SetTile ( xTile, yTile, mask );
 	
 	return 0;
 }
@@ -225,13 +165,11 @@ void MOAIGrid::RegisterLuaFuncs ( MOAILuaState& state ) {
 	MOAIGridSpace::RegisterLuaFuncs ( state );
 
 	luaL_Reg regTable [] = {
-		{ "clearTileFlags",		_clearTileFlags },
 		{ "getTile",			_getTile },
 		{ "getTileFlags",		_getTileFlags },
 		{ "setRow",				_setRow },
 		{ "setTile",			_setTile },
 		{ "setTileFlags",		_setTileFlags },
-		{ "toggleTileFlags",	_toggleTileFlags },
 		{ NULL, NULL }
 	};
 

@@ -51,7 +51,6 @@ private:
 
 	//----------------------------------------------------------------//
 	static int		_clearAnchors			( lua_State* L );
-	static int		_clearFitMode			( lua_State* L );
 	static int		_getFitDistance			( lua_State* L );
 	static int		_getFitLoc				( lua_State* L );
 	static int		_getFitMode				( lua_State* L );

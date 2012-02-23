@@ -21,13 +21,11 @@ private:
 	USLeanArray < u32 > mTiles;
 
 	//----------------------------------------------------------------//
-	static int		_clearTileFlags		( lua_State* L );
 	static int		_getTile			( lua_State* L );
 	static int		_getTileFlags		( lua_State* L );
 	static int		_setRow				( lua_State* L );
 	static int		_setTile			( lua_State* L );
 	static int		_setTileFlags		( lua_State* L );
-	static int		_toggleTileFlags	( lua_State* L );
 
 	//----------------------------------------------------------------//
 	void			OnResize			();
