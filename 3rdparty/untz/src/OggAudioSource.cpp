@@ -7,6 +7,9 @@
 //
 
 #include "OggAudioSource.h"
+#if defined(__ANDROID__)
+	#include <android/log.h>
+#endif
 
 
 OggAudioSource::OggAudioSource()
@@ -67,6 +70,9 @@ void OggAudioSource::setDecoderPosition(Int64 startFrame)
 {
 	RScopedLock l(&mDecodeLock);
 
+	if(!mInFile)
+		return;
+
 	int status = ov_pcm_seek(&mOggFile, startFrame * getNumChannels());
 	if(startFrame < getLength() * getSampleRate())
 		mEOF = false;
@@ -75,6 +81,10 @@ void OggAudioSource::setDecoderPosition(Int64 startFrame)
 void OggAudioSource::doneDecoding()
 {
 	close();
+
+#if defined(__ANDROID__)
+    __android_log_write(ANDROID_LOG_ERROR, "UntzJNI", "closing file");
+#endif
 }
 
 double OggAudioSource::getLength() 

@@ -25,4 +25,8 @@ protected:
 	RString mPath;
     WaveFile mWaveFile;
 	std::vector<UInt8> mRawBuffer;
+
+    double mSampleRate;
+    double mLength;
+    UInt32 mNumChannels;
 };

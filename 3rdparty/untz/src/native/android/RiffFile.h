@@ -38,6 +38,7 @@ public:
 
 	virtual int open(const char* path);
 	virtual void close();
+	virtual bool isOpened();
 
 	void rewind();
 	bool push(UInt32 chunkId);

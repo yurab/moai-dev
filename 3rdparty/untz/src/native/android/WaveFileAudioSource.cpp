@@ -16,18 +16,18 @@ WaveFileAudioSource::~WaveFileAudioSource()
 
 double WaveFileAudioSource::getSampleRate()
 {
-    return (double)mWaveFile.getHeader().samplesPerSecond;
+    return mSampleRate;
 }
 
 double WaveFileAudioSource::getLength()
 {
     // seconds
-    return (double)mWaveFile.getNumberOfFrames() / getSampleRate();
+    return mLength;
 }
 
 UInt32 WaveFileAudioSource::getNumChannels()
 {
-    return mWaveFile.getHeader().numChannels;
+    return mNumChannels;
 }
 
 bool WaveFileAudioSource::init(const RString& path, bool loadIntoMemory)
@@ -53,6 +53,10 @@ bool WaveFileAudioSource::init(const RString& path, bool loadIntoMemory)
 	}
 
 	mRawBuffer.resize(mWaveFile.chunkSize());
+
+    mSampleRate = (double)mWaveFile.getHeader().samplesPerSecond;
+    mLength = (double)mWaveFile.getNumberOfFrames() / getSampleRate();
+    mNumChannels = mWaveFile.getHeader().numChannels;
 
     return BufferedAudioSource::init(path, loadIntoMemory);
 }
@@ -149,8 +153,6 @@ Int64 WaveFileAudioSource::decodeData(float* buffer, UInt32 numFrames)
 
 void WaveFileAudioSource::doneDecoding()
 {
-	RPRINT("freeing decoder memory.\n");
-	
 	mRawBuffer.clear();
 	std::vector<UInt8>().swap(mRawBuffer);
 
@@ -159,6 +161,9 @@ void WaveFileAudioSource::doneDecoding()
 
 void WaveFileAudioSource::setDecoderPosition(Int64 startFrame)
 {
+	if(!mWaveFile.isOpened())
+		return;
+
 	mWaveFile.setPosition(startFrame * mWaveFile.getHeader().bytesPerFrame);
 	if(startFrame < getLength() * getSampleRate())
 		mEOF = false;
