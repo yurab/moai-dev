@@ -34,6 +34,7 @@ public:
     virtual void close();
 	virtual Int64 decodeData(float* buffer, UInt32 size);
 	virtual void setDecoderPosition(Int64 startFrame);
+	virtual void doneDecoding();
 	
 private:
 	void setDecoderPosition(double position);
@@ -43,6 +44,11 @@ private:
 	FILE* mInFile;
 	vorbis_info* mpOggInfo;
 	OggVorbis_File mOggFile;
+	
+	double mLength;
+	double mSampleRate;
+	UInt32 mNumChannels;
+	UInt32 mBitsPerSample;	
 };
 
 #endif

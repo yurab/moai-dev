@@ -146,6 +146,17 @@ Int64 WaveFileAudioSource::decodeData(float* buffer, UInt32 numFrames)
 	return readFrames;
 }
 
+
+void WaveFileAudioSource::doneDecoding()
+{
+	RPRINT("freeing decoder memory.\n");
+	
+	mRawBuffer.clear();
+	std::vector<UInt8>().swap(mRawBuffer);
+
+	close();
+}
+
 void WaveFileAudioSource::setDecoderPosition(Int64 startFrame)
 {
 	mWaveFile.setPosition(startFrame * mWaveFile.getHeader().bytesPerFrame);

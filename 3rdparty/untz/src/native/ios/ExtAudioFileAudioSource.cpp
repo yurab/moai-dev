@@ -39,6 +39,8 @@ void ExtAudioFileAudioSource::doneDecoding()
 	
 	mReadBuffer.clear();
 	std::vector<float>().swap(mReadBuffer);
+	
+	close();
 }
 
 double ExtAudioFileAudioSource::getLength() 
@@ -72,7 +74,8 @@ bool ExtAudioFileAudioSource::init(const RString& path, bool loadIntoMemory)
     OSStatus err = ExtAudioFileOpenURL(path_url, &mAudioFile);
     if(err)
     {
-        printCode("ExtAudioFileOpenURL: ", err);        
+        printCode("ExtAudioFileOpenURL: ", err);       
+		printf("ExtAudioFileAudioSource: couldn't open file, %s\n", path.c_str());
         return false;
     }
     
