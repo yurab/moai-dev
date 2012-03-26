@@ -9,7 +9,7 @@
 #include "RiffFile.h"
 
 
-RiffFile::RiffFile()
+RiffFile::RiffFile() : mpFile(0)
 {
 }
 
@@ -50,8 +50,18 @@ int RiffFile::open(const char* path)
 
 void RiffFile::close()
 {
-	if(mpFile)
+	if(mpFile) 
+    {
 		fclose(mpFile);
+        mpFile = 0;
+    }
+}
+
+bool RiffFile::isOpened()
+{
+    if(mpFile)
+        return true;
+    return false;
 }
 
 void RiffFile::rewind()

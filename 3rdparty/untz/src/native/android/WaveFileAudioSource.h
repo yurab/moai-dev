@@ -19,9 +19,14 @@ public:
     virtual void close();
     virtual Int64 decodeData(float* buffer, UInt32 size);
     virtual void setDecoderPosition(Int64 startFrame);
+    virtual void doneDecoding();
 
 protected:
 	RString mPath;
     WaveFile mWaveFile;
 	std::vector<UInt8> mRawBuffer;
+
+    double mSampleRate;
+    double mLength;
+    UInt32 mNumChannels;
 };

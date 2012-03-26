@@ -7,6 +7,9 @@
 //
 
 #include "OggAudioSource.h"
+#if defined(__ANDROID__)
+	#include <android/log.h>
+#endif
 
 
 OggAudioSource::OggAudioSource()
@@ -44,6 +47,11 @@ bool OggAudioSource::init(const RString& path, bool loadIntoMemory)
 	// Get some information about the OGG file
 	mpOggInfo = ov_info(&mOggFile, -1);
 
+	mLength = ov_time_total(&mOggFile, -1);
+	mSampleRate = mpOggInfo->rate;
+	mNumChannels = mpOggInfo->channels;
+	mBitsPerSample = mpOggInfo->bitrate_upper;
+	
 	return BufferedAudioSource::init(path, loadIntoMemory);
 }
 
@@ -62,35 +70,41 @@ void OggAudioSource::setDecoderPosition(Int64 startFrame)
 {
 	RScopedLock l(&mDecodeLock);
 
+	if(!mInFile)
+		return;
+
 	int status = ov_pcm_seek(&mOggFile, startFrame * getNumChannels());
 	if(startFrame < getLength() * getSampleRate())
 		mEOF = false;
 }
 
+void OggAudioSource::doneDecoding()
+{
+	close();
+
+#if defined(__ANDROID__)
+    __android_log_write(ANDROID_LOG_ERROR, "UntzJNI", "closing file");
+#endif
+}
+
 double OggAudioSource::getLength() 
 { 
-	return ov_time_total(&mOggFile, -1);
+	return mLength;
 }
 
 double OggAudioSource::getSampleRate() 
 {
-	if(mpOggInfo)
-		return mpOggInfo->rate;
-	return 0; 
+	return mSampleRate;
 }
 
 UInt32 OggAudioSource::getNumChannels()
 {
-	if(mpOggInfo)
-		return mpOggInfo->channels;
-	return 0; 
+	return mNumChannels;
 }
 
 UInt32 OggAudioSource::getBitsPerSample()
 {
-	if(mpOggInfo)
-		return mpOggInfo->bitrate_upper;
-	return 0;
+	return mBitsPerSample;
 }
 
 Int64 OggAudioSource::decodeData(float* buffer, UInt32 numFrames)
