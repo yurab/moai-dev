@@ -8,7 +8,7 @@
 
 	set -e
 
-	usage="usage: $0 -p <package> [-s] [-i thumb | arm] [-a all | armeabi | armeabi-v7a] [-l appPlatform] [--disable-tapjoy] [--disable-google-push] [--disable-google-billing] [--disable-crittercism] [--disable-adcolony]"
+	usage="usage: $0 -p <package> [-s] [-i thumb | arm] [-a all | armeabi | armeabi-v7a] [-l appPlatform] [--disable-tapjoy] [--disable-google-push] [--disable-google-billing] [--disable-crittercism] [--disable-adcolony] [--disable-chartboost]"
 	skip_build="false"
 	package_name=
 	arm_mode=arm
@@ -19,6 +19,7 @@
 	google_billing_flags=
 	crittercism_flags=
 	adcolony_flags=
+	chartboost_flags=
 	
 	while [ $# -gt 0 ];	do
 	    case "$1" in
@@ -32,6 +33,7 @@
 			--disable-google-billing)  google_billing_flags="--disable-google-billing";;
 			--disable-crittercism)  crittercism_flags="--disable-crittercism";;
 			--disable-adcolony)  adcolony_flags="--disable-adcolony";;
+			--disable-chartboost)  chartboost_flags="--disable-chartboost";;
 			-*)
 		    	echo >&2 \
 		    		$usage
@@ -63,7 +65,7 @@
 	
 	if [ x"$skip_build" != xtrue ]; then
 		pushd libmoai > /dev/null
-			bash build.sh -i $arm_mode -a $arm_arch -l $app_platform $tapjoy_flags $google_push_flags $google_billing_flags $crittercism_flags $adcolony_flags
+			bash build.sh -i $arm_mode -a $arm_arch -l $app_platform $tapjoy_flags $google_push_flags $google_billing_flags $crittercism_flags $adcolony_flags $chartboost_flags
 		popd > /dev/null
 	fi
 
@@ -106,6 +108,10 @@
 
 	if [ x"$adcolony_flags" == x ]; then
 		required_libs="$required_libs \"adcolony\""
+	fi
+
+	if [ x"$chartboost_flags" == x ]; then
+		required_libs="$required_libs \"chartboost\""
 	fi
 
 	cp -f host-source/d.settings-local.sh $new_host_dir/settings-local.sh
