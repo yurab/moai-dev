@@ -266,14 +266,9 @@
 		MOAIApp::Affirm ();
 		REGISTER_LUA_CLASS ( MOAIApp );
 
-#ifndef DISABLE_TAPJOY
-		MOAITapjoy::Affirm ();
-		REGISTER_LUA_CLASS ( MOAITapjoy );
-#endif
-
-#ifndef DISABLE_NOTIFICATIONS
-		MOAINotifications::Affirm ();
-		REGISTER_LUA_CLASS ( MOAINotifications );
+#ifndef DISABLE_ADCOLONY
+		MOAIAdColony::Affirm ();
+		REGISTER_LUA_CLASS ( MOAIAdColony );
 #endif
 
 #ifndef DISABLE_BILLING
@@ -281,19 +276,29 @@
 		REGISTER_LUA_CLASS ( MOAIBilling );
 #endif
 
+#ifndef DISABLE_CHARTBOOST
+		MOAIChartBoost::Affirm ();
+		REGISTER_LUA_CLASS ( MOAIChartBoost );
+#endif
+
 #ifndef DISABLE_CRITTERCISM
 		MOAICrittercism::Affirm ();
 		REGISTER_LUA_CLASS ( MOAICrittercism );
 #endif
 
-#ifndef DISABLE_ADCOLONY
-		MOAIAdColony::Affirm ();
-		REGISTER_LUA_CLASS ( MOAIAdColony );
-#endif
-
 #ifndef DISABLE_FACEBOOK
 		MOAIFacebook::Affirm ();
 		REGISTER_LUA_CLASS ( MOAIFacebook );
+#endif
+
+#ifndef DISABLE_NOTIFICATIONS
+		MOAINotifications::Affirm ();
+		REGISTER_LUA_CLASS ( MOAINotifications );
+#endif
+
+#ifndef DISABLE_TAPJOY
+		MOAITapjoy::Affirm ();
+		REGISTER_LUA_CLASS ( MOAITapjoy );
 #endif
 
 		inputQueue = new LockingQueue < InputEvent > ();
