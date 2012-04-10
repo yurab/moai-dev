@@ -17,13 +17,6 @@ extern JavaVM* jvm;
 //================================================================//
 
 //----------------------------------------------------------------//
-/**	@name	init
-	@text	Initialize ChartBoost.
-	
-	@in		string	appId			Available in ChartBoost dashboard settings.
-	@in 	string	appSignature	Available in ChartBoost dashboard settings.
-	@out 	nil
-*/
 int MOAIChartBoost::_init ( lua_State* L ) {
 	
 	MOAILuaState state ( L );
@@ -56,12 +49,6 @@ int MOAIChartBoost::_init ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
-/**	@name	showInterstitial
-	@text	Request an interstitial ad display.
-	
-	@opt	string	locationId		Optional location ID.
-	@out 	nil
-*/
 int MOAIChartBoost::_showInterstitial ( lua_State* L ) {
 	
 	MOAILuaState state ( L );
