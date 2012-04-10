@@ -17,6 +17,13 @@ extern JavaVM* jvm;
 //================================================================//
 
 //----------------------------------------------------------------//
+/**	@name	init
+	@text	Initialize ChartBoost.
+	
+	@in		string	appId			Available in ChartBoost dashboard settings.
+	@in 	string	appSignature	Available in ChartBoost dashboard settings.
+	@out 	nil
+*/
 int MOAIChartBoost::_init ( lua_State* L ) {
 	
 	MOAILuaState state ( L );
@@ -49,32 +56,12 @@ int MOAIChartBoost::_init ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
-int MOAIChartBoost::_install ( lua_State* L ) {
+/**	@name	showInterstitial
+	@text	Request an interstitial ad display.
 	
-	MOAILuaState state ( L );
-
-	JNI_GET_ENV ( jvm, env );
-
-	jclass chartboost = env->FindClass ( "com/ziplinegames/moai/MoaiChartBoost" );
-    if ( chartboost == NULL ) {
-
-		USLog::Print ( "MOAIChartBoost: Unable to find java class %s", "com/ziplinegames/moai/MoaiChartBoost" );
-    } else {
-
-    	jmethodID install = env->GetStaticMethodID ( chartboost, "install", "()V" );
-    	if ( install == NULL ) {
-
-			USLog::Print ( "MOAIChartBoost: Unable to find static java method %s", "install" );
-    	} else {
-
-			env->CallStaticVoidMethod ( chartboost, install );				
-		}
-	}
-			
-	return 0;
-}
-
-//----------------------------------------------------------------//
+	@opt	string	locationId		Optional location ID.
+	@out 	nil
+*/
 int MOAIChartBoost::_showInterstitial ( lua_State* L ) {
 	
 	MOAILuaState state ( L );
@@ -124,7 +111,6 @@ void MOAIChartBoost::RegisterLuaClass ( MOAILuaState& state ) {
 
 	luaL_Reg regTable [] = {
 		{ "init",				_init },
-		{ "install",			_install },
 		{ "showInterstitial",	_showInterstitial },
 		{ NULL, NULL }
 	};
