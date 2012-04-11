@@ -17,15 +17,27 @@ private:
 
 	//----------------------------------------------------------------//
 	static int	_init 				( lua_State* L );
+	static int	_loadInterstitial 	( lua_State* L );
+	static int	_setListener		( lua_State* L );
 	static int	_showInterstitial 	( lua_State* L );
 	
 public:
 
 	DECL_LUA_SINGLETON ( MOAIChartBoost );
 	
-					MOAIChartBoost		();
-					~MOAIChartBoost		();
-	void			RegisterLuaClass	( MOAILuaState& state );
+	enum {
+		INTERSTITIAL_LOAD_FAILED,
+		INTERSTITIAL_DISMISSED,
+		TOTAL
+	};
+	
+	MOAILuaRef		mListeners [ TOTAL ];
+	
+					MOAIChartBoost					();
+					~MOAIChartBoost					();
+	void 			NotifyInterstitialDismissed		();
+	void 			NotifyInterstitialLoadFailed	();
+	void			RegisterLuaClass				( MOAILuaState& state );
 };
 
 #endif  //DISABLE_CHARTBOOST
