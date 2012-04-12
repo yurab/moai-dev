@@ -24,8 +24,8 @@
 # space-delimited list of libraries (moai-supported) required 
 # (this list is created by make-host.sh using command-line 
 # information)
-# available: facebook, tapjoy, adcolony, crittercism, google-push, 
-#            google-billing
+# available: facebook, tapjoy, crittercism, google-push, 
+#            google-billing, miscellaneous (required by google-billing)
 #----------------------------------------------------------------#
 
 	requires=( @REQUIRED_LIBS@ )
@@ -37,6 +37,7 @@
 	icon_ldpi="res/icon-ldpi.png"
 	icon_mdpi="res/icon-mdpi.png"
 	icon_hdpi="res/icon-hdpi.png"
+	icon_xhdpi="res/icon-xhdpi.png"
 		
 #----------------------------------------------------------------#
 # working directory in the assets directory of the application 
