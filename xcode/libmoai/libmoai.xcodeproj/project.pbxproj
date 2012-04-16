@@ -3828,7 +3828,6 @@
 		0725E2E414F459E600551DB5 /* MOAIAdColony.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOAIAdColony.h; path = "moaiext-iphone/MOAIAdColony.h"; sourceTree = "<group>"; };
 		0725E2E514F459E600551DB5 /* MOAIAdColony.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MOAIAdColony.mm; path = "moaiext-iphone/MOAIAdColony.mm"; sourceTree = "<group>"; };
 		0725E2EC14F45AE200551DB5 /* AdColonyPublic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdColonyPublic.h; path = "../../3rdparty/adcolonyiOS-197/Library/AdColonyPublic.h"; sourceTree = "<group>"; };
-		0725E2EE14F45B0C00551DB5 /* libAdColony.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAdColony.a; path = "../../3rdparty/adcolonyiOS-197/Library/libAdColony.a"; sourceTree = "<group>"; };
 		073D58591459269600289D5C /* libmoai-ios-tapjoy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libmoai-ios-tapjoy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		075110E1149AD7C3006C0B61 /* MOAIGridPathGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MOAIGridPathGraph.cpp; path = moaicore/MOAIGridPathGraph.cpp; sourceTree = "<group>"; };
 		075110E2149AD7C3006C0B61 /* MOAIGridPathGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOAIGridPathGraph.h; path = moaicore/MOAIGridPathGraph.h; sourceTree = "<group>"; };
@@ -7286,7 +7285,6 @@
 		CD2FDE8613542E9F00B814DF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0725E2EE14F45B0C00551DB5 /* libAdColony.a */,
 				CD2FDEDB13542F3600B814DF /* libiconv.dylib */,
 				CD2FDEBB13542F1400B814DF /* AddressBook.framework */,
 				CD2FDEBC13542F1400B814DF /* AddressBookUI.framework */,
@@ -12814,7 +12812,7 @@
 					"\"../../3rdparty/tlsf-2.0\"",
 					"\"../../3rdparty/zlib-1.2.3\"",
 					"\"../../3rdparty/tapjoyiOS-8.1.9/\"/**",
-					"\"../../3rdparty/crittercismiOS-2.9.37/CrittercismSDK\"/**",
+					"\"../../3rdparty/crittercismiOS-3.1.5/CrittercismSDK\"/**",
 					"\"../../3rdparty/adcolonyiOS-197/Library\"/**",
 					"\"../../3rdparty/chartboostiOS-2.8.2/**",
 				);
@@ -13254,7 +13252,7 @@
 					"\"../../3rdparty/tlsf-2.0\"",
 					"\"../../3rdparty/zlib-1.2.3\"",
 					"\"../../3rdparty/tapjoyiOS-8.1.9/\"/**",
-					"\"../../3rdparty/crittercismiOS-2.9.37/CrittercismSDK\"/**",
+					"\"../../3rdparty/crittercismiOS-3.1.5/CrittercismSDK\"/**",
 					"\"../../3rdparty/adcolonyiOS-197/Library\"/**",
 					"\"../../3rdparty/chartboostiOS-2.8.2/**",
 				);
@@ -13721,7 +13719,7 @@
 					"\"../../3rdparty/tlsf-2.0\"",
 					"\"../../3rdparty/zlib-1.2.3\"",
 					"\"../../3rdparty/tapjoyiOS-8.1.9/\"/**",
-					"\"../../3rdparty/crittercismiOS-2.9.37/CrittercismSDK\"/**",
+					"\"../../3rdparty/crittercismiOS-3.1.5/CrittercismSDK\"/**",
 					"\"../../3rdparty/adcolonyiOS-197/Library\"/**",
 					"\"../../3rdparty/chartboostiOS-2.8.2/**",
 				);
@@ -14312,7 +14310,7 @@
 					"\"../../3rdparty/tlsf-2.0\"",
 					"\"../../3rdparty/zlib-1.2.3\"",
 					"\"../../3rdparty/tapjoyiOS-8.1.9/\"/**",
-					"\"../../3rdparty/crittercismiOS-2.9.37/CrittercismSDK\"/**",
+					"\"../../3rdparty/crittercismiOS-3.1.5/CrittercismSDK\"/**",
 					"\"../../3rdparty/adcolonyiOS-197/Library\"/**",
 					"\"../../3rdparty/chartboostiOS-2.8.2/**",
 				);
