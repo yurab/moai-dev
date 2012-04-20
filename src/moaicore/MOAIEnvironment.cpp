@@ -37,6 +37,40 @@ int MOAIEnvironment::_generateGUID ( lua_State* L ) {
 }
 
 //----------------------------------------------------------------//
+/**	@name	getMACAddress
+ @text	Finds and returns the primary MAC Address
+ 
+ @out	string MAC
+ */
+
+int MOAIEnvironment::_getMACAddress ( lua_State* L ) {
+	
+	STLString macAddress = USAdapterInfo::GetMACAddress ();
+	lua_pushstring ( L, macAddress );
+	return 1;
+}
+
+//----------------------------------------------------------------//
+/**	@name	getOpenUDID
+ @text	Finds and returns the primary MAC Address
+ 
+ @out	string MAC
+ */
+
+int MOAIEnvironment::_getOpenUDID ( lua_State* L ) {
+	
+	if ( !MOAIEnvironment::Get ().mOpenUDID.empty ()) {
+		lua_pushstring ( L, MOAIEnvironment::Get ().mOpenUDID.c_str ());
+	} else {
+		lua_pushnil ( L );
+	}
+	
+	
+	return 1;
+}
+
+
+//----------------------------------------------------------------//
 /**	@name	getAppDisplayName
 	@text	Returns the app display name
 
@@ -519,6 +553,8 @@ void MOAIEnvironment::RegisterLuaClass ( MOAILuaState& state ) {
 		{ "getDevProduct",					_getDevProduct					},
 		{ "getDocumentDirectory",			_getDocumentDirectory			},
 		{ "getLanguageCode",				_getLanguageCode				},
+		{ "getMACAddress",					_getMACAddress					},
+		{ "getOpenUDID",					_getOpenUDID					},
 		{ "getOSBrand",						_getOSBrand						},
 		{ "getOSVersion",					_getOSVersion					},
 		{ "getResourceDirectory",			_getResourceDirectory			},
@@ -767,6 +803,16 @@ void MOAIEnvironment::SetUDID ( cc8* udid ) {
 		mUDID = udid;
 	} else {
 		mUDID.clear ();
+	}
+}
+
+//----------------------------------------------------------------//
+void MOAIEnvironment::SetOpenUDID ( cc8* openudid ) {
+	
+	if ( openudid != NULL ) {
+		mOpenUDID = openudid;
+	} else {
+		mOpenUDID.clear ();
 	}
 }
 

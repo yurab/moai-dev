@@ -1454,6 +1454,8 @@
 		668E165A14887A0A00897ED6 /* MOAIWheelSensor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 668E165714887A0A00897ED6 /* MOAIWheelSensor.cpp */; };
 		668E165B14887A0A00897ED6 /* MOAIWheelSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 668E165814887A0A00897ED6 /* MOAIWheelSensor.h */; };
 		668E165C14887A0A00897ED6 /* MOAIWheelSensor.h in Headers */ = {isa = PBXBuildFile; fileRef = 668E165814887A0A00897ED6 /* MOAIWheelSensor.h */; };
+		66B0FCF31540FD7E008C69A7 /* MOAIOpenUDID.h in Headers */ = {isa = PBXBuildFile; fileRef = 66B0FCF11540FD7E008C69A7 /* MOAIOpenUDID.h */; };
+		66B0FCF41540FD7E008C69A7 /* MOAIOpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = 66B0FCF21540FD7E008C69A7 /* MOAIOpenUDID.m */; };
 		66D967FC14047A2500017919 /* MOAIScriptDeck.h in Headers */ = {isa = PBXBuildFile; fileRef = 66D967F914047A2500017919 /* MOAIScriptDeck.h */; };
 		66D967FD14047A2500017919 /* MOAIScriptDeck.h in Headers */ = {isa = PBXBuildFile; fileRef = 66D967F914047A2500017919 /* MOAIScriptDeck.h */; };
 		C359A149143A81BA005E7829 /* RAudioBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = C359A148143A81BA005E7829 /* RAudioBuffer.h */; };
@@ -3946,6 +3948,8 @@
 		66459FB91511641F0075BF13 /* MOAIAudioSampler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIAudioSampler.h; sourceTree = "<group>"; };
 		668E165714887A0A00897ED6 /* MOAIWheelSensor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAIWheelSensor.cpp; sourceTree = "<group>"; };
 		668E165814887A0A00897ED6 /* MOAIWheelSensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIWheelSensor.h; sourceTree = "<group>"; };
+		66B0FCF11540FD7E008C69A7 /* MOAIOpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIOpenUDID.h; sourceTree = "<group>"; };
+		66B0FCF21540FD7E008C69A7 /* MOAIOpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAIOpenUDID.m; sourceTree = "<group>"; };
 		66D967F4140479DF00017919 /* MOAILogMessages.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAILogMessages.cpp; sourceTree = "<group>"; };
 		66D967F814047A2500017919 /* MOAIScriptDeck.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MOAIScriptDeck.cpp; sourceTree = "<group>"; };
 		66D967F914047A2500017919 /* MOAIScriptDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAIScriptDeck.h; sourceTree = "<group>"; };
@@ -5351,6 +5355,7 @@
 		032409EE13564CAF000ADC60 /* 3rd party */ = {
 			isa = PBXGroup;
 			children = (
+				66B0FCF01540FD7E008C69A7 /* openUDID */,
 				0725E2EB14F45AC700551DB5 /* adcolony */,
 				032409EF13564CAF000ADC60 /* box2d */,
 				E98DBC551534CD1100514387 /* chartboost */,
@@ -6458,6 +6463,16 @@
 				66459FB91511641F0075BF13 /* MOAIAudioSampler.h */,
 			);
 			path = "moaiext-audiosampler";
+			sourceTree = "<group>";
+		};
+		66B0FCF01540FD7E008C69A7 /* openUDID */ = {
+			isa = PBXGroup;
+			children = (
+				66B0FCF11540FD7E008C69A7 /* MOAIOpenUDID.h */,
+				66B0FCF21540FD7E008C69A7 /* MOAIOpenUDID.m */,
+			);
+			name = openUDID;
+			path = ../../3rdparty/openUDID;
 			sourceTree = "<group>";
 		};
 		CD04AEB6147256B0009C20E5 /* zlib */ = {
@@ -9772,6 +9787,7 @@
 				CD04AF0314725714009C20E5 /* zconf.h in Headers */,
 				CD04AF0614725714009C20E5 /* zlib.h in Headers */,
 				CD04AF0C14725714009C20E5 /* zutil.h in Headers */,
+				66B0FCF31540FD7E008C69A7 /* MOAIOpenUDID.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12014,6 +12030,7 @@
 				CD04AEFA14725714009C20E5 /* trees.c in Sources */,
 				CD04AF0014725714009C20E5 /* uncompr.c in Sources */,
 				CD04AF0914725714009C20E5 /* zutil.c in Sources */,
+				66B0FCF41540FD7E008C69A7 /* MOAIOpenUDID.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

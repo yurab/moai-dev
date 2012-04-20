@@ -54,6 +54,7 @@ private:
 	STLString			mOSVersion;
 	STLString			mResourceDirectory;
 	STLString			mUDID;
+	STLString			mOpenUDID;
 	long				mScreenWidth;
 	long				mScreenHeight;
 	
@@ -80,6 +81,8 @@ private:
 	static int			_getDevProduct					( lua_State* L );
 	static int			_getDocumentDirectory			( lua_State* L );
 	static int			_getLanguageCode				( lua_State* L );
+	static int			_getMACAddress					( lua_State* L );
+	static int			_getOpenUDID					( lua_State* L );
 	static int			_getOSBrand						( lua_State* L );
 	static int			_getOSVersion					( lua_State* L );
 	static int			_getResourceDirectory			( lua_State* L );
@@ -136,6 +139,7 @@ public:
 	void				SetOSVersion				( cc8* osVersion );
 	void				SetResourceDirectory		( cc8* resDir );
 	void				SetUDID						( cc8* udid );
+	void				SetOpenUDID					( cc8* openudid );
 	void				SetScreenSize				( long width, long height );
 };
 

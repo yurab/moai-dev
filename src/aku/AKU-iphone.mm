@@ -12,6 +12,8 @@
 #import <Crittercism.h>
 #import <TapjoyConnect.h>
 
+#import <OpenUDID/MOAIOpenUDID.h>
+
 //-----------------------------------------------------------------//
 void AKUAppDidStartSession ( bool resumed ) {
 
@@ -93,6 +95,7 @@ void AKUIphoneInit ( UIApplication* application ) {
 	MOAIEnvironment::Get ().SetOSVersion ( [[ UIDevice currentDevice ].systemVersion UTF8String ] );
 	MOAIEnvironment::Get ().SetResourceDirectory ( [[[ NSBundle mainBundle ] resourcePath ] UTF8String ]);
 	MOAIEnvironment::Get ().SetUDID ( [[ UIDevice currentDevice ].uniqueIdentifier UTF8String ] );
+	MOAIEnvironment::Get ().SetOpenUDID ( [[ MOAIOpenUDID value ] UTF8String ] );
 	MOAIEnvironment::Get ().SetDevModel ( [[ UIDevice currentDevice ].model UTF8String ] );
 
 	if ([[ UIScreen mainScreen ] scale ] == 2.0 ) {
