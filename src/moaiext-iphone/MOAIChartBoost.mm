@@ -23,7 +23,7 @@ int MOAIChartBoost::_init ( lua_State* L ) {
 	[[ ChartBoost sharedChartBoost ] setAppId:[ NSString stringWithUTF8String:identifier ]];
 	[[ ChartBoost sharedChartBoost ] setAppSignature:[ NSString stringWithUTF8String:signature ]];
 	[[ ChartBoost sharedChartBoost ] setDelegate:MOAIChartBoost::Get ().mDelegate ];
-	[[ ChartBoost sharedChartBoost ] install ];
+	[[ ChartBoost sharedChartBoost ] startSession ];
 	
 	return 0;
 }
