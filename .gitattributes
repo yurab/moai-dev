@@ -1,6 +1,7 @@
-*.sh 								eol=lf
-3rdparty/curl-7.19.7/				eol=lf
-*.sln								eol=crlf
-distribute/moai-sdk/legal.txt		eol=crlf
-distribute/moai-sdk/license.txt		eol=crlf
-distribute/moai-sdk/README.txt		eol=crlf
+* text=auto
+*.sh text				eol=lf
+3rdparty/curl-7.19.7/ text		eol=lf
+*.sln			  text      	eol=crlf
+distribute/moai-sdk/legal.txt tex	eol=crlf
+distribute/moai-sdk/license.txt	text	eol=crlf
+distribute/moai-sdk/README.txt	text	eol=crlf
