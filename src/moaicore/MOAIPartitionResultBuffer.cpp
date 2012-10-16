@@ -88,6 +88,18 @@ public:
 //================================================================//
 
 //----------------------------------------------------------------//
+MOAIPartitionResult& MOAIPartitionResultBuffer::AddResult () {
+	
+	u32 idx = this->mTotalResults++;
+	
+	if ( idx >= this->mMainBuffer.Size ()) {
+		this->mMainBuffer.Grow ( idx + 1, BLOCK_SIZE );
+	}
+	
+	return this->mMainBuffer [ idx ];
+}
+
+//----------------------------------------------------------------//
 void MOAIPartitionResultBuffer::Clear () {
 
 	this->mMainBuffer.Clear ();
@@ -126,6 +138,13 @@ void MOAIPartitionResultBuffer::GenerateKeys ( u32 mode, float xScale, float ySc
 
 	switch ( mode & SORT_MODE_MASK ) {
 		
+		case SORT_RAY_ASCENDING:
+			for ( u32 i = 0; i < this->mTotalResults; ++i ) {
+				float t = this->mMainBuffer [ i ].mRayHitTime;
+				this->mMainBuffer [ i ].mKey = USFloat::FloatToIntKey ( t * floatSign );
+			}
+			break;
+			
 		case SORT_PRIORITY_ASCENDING:
 			for ( u32 i = 0; i < this->mTotalResults; ++i ) {
 				s32 p = this->mMainBuffer [ i ].mPriority * intSign;
@@ -196,27 +215,6 @@ void MOAIPartitionResultBuffer::PushProps ( lua_State* L ) {
 	for ( u32 i = 0; i < total; ++i ) {
 		this->mResults [ i ].mProp->PushLuaUserdata ( state );
    }
-}
-
-//----------------------------------------------------------------//
-void MOAIPartitionResultBuffer::PushResult ( MOAIProp& prop, u32 key, int subPrimID, s32 priority, const USVec3D& loc, const USBox& bounds ) {
-
-	u32 idx = this->mTotalResults++;
-	
-	if ( idx >= this->mMainBuffer.Size ()) {
-		this->mMainBuffer.Grow ( idx + 1, BLOCK_SIZE );
-	}
-	
-	MOAIPartitionResult& result = this->mMainBuffer [ idx ] ;
-	
-	result.mKey = key;
-	
-	result.mProp = &prop;
-	result.mSubPrimID = subPrimID;
-	result.mPriority = priority;
-	
-	result.mLoc = loc;
-	result.mBounds = bounds;
 }
 
 //----------------------------------------------------------------//

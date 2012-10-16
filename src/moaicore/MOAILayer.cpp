@@ -741,6 +741,8 @@ void MOAILayer::RegisterLuaClass ( MOAILuaState& state ) {
 	
 	state.SetField ( -1, "SORT_NONE",					( u32 )MOAIPartitionResultBuffer::SORT_NONE );
 	state.SetField ( -1, "SORT_ISO",					( u32 )MOAIPartitionResultBuffer::SORT_ISO );
+	state.SetField ( -1, "SORT_RAY_ASCENDING",			( u32 )MOAIPartitionResultBuffer::SORT_RAY_ASCENDING );
+	state.SetField ( -1, "SORT_RAY_DESCENDING",			( u32 )MOAIPartitionResultBuffer::SORT_RAY_DESCENDING );
 	state.SetField ( -1, "SORT_PRIORITY_ASCENDING",		( u32 )MOAIPartitionResultBuffer::SORT_PRIORITY_ASCENDING );
 	state.SetField ( -1, "SORT_PRIORITY_DESCENDING",	( u32 )MOAIPartitionResultBuffer::SORT_PRIORITY_DESCENDING );
 	state.SetField ( -1, "SORT_X_ASCENDING",			( u32 )MOAIPartitionResultBuffer::SORT_X_ASCENDING );

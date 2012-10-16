@@ -19,6 +19,8 @@ public:
 	
 	USVec3D		mLoc;
 	USBox		mBounds;
+		
+	float		mRayHitTime;
 };
 
 //================================================================//
@@ -55,12 +57,14 @@ public:
 		
 		SORT_ISO,
 		
+		SORT_RAY_ASCENDING,
 		SORT_PRIORITY_ASCENDING,
 		SORT_X_ASCENDING,
 		SORT_Y_ASCENDING,
 		SORT_Z_ASCENDING,
 		SORT_VECTOR_ASCENDING,
 		
+		SORT_RAY_DESCENDING			= SORT_RAY_ASCENDING | SORT_FLAG_DESCENDING,
 		SORT_PRIORITY_DESCENDING	= SORT_PRIORITY_ASCENDING | SORT_FLAG_DESCENDING,
 		SORT_X_DESCENDING			= SORT_X_ASCENDING | SORT_FLAG_DESCENDING,
 		SORT_Y_DESCENDING			= SORT_Y_ASCENDING | SORT_FLAG_DESCENDING,
@@ -71,6 +75,7 @@ public:
 	GET ( u32, TotalResults, mTotalResults )
 	
 	//----------------------------------------------------------------//
+	MOAIPartitionResult&	AddResult						();
 	void					Clear							();
 	MOAIProp*				FindBest						();
 	void					GenerateKeys					( u32 mode, float xScale, float yScale, float zScale, float priority );
@@ -78,7 +83,6 @@ public:
 							~MOAIPartitionResultBuffer		();
 	MOAIPartitionResult*	PopResult						();
 	void					PushProps						( lua_State* L );
-	void					PushResult						( MOAIProp& prop, u32 key, int subPrimID, s32 priority, const USVec3D& loc, const USBox& bounds );
 	void					Reset							();
 	u32						Sort							( u32 mode );
 	

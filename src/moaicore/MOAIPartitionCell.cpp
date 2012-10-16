@@ -51,7 +51,12 @@ void MOAIPartitionCell::GatherProps ( MOAIPartitionResultBuffer& results, const 
 		float t;
 		if (( mask == 0 ) || ( prop->mMask & mask )) {
 			if ( !USSect::RayToBox( prop->mBounds, point, orientation, t )) {
-				prop->AddToSortBuffer ( results,  -1 * USFloat::FloatToIntKey ( t ));
+								
+				MOAIPartitionResult& result = results.AddResult();
+				prop->PopulateResult ( result );
+				
+				result.mKey = 0;
+				result.mRayHitTime = t;
 			}
 		}
 	}
@@ -67,7 +72,10 @@ void MOAIPartitionCell::GatherProps ( MOAIPartitionResultBuffer& results, const 
 		if ( prop == ignore ) continue;
 		
 		if (( mask == 0 ) || ( prop->mMask & mask )) {
-			prop->AddToSortBuffer ( results );
+			MOAIPartitionResult& result = results.AddResult();
+			prop->PopulateResult ( result );
+			
+			result.mKey = 0;
 		}
 	}
 }
@@ -84,7 +92,10 @@ void MOAIPartitionCell::GatherProps ( MOAIPartitionResultBuffer& results, const 
 		if (( mask == 0 ) || ( prop->mMask & mask )) {
 			if ( prop->mBounds.Contains ( point )) {
 				if ( prop->Inside ( point, 0.0f )) {
-					prop->AddToSortBuffer ( results );
+					MOAIPartitionResult& result = results.AddResult();
+					prop->PopulateResult ( result );
+					
+					result.mKey = 0;
 				}
 			}
 		}
@@ -102,7 +113,10 @@ void MOAIPartitionCell::GatherProps ( MOAIPartitionResultBuffer& results, const 
 		
 		if (( mask == 0 ) || ( prop->mMask & mask )) {	
 			if ( prop->mBounds.Overlap ( box )) {
-				prop->AddToSortBuffer ( results );
+				MOAIPartitionResult& result = results.AddResult();
+				prop->PopulateResult ( result );
+				
+				result.mKey = 0;
 			}
 		}
 	}
@@ -119,7 +133,10 @@ void MOAIPartitionCell::GatherProps ( MOAIPartitionResultBuffer& results, const 
 		
 		if (( mask == 0 ) || ( prop->mMask & mask )) {	
 			if ( !frustum.Cull ( prop->mBounds )) {
-				prop->AddToSortBuffer ( results );
+				MOAIPartitionResult& result = results.AddResult();
+				prop->PopulateResult ( result );
+				
+				result.mKey = 0;
 			}
 		}
 	}
