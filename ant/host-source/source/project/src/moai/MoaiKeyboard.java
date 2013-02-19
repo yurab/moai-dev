@@ -22,7 +22,7 @@ import android.widget.TextView.OnEditorActionListener;
 import android.widget.TextView;
 
 // These are necessary for the mKeyInTextView hack
-import android.widget.EditText;Ï
+import android.widget.EditText;
 import android.text.TextWatcher;
 import android.text.Editable;
 
@@ -96,14 +96,6 @@ public class MoaiKeyboard {
 		        return false;
 		    }
 		});
-
-		// Create the fake EditText, and push it outside the margins so that its not visible.
-		LinearLayout.LayoutParams paramsKeyInTextView = new LinearLayout.LayoutParams ( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );
-
-		// re-set the Margins so that the field is hidden.
-		paramsKeyInTextView.setMargins ( 0, 64, 0, 0 );
-		mKeyInTextView.setLayoutParams ( paramsKeyInTextView );
-		
 	}
 
 	public static LinearLayoutIMETrap getContainer () {
