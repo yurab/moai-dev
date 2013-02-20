@@ -126,7 +126,7 @@ public class MoaiActivity extends Activity {
 		setContentView ( con );
 		con.addView ( mMoaiView );
 		con.addView ( MoaiKeyboard.getEditText ());
-		
+		MoaiKeyboard.hideKeyboard ();
     }
 
 	//----------------------------------------------------------------//

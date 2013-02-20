@@ -38,7 +38,7 @@ int MOAIKeyboardAndroid::_hideKeyboard ( lua_State* L ) {
 	jclass moai = env->FindClass ( "com/ziplinegames/moai/MoaiKeyboard" );
 
 	if ( moai ) {
-		jmethodID hideSoftKeyboard = env->GetStaticMethodID ( moai, "hideKeyboard", "()V" );
+		jmethodID hideSoftKeyboard = env->GetStaticMethodID ( moai, "hideKeyboard", "()Z" );
 		if ( hideSoftKeyboard ) {
 			env->CallStaticVoidMethod ( moai, hideSoftKeyboard ); 
 			return 1;

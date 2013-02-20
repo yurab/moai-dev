@@ -128,9 +128,9 @@ public class MoaiKeyboard {
 		mInputMethodManager.showSoftInput ( mKeyInTextView, 0 );	
 	}
 
-	public static void hideKeyboard () {	
+	public static boolean hideKeyboard () {	
 		mKeyInTextView.setText ( "" );
-		mInputMethodManager.hideSoftInputFromWindow ( mKeyInTextView.getWindowToken (), 0 );
+		return	mInputMethodManager.hideSoftInputFromWindow ( mKeyInTextView.getWindowToken (), 0 );
 	}
 		
 	public static void setText ( String text )	{	

@@ -53,17 +53,17 @@ public class LinearLayoutIMETrap extends LinearLayout {
 
 	@Override
 	public boolean dispatchKeyEventPreIme ( KeyEvent event ) {
-		if ( activityReference != null ) {
-			InputMethodManager imm = ( InputMethodManager ) activityReference.getSystemService ( Context.INPUT_METHOD_SERVICE );
-			if ( imm.isActive () && event.getKeyCode () == KeyEvent.KEYCODE_BACK ) {
-				MoaiLog.i ( "LinearLayoutIMETrap dispatchKeyEventPreIme, event: " + event );
-				MoaiKeyboard.hideKeyboard (); // hide the keyboard if its visible ..
+		
+		if ( event.getKeyCode () == KeyEvent.KEYCODE_BACK ) {
+			if ( MoaiKeyboard.hideKeyboard ()) {
+				return true;
+			}
+			else {
 				if ( Moai.backButtonPressed ()) {
 					return true;
 				}
 			}
 		}
-
 		return super.dispatchKeyEventPreIme ( event );
 	}
 }
