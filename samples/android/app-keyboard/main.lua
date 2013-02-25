@@ -20,4 +20,16 @@ end
 
 MOAIKeyboardAndroid.setListener ( MOAIKeyboardAndroid.EVENT_INPUT, onInput )
 MOAIKeyboardAndroid.setListener ( MOAIKeyboardAndroid.EVENT_RETURN, onReturn )
-MOAIKeyboardAndroid.showKeyboard ()
+
+local updateThread = MOAIThread.new()
+
+function update ()
+	coroutine.yield ()
+	coroutine.yield ()	
+	coroutine.yield ()	
+	coroutine.yield ()	
+	coroutine.yield ()
+	MOAIKeyboardAndroid.showKeyboard ()
+end
+
+updateThread:run ( update )

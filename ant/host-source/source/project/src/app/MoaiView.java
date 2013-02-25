@@ -62,7 +62,6 @@ public class MoaiView extends GLSurfaceView {
 
 			public void run () {
 			
-				MoaiKeyboard.update ();
 				Moai.update ();
 
 				mHandler.postDelayed ( mUpdateRunnable , AKU_UPDATE_FREQUENCY );

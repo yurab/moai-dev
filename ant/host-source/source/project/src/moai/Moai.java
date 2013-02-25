@@ -510,6 +510,9 @@ public class Moai {
 	public static void update () {
 		
 		synchronized ( sAkuLock ) {
+			
+			MoaiKeyboard.update ();
+			
 			AKUUpdate ();
 		}
 	}	

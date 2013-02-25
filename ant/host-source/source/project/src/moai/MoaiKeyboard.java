@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.Window;
+import android.view.View;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 
@@ -46,6 +47,8 @@ public class MoaiKeyboard {
 	private static InputMethodManager mInputMethodManager;
 
 	private static LinearLayoutIMETrap mContainer;
+	
+	private static View mMainView;
 		
 	//----------------------------------------------------------------//
 	public static void onCreate ( Activity activity ) {
@@ -87,19 +90,33 @@ public class MoaiKeyboard {
 			}
 		});
 		
+		mKeyInTextView.setRawInputType( EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_NORMAL );
+		mKeyInTextView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		
 		mKeyInTextView.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		        if (actionId == EditorInfo.IME_ACTION_DONE) {
 					mTextIsReady = true;
+					mKeyInTextView.bringToFront ();
+					mContainer.invalidate ();
 		        }
 		        return false;
 		    }
 		});
+		
+		LinearLayout.LayoutParams paramsKeyInTextView = new LinearLayout.LayoutParams ( LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT );  	
+		// re-set the Margins so that the field is hidden.  	
+		paramsKeyInTextView.setMargins ( 0, 64, 0, 0 ); 	
+		mKeyInTextView.setLayoutParams ( paramsKeyInTextView );
 	}
 
 	public static LinearLayoutIMETrap getContainer () {
 		return mContainer;
+	}
+	
+	public static void setMainView ( View mainView ) {
+		mMainView = mainView;
 	}
 	
 	public static EditText getEditText() {
@@ -124,12 +141,16 @@ public class MoaiKeyboard {
 		return mKeyString;
 	}
 	
-	public static void showKeyboard () {	
-		mInputMethodManager.showSoftInput ( mKeyInTextView, 0 );	
+	public static void showKeyboard () {
+		mMainView.bringToFront ();
+		mContainer.invalidate ();
+		mInputMethodManager.showSoftInput ( mKeyInTextView, 0 );
 	}
 
 	public static boolean hideKeyboard () {	
 		mKeyInTextView.setText ( "" );
+		mKeyInTextView.bringToFront ();
+		mContainer.invalidate ();
 		return	mInputMethodManager.hideSoftInputFromWindow ( mKeyInTextView.getWindowToken (), 0 );
 	}
 		
