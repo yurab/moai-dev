@@ -91,7 +91,7 @@ public class MoaiKeyboard {
 		});
 		
 		mKeyInTextView.setRawInputType( EditorInfo.TYPE_CLASS_TEXT | EditorInfo.TYPE_TEXT_VARIATION_NORMAL );
-		mKeyInTextView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+		mKeyInTextView.setImeOptions( EditorInfo.IME_ACTION_DONE | EditorInfo.IME_FLAG_NO_EXTRACT_UI );
 		
 		mKeyInTextView.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
