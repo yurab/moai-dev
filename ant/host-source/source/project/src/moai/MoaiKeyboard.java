@@ -142,15 +142,15 @@ public class MoaiKeyboard {
 	}
 	
 	public static void showKeyboard () {
-		mMainView.bringToFront ();
-		mContainer.invalidate ();
+		//mMainView.bringToFront ();
+		//mContainer.invalidate ();
 		mInputMethodManager.showSoftInput ( mKeyInTextView, 0 );
 	}
 
 	public static boolean hideKeyboard () {	
-		mKeyInTextView.setText ( "" );
-		mKeyInTextView.bringToFront ();
-		mContainer.invalidate ();
+		//mKeyInTextView.setText ( "" );
+		//mKeyInTextView.bringToFront ();
+		//mContainer.invalidate ();
 		return	mInputMethodManager.hideSoftInputFromWindow ( mKeyInTextView.getWindowToken (), 0 );
 	}
 		
