@@ -15,6 +15,37 @@ extern JavaVM* jvm;
 //================================================================//
 
 //----------------------------------------------------------------//
+/**	@name	finish
+	@text	Finishes the Android Activity
+	
+	@out 	num		UTC Time
+*/
+int MOAIAppAndroid::_finish ( lua_State* L ) {
+	
+	MOAILuaState state ( L );
+		
+	JNI_GET_ENV ( jvm, env );
+	
+	jclass moai = env->FindClass ( "com/ziplinegames/moai/Moai" );
+    if ( moai == NULL ) {
+
+		USLog::Print ( "MOAIAppAndroid: Unable to find java class %s", "com/ziplinegames/moai/Moai" );
+    } else {
+
+    	jmethodID finish = env->GetStaticMethodID ( moai, "finishActivity", "()V" );
+    	if ( finish == NULL ) {
+
+			USLog::Print ( "MOAIAppAndroid: Unable to find static java method %s", "finish" );
+    	} else {
+
+			env->CallStaticVoidMethod ( moai, finish );
+		}
+	}
+	
+	return 0;
+}
+
+//----------------------------------------------------------------//
 /**	@name	getUTCTime
 	@text	Gets the UTC time.
 	
@@ -199,6 +230,7 @@ void MOAIAppAndroid::RegisterLuaClass ( MOAILuaState& state ) {
 	state.SetField ( -1, "BACK_BUTTON_PRESSED",		( u32 )BACK_BUTTON_PRESSED );
 
 	luaL_Reg regTable [] = {
+		{ "finish",					_finish },
 		{ "getUTCTime",				_getUTCTime },
 		{ "getStatusBarHeight",		_getStatusBarHeight },
 		{ "openURL",				_openURL },

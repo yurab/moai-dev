@@ -276,6 +276,13 @@ public class Moai {
 			AKUFinalize ();
 		}
 	}
+	
+	//----------------------------------------------------------------//
+	public static void finishActivity () {
+		synchronized ( sAkuLock ) {
+			sActivity.finish ();
+		}
+	}
 
 	//----------------------------------------------------------------//
 	public static ApplicationState getApplicationState () {
@@ -515,7 +522,7 @@ public class Moai {
 			
 			AKUUpdate ();
 		}
-	}	
+	}
 	
 	//================================================================//
 	// Private methods
