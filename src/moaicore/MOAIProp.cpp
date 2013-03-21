@@ -233,11 +233,11 @@ int MOAIProp::_setBlendEquation ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIProp, "U" )
 
 	if ( state.IsType ( 2, LUA_TNUMBER )) {
-		u32 equation = state.GetValue < u32 >( 2, GL_FUNC_ADD );
+		u32 equation = state.GetValue < u32 >( 2, ZGL_BLEND_MODE_ADD );
 		self->mBlendMode.SetBlendEquation ( equation );
 	}
 	else {
-		self->mBlendMode.SetBlendEquation ( GL_FUNC_ADD );
+		self->mBlendMode.SetBlendEquation ( ZGL_BLEND_MODE_ADD );
 	}
 	
 	self->ScheduleUpdate ();
@@ -707,8 +707,11 @@ bool MOAIProp::ApplyAttrOp ( u32 attrID, MOAIAttrOp& attrOp, u32 op ) {
 			case ATTR_BLEND_MODE:
 				attrOp.ApplyNoAdd < MOAIBlendMode >( this->mBlendMode, op, MOAIAttrOp::ATTR_READ_WRITE );
 				return true;
+			case ATTR_LOCAL_VISIBLE:
+				this->SetVisible ( USFloat::ToBoolean ( attrOp.ApplyNoAdd ( USFloat::FromBoolean (( this->mFlags & FLAGS_LOCAL_VISIBLE ) != 0 ), op, MOAIAttrOp::ATTR_READ_WRITE )));
+				return true;
 			case ATTR_VISIBLE:
-				this->SetVisible ( USFloat::ToBoolean ( attrOp.Apply ( USFloat::FromBoolean (( this->mFlags & FLAGS_VISIBLE ) != 0 ), op, MOAIAttrOp::ATTR_READ_WRITE )));
+				attrOp.ApplyNoAdd ( USFloat::FromBoolean (( this->mFlags & FLAGS_VISIBLE ) != 0 ), op , MOAIAttrOp::ATTR_READ );
 				return true;
 			//case FRAME_TRAIT:
 			//	attrOp.Apply < USBox >( &this->mFrame, op, MOAIAttrOp::ATTR_READ );
@@ -1090,6 +1093,9 @@ void MOAIProp::OnDepNodeUpdate () {
 	// update the prop location in the partition
 	propBounds.Transform ( this->mLocalToWorldMtx );
 	this->UpdateBounds ( propBounds, propBoundsStatus );
+	
+	bool visible = USFloat::ToBoolean ( this->GetLinkedValue ( MOAIPropAttr::Pack ( INHERIT_VISIBLE ), 1.0f ));
+	this->mFlags = visible && ( this->mFlags & FLAGS_LOCAL_VISIBLE ) ? this->mFlags | FLAGS_VISIBLE : this->mFlags & ~FLAGS_VISIBLE ;	
 }
 
 //----------------------------------------------------------------//
@@ -1098,50 +1104,57 @@ void MOAIProp::RegisterLuaClass ( MOAILuaState& state ) {
 	MOAITransform::RegisterLuaClass ( state );
 	MOAIColor::RegisterLuaClass ( state );
 	
-	state.SetField ( -1, "ATTR_INDEX", MOAIPropAttr::Pack ( ATTR_INDEX ));
-	state.SetField ( -1, "ATTR_PARTITION", MOAIPropAttr::Pack ( ATTR_PARTITION ));
-	state.SetField ( -1, "ATTR_SHADER", MOAIPropAttr::Pack ( ATTR_SHADER ));
-	state.SetField ( -1, "ATTR_BLEND_MODE", MOAIPropAttr::Pack ( ATTR_BLEND_MODE ));
-	state.SetField ( -1, "ATTR_VISIBLE", MOAIPropAttr::Pack ( ATTR_VISIBLE ));
-	
-	state.SetField ( -1, "INHERIT_FRAME", MOAIPropAttr::Pack ( INHERIT_FRAME ));
-	state.SetField ( -1, "FRAME_TRAIT", MOAIPropAttr::Pack ( FRAME_TRAIT ));
-	
-	state.SetField ( -1, "BLEND_ADD", ( u32 )MOAIBlendMode::BLEND_ADD );
-	state.SetField ( -1, "BLEND_MULTIPLY", ( u32 )MOAIBlendMode::BLEND_MULTIPLY );
-	state.SetField ( -1, "BLEND_NORMAL", ( u32 )MOAIBlendMode::BLEND_NORMAL );
+	state.SetField ( -1, "ATTR_INDEX",			MOAIPropAttr::Pack ( ATTR_INDEX ));
+	state.SetField ( -1, "ATTR_PARTITION",		MOAIPropAttr::Pack ( ATTR_PARTITION ));
+	state.SetField ( -1, "ATTR_SHADER",			MOAIPropAttr::Pack ( ATTR_SHADER ));
+	state.SetField ( -1, "ATTR_BLEND_MODE",		MOAIPropAttr::Pack ( ATTR_BLEND_MODE ));
+	state.SetField ( -1, "ATTR_VISIBLE",		MOAIPropAttr::Pack ( ATTR_VISIBLE ));
 
-#define SIMPLE_FIELD_MAP(x) state.SetField ( -1, #x, ( u32 ) x )
-	SIMPLE_FIELD_MAP(GL_FUNC_ADD);
-	SIMPLE_FIELD_MAP(GL_FUNC_SUBTRACT);
-	SIMPLE_FIELD_MAP(GL_FUNC_REVERSE_SUBTRACT);
+	state.SetField ( -1, "ATTR_LOCAL_VISIBLE",	MOAIPropAttr::Pack ( ATTR_LOCAL_VISIBLE ));
+	state.SetField ( -1, "ATTR_VISIBLE",		MOAIPropAttr::Pack ( ATTR_VISIBLE ));
+	state.SetField ( -1, "INHERIT_VISIBLE",		MOAIPropAttr::Pack ( INHERIT_VISIBLE ));
 
-	SIMPLE_FIELD_MAP(GL_ONE);
-	SIMPLE_FIELD_MAP(GL_ZERO);
-	SIMPLE_FIELD_MAP(GL_DST_ALPHA);
-	SIMPLE_FIELD_MAP(GL_DST_COLOR);
-	SIMPLE_FIELD_MAP(GL_SRC_COLOR);
-	SIMPLE_FIELD_MAP(GL_ONE_MINUS_DST_ALPHA);
-	SIMPLE_FIELD_MAP(GL_ONE_MINUS_DST_COLOR);
-	SIMPLE_FIELD_MAP(GL_ONE_MINUS_SRC_ALPHA);
-	SIMPLE_FIELD_MAP(GL_ONE_MINUS_SRC_COLOR);
-	SIMPLE_FIELD_MAP(GL_SRC_ALPHA);
-	SIMPLE_FIELD_MAP(GL_SRC_ALPHA_SATURATE);
+	state.SetField ( -1, "INHERIT_FRAME",		MOAIPropAttr::Pack ( INHERIT_FRAME ));
+	state.SetField ( -1, "FRAME_TRAIT",			MOAIPropAttr::Pack ( FRAME_TRAIT ));
 	
-	state.SetField ( -1, "DEPTH_TEST_DISABLE", ( u32 )0 );
-	state.SetField ( -1, "DEPTH_TEST_NEVER", ( u32 )GL_NEVER );
-	state.SetField ( -1, "DEPTH_TEST_LESS", ( u32 )GL_LESS );
-	state.SetField ( -1, "DEPTH_TEST_EQUAL", ( u32 )GL_EQUAL );
-	state.SetField ( -1, "DEPTH_TEST_LESS_EQUAL", ( u32 )GL_LEQUAL );
-	state.SetField ( -1, "DEPTH_TEST_GREATER", ( u32 )GL_GREATER );
-	state.SetField ( -1, "DEPTH_TEST_NOTEQUAL", ( u32 )GL_NOTEQUAL );
-	state.SetField ( -1, "DEPTH_TEST_GREATER_EQUAL", ( u32 )GL_GEQUAL );
-	state.SetField ( -1, "DEPTH_TEST_ALWAYS", ( u32 )GL_ALWAYS );
+	state.SetField ( -1, "BLEND_ADD",			( u32 )MOAIBlendMode::BLEND_ADD );
+	state.SetField ( -1, "BLEND_MULTIPLY",		( u32 )MOAIBlendMode::BLEND_MULTIPLY );
+	state.SetField ( -1, "BLEND_NORMAL",		( u32 )MOAIBlendMode::BLEND_NORMAL );
+
+	state.SetField ( -1, "BLEND_NORMAL",		( u32 )MOAIBlendMode::BLEND_NORMAL );
+	state.SetField ( -1, "BLEND_NORMAL",		( u32 )MOAIBlendMode::BLEND_NORMAL );
+	state.SetField ( -1, "BLEND_NORMAL",		( u32 )MOAIBlendMode::BLEND_NORMAL );
 	
-	state.SetField ( -1, "CULL_NONE", ( u32 )0 );
-	state.SetField ( -1, "CULL_ALL", ( u32 )GL_FRONT_AND_BACK );
-	state.SetField ( -1, "CULL_BACK", ( u32 )GL_BACK );
-	state.SetField ( -1, "CULL_FRONT", ( u32 )GL_FRONT );
+	state.SetField ( -1, "GL_FUNC_ADD",					( u32 )ZGL_BLEND_MODE_ADD );
+	state.SetField ( -1, "GL_FUNC_SUBTRACT",			( u32 )ZGL_BLEND_MODE_SUBTRACT );
+	state.SetField ( -1, "GL_FUNC_REVERSE_SUBTRACT",	( u32 )ZGL_BLEND_MODE_REVERSE_SUBTRACT );
+	
+	state.SetField ( -1, "GL_ONE",						( u32 )ZGL_BLEND_FACTOR_ONE );
+	state.SetField ( -1, "GL_ZERO",						( u32 )ZGL_BLEND_FACTOR_ZERO );
+	state.SetField ( -1, "GL_DST_ALPHA",				( u32 )ZGL_BLEND_FACTOR_DST_ALPHA );
+	state.SetField ( -1, "GL_DST_COLOR",				( u32 )ZGL_BLEND_FACTOR_DST_COLOR );
+	state.SetField ( -1, "GL_SRC_COLOR",				( u32 )ZGL_BLEND_FACTOR_SRC_COLOR );
+	state.SetField ( -1, "GL_ONE_MINUS_DST_ALPHA",		( u32 )ZGL_BLEND_FACTOR_ONE_MINUS_DST_ALPHA );
+	state.SetField ( -1, "GL_ONE_MINUS_DST_COLOR",		( u32 )ZGL_BLEND_FACTOR_ONE_MINUS_DST_COLOR );
+	state.SetField ( -1, "GL_ONE_MINUS_SRC_ALPHA",		( u32 )ZGL_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA );
+	state.SetField ( -1, "GL_ONE_MINUS_SRC_COLOR",		( u32 )ZGL_BLEND_FACTOR_ONE_MINUS_SRC_COLOR );
+	state.SetField ( -1, "GL_SRC_ALPHA",				( u32 )ZGL_BLEND_FACTOR_SRC_ALPHA );
+	state.SetField ( -1, "GL_SRC_ALPHA_SATURATE",		( u32 )ZGL_BLEND_FACTOR_SRC_ALPHA_SATURATE );
+	
+	state.SetField ( -1, "DEPTH_TEST_DISABLE",			( u32 )0 );
+	state.SetField ( -1, "DEPTH_TEST_NEVER",			( u32 )ZGL_DEPTH_NEVER );
+	state.SetField ( -1, "DEPTH_TEST_LESS",				( u32 )ZGL_DEPTH_LESS );
+	state.SetField ( -1, "DEPTH_TEST_EQUAL",			( u32 )ZGL_DEPTH_EQUAL );
+	state.SetField ( -1, "DEPTH_TEST_LESS_EQUAL",		( u32 )ZGL_DEPTH_LEQUAL );
+	state.SetField ( -1, "DEPTH_TEST_GREATER",			( u32 )ZGL_DEPTH_GREATER );
+	state.SetField ( -1, "DEPTH_TEST_NOTEQUAL",			( u32 )ZGL_DEPTH_NOTEQUAL );
+	state.SetField ( -1, "DEPTH_TEST_GREATER_EQUAL",	( u32 )ZGL_DEPTH_GEQUAL );
+	state.SetField ( -1, "DEPTH_TEST_ALWAYS",			( u32 )ZGL_DEPTH_ALWAYS );
+	
+	state.SetField ( -1, "CULL_NONE",					( u32 )0 );
+	state.SetField ( -1, "CULL_ALL",					( u32 )ZGL_CULL_ALL );
+	state.SetField ( -1, "CULL_BACK",					( u32 )ZGL_CULL_BACK );
+	state.SetField ( -1, "CULL_FRONT",					( u32 )ZGL_CULL_FRONT );
 }
 
 //----------------------------------------------------------------//
@@ -1220,7 +1233,7 @@ void MOAIProp::SetPartition ( MOAIPartition* partition ) {
 //----------------------------------------------------------------//
 void MOAIProp::SetVisible ( bool visible ) {
 
-	this->mFlags = visible ? this->mFlags | FLAGS_VISIBLE : this->mFlags & ~FLAGS_VISIBLE;
+	this->mFlags = visible ? this->mFlags | FLAGS_LOCAL_VISIBLE : this->mFlags & ~FLAGS_LOCAL_VISIBLE;
 	this->ScheduleUpdate ();
 }
 

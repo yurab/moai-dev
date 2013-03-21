@@ -36,6 +36,7 @@
 #include <uslscore/USFileSys.h>
 #include <uslscore/USFloat.h>
 #include <uslscore/USFrustum.h>
+#include <uslscore/USHashedString.h>
 #include <uslscore/USHashWriter.h>
 #include <uslscore/USHashWriterAdler32.h>
 #include <uslscore/USHashWriterCRC32.h>
@@ -89,7 +90,7 @@
 #include <uslscore/USZip.h>
 #include <uslscore/USZipFile.h>
 
-#if MOAI_WITH_BOX2D
+#if MOAI_WITH_LIBCRYPTO
 	#include <uslscore/USHashWriterMD5.h>
 	#include <uslscore/USHashWriterSHA1.h>
 	#include <uslscore/USHashWriterSHA224.h>

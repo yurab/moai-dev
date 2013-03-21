@@ -36,7 +36,7 @@ public:
 		DELETE_RENDERBUFFER,
 	};
 
-	GLuint	mResourceID;
+	u32		mResourceID;
 	u32		mType;
 
 	//----------------------------------------------------------------//
@@ -122,7 +122,7 @@ private:
 	u32				mPrimCount;
 	u32				mPrimSize;
 	u32				mPrimTop;
-	GLenum			mPrimType;
+	u32				mPrimType;
 	
 	typedef USLeanList < MOAIGfxResource* >::Iterator ResourceIt;
 	USLeanList < MOAIGfxResource* > mResources;
@@ -201,6 +201,8 @@ public:
 	
 	GET ( const USFrustum&, ViewVolume, mViewVolume )
 	
+	GET ( MOAIBlendMode, BlendMode, mBlendMode )
+	
 	GET ( USColorVec, AmbientColor, mAmbientColor )
 	GET ( USColorVec, FinalColor, mFinalColor )
 	GET ( USColorVec, PenColor, mPenColor )
@@ -222,14 +224,17 @@ public:
 	
 	float					GetDeviceScale			();
 	u32						GetDrawCount			() const { return mDrawCount; }
-	cc8*					GetErrorString			( int error ) const;
 	
 	u32						GetHeight				() const;
 	
 	USMatrix4x4				GetNormToWndMtx			() const;
 	
+	void					GetUVMtxMode			( u32& input, u32& output ) const;
 	const USMatrix4x4&		GetUVTransform			() const;
+	
+	void					GetVertexMtxMode		( u32& input, u32& output ) const;
 	const USMatrix4x4&		GetVertexTransform		( u32 id ) const;
+	
 	USMatrix4x4				GetViewProjMtx			() const;
 
 	u32						GetWidth				() const;
@@ -244,7 +249,7 @@ public:
 							~MOAIGfxDevice			();
 	
 	void					ProcessDeleters			();
-	void					PushDeleter				( u32 type, GLuint id );
+	void					PushDeleter				( u32 type, u32 id );
 
 	void					RegisterLuaClass		( MOAILuaState& state );
 	void					ReleaseResources		();

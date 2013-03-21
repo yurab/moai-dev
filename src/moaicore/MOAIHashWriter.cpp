@@ -304,7 +304,7 @@ bool MOAIHashWriter::Open ( MOAIStream* stream, USHashWriter* writer ) {
 		this->mStream.Set ( *this, stream );
 	}
 	
-	this->mWriter->Open ( usStream );
+	this->mWriter->Open ( *usStream );
 	this->SetUSStream ( this->mWriter );
 	
 	return true;

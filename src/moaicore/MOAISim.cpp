@@ -680,7 +680,8 @@ MOAISim::MOAISim () :
 	mLongDelayThreshold ( DEFAULT_LONG_DELAY_THRESHOLD ),
 	mCpuBudget ( DEFAULT_CPU_BUDGET ),
 	mStepMultiplier ( DEFAULT_STEP_MULTIPLIER ),
-	mTimerError ( 0.0 ) {
+	mTimerError ( 0.0 ),
+	mSimDuration ( 1.0 / 60.0 ) {
 	
 	RTTI_SINGLE ( MOAIGlobalEventSource )
 	
@@ -883,6 +884,9 @@ double MOAISim::StepSim ( double step, u32 multiplier ) {
 //----------------------------------------------------------------//
 void MOAISim::Update () {
 
+	// Measure performance
+	double simStartTime = USDeviceTime::GetTimeInSeconds ();
+
 	double interval = this->MeasureFrameRate ();
 
 	#if MOAI_WITH_LIBCURL
@@ -1016,4 +1020,8 @@ void MOAISim::Update () {
 	if (( this->mLoopFlags & SIM_LOOP_NO_SURPLUS ) && ( this->mRealTime < this->mSimTime )) {
 		this->mRealTime = this->mSimTime;
 	}
+	
+	// Measure performance
+	double simEndTime = USDeviceTime::GetTimeInSeconds ();
+	this->mSimDuration = simEndTime - simStartTime;
 }

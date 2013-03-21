@@ -58,6 +58,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	MOAIGlobalsMgr::Set ( globals );
 
 	MOAILuaRuntime::Affirm ();
+	MOAIProfiler::Affirm ();
 	MOAILogMgr::Affirm ();
 	MOAIGfxDevice::Affirm ();
 	
@@ -173,6 +174,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIPathFinder )
 	REGISTER_LUA_CLASS ( MOAIPathTerrainDeck )
 	REGISTER_LUA_CLASS ( MOAIPointerSensor )
+	REGISTER_LUA_CLASS ( MOAIProfilerReportBox )
 	REGISTER_LUA_CLASS ( MOAIProp )
 	REGISTER_LUA_CLASS ( MOAIRenderMgr )
 	REGISTER_LUA_CLASS ( MOAIScissorRect )

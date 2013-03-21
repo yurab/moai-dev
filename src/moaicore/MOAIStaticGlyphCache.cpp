@@ -20,7 +20,7 @@
 void MOAIStaticGlyphCache::ClearTextures () {
 
 	for ( u32 i = 0; i < this->mTextures.Size (); ++i ) {
-		delete this->mTextures [ i ];
+		this->LuaRelease ( this->mTextures [ i ]); // TODO: ref counting?
 	}
 	this->mTextures.Clear ();
 }
@@ -134,13 +134,14 @@ void MOAIStaticGlyphCache::SetImage ( MOAIFont& font, MOAIImage& image ) {
 		textureHeight = textureHeight > width ? width : textureHeight;
 		
 		texture->Init ( image, 0, y, width, textureHeight, font.GetFilename ());
-		texture->SetFilter ( GL_LINEAR, GL_LINEAR );
+		texture->SetFilter ( ZGL_SAMPLE_LINEAR, ZGL_SAMPLE_LINEAR );
 		
 		y += textureHeight;
 	}
 }
 
 //----------------------------------------------------------------//
-void MOAIStaticGlyphCache::SetTexture ( int id, MOAITexture * texture ) {
+void MOAIStaticGlyphCache::SetTexture ( int id, MOAITexture* texture ) {
+	this->LuaRetain ( texture ); // TODO: ref counting?
 	this->mTextures [ id ] = texture;
 }
