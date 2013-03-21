@@ -1,5 +1,4 @@
 #include <uslscore/uslscore.h>
-#include <moaicore-config.h>
 
 #ifdef MOAI_OS_WINDOWS
 	#define GLEW_STATIC
@@ -33,9 +32,14 @@
 #endif
 
 #ifdef __FLASCC__
-  #include <GL/gl.h>
-  #include <GL/glu.h>
-  #include <GL/glext.h>
+
+	//#include <AS3/AS3.h>
+	//#include <Flash++.h>
+	//#include <AGAL.h>
+
+	//#include <GL/gl.h>
+	//#include <GL/glu.h>
+	//#include <GL/glext.h>
 #endif
 
 #ifdef MOAI_OS_LINUX

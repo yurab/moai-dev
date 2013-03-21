@@ -10,7 +10,7 @@ extern "C" {
 	#include <zlcore/ZLZipArchive.h>
 }
 
-#if USE_OPENSSL
+#if MOAI_WITH_OPENSSL
 	#include <openssl/conf.h>
 	#include <openssl/crypto.h>
 
@@ -61,7 +61,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	MOAILogMgr::Affirm ();
 	MOAIGfxDevice::Affirm ();
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		MOAIUrlMgrCurl::Affirm ();
 	#endif
 	
@@ -70,7 +70,11 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	#endif
 	
 	MOAIMath::Affirm ();
-	MOAIXmlParser::Affirm ();
+	
+	#if MOAI_WITH_TINYXML
+		MOAIXmlParser::Affirm ();
+	#endif
+	
 	MOAIActionMgr::Affirm ();
 	MOAIInputMgr::Affirm ();
 	MOAINodeMgr::Affirm ();
@@ -81,6 +85,10 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	MOAIPartitionResultMgr::Affirm ();
 	MOAISim::Affirm ();
 	MOAIRenderMgr::Affirm ();
+	
+	#if MOAI_WITH_CHIPMUNK
+		MOAICp::Affirm ();
+	#endif
 	
 	// Start Lua
 	MOAILuaRuntime& luaRuntime = MOAILuaRuntime::Get ();
@@ -123,9 +131,9 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIFont )
 	REGISTER_LUA_CLASS ( MOAIFrameBuffer )
 
-#ifndef __FLASCC__
-	REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
-#endif
+	#ifndef __FLASCC__
+		REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
+	#endif
 
 	REGISTER_LUA_CLASS ( MOAIGfxDevice )
 	REGISTER_LUA_CLASS ( MOAIGfxQuad2D )
@@ -142,7 +150,6 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIInputDevice )
 	REGISTER_LUA_CLASS ( MOAIInputMgr )
 	REGISTER_LUA_CLASS ( MOAIJoystickSensor )
-	REGISTER_LUA_CLASS ( MOAIJsonParser )
 	REGISTER_LUA_CLASS ( MOAIKeyboardSensor )
 	REGISTER_LUA_CLASS ( MOAILayer )
 	REGISTER_LUA_CLASS ( MOAILayerBridge )
@@ -154,7 +161,6 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIMesh )
 	REGISTER_LUA_CLASS ( MOAIMotionSensor )
 	REGISTER_LUA_CLASS ( MOAIMultiTexture )
-	REGISTER_LUA_CLASS ( MOAIParser )
 	REGISTER_LUA_CLASS ( MOAIParticleCallbackPlugin )
 	REGISTER_LUA_CLASS ( MOAIParticleDistanceEmitter )
 	REGISTER_LUA_CLASS ( MOAIParticleForce )
@@ -196,9 +202,8 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIVertexFormat )
 	REGISTER_LUA_CLASS ( MOAIViewport )
 	REGISTER_LUA_CLASS ( MOAIWheelSensor )
-	REGISTER_LUA_CLASS ( MOAIXmlParser )
 	
-	#if USE_BOX2D
+	#if MOAI_WITH_BOX2D
 		REGISTER_LUA_CLASS ( MOAIBox2DArbiter )
 		REGISTER_LUA_CLASS ( MOAIBox2DBody )
 		REGISTER_LUA_CLASS ( MOAIBox2DDistanceJoint )
@@ -215,10 +220,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		REGISTER_LUA_CLASS ( MOAIBox2DWorld )
 	#endif
 	
-	#if USE_CHIPMUNK
-	
-		MOAICp::Affirm ();
-	
+	#if MOAI_WITH_CHIPMUNK	
 		REGISTER_LUA_CLASS ( MOAICp )
 		REGISTER_LUA_CLASS ( MOAICpArbiter )
 		REGISTER_LUA_CLASS ( MOAICpBody )
@@ -227,16 +229,28 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		REGISTER_LUA_CLASS ( MOAICpSpace )
 	#endif
 	
-	#if USE_FREETYPE
+	#if MOAI_WITH_FREETYPE
 		REGISTER_LUA_CLASS ( MOAIFreeTypeFontReader )
 	#endif
 
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		REGISTER_LUA_CLASS ( MOAIHttpTaskCurl )
 	#endif
 
 	#if MOAI_OS_NACL
 		REGISTER_LUA_CLASS ( MOAIHttpTaskNaCl )
+	#endif
+	
+	#if MOAI_WITH_JANSSON
+		REGISTER_LUA_CLASS ( MOAIJsonParser )
+	#endif
+	
+	#if MOAI_WITH_GPB
+		REGISTER_LUA_CLASS ( MOAIParser )
+	#endif
+	
+	#if MOAI_WITH_TINYXML
+		REGISTER_LUA_CLASS ( MOAIXmlParser )
 	#endif
 	
 	MOAIEnvironment::Get ().DetectEnvironment ();
@@ -247,11 +261,12 @@ void moaicore::SystemFinalize () {
 
 	MOAIGlobalsMgr::Finalize ();
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		curl_global_cleanup ();
 	#endif
 	
-	#if USE_OPENSSL
+	#if MOAI_WITH_OPENSSL
+	
 		#ifndef OPENSSL_NO_ENGINE
 			ENGINE_cleanup ();
 		#endif
@@ -277,7 +292,7 @@ void moaicore::SystemInit () {
 	srand (( u32 )time ( 0 ));
 	zl_init ();
 	
-	#if USE_OPENSSL
+	#if MOAI_WITH_OPENSSL
 		SSL_load_error_strings ();
 		SSL_library_init ();
 	#endif
@@ -286,11 +301,11 @@ void moaicore::SystemInit () {
 		ares_set_default_dns_addr ( 0x08080808 );
 	#endif
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		curl_global_init ( CURL_GLOBAL_WIN32 | CURL_GLOBAL_SSL );
 	#endif
 	
-	#if USE_CHIPMUNK
+	#if MOAI_WITH_CHIPMUNK
 		cpInitChipmunk ();
 	#endif
 }
