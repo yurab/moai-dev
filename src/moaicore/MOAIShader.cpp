@@ -533,15 +533,9 @@ void MOAIShader::ClearUniforms () {
 u32 MOAIShader::CompileShader ( u32 type, cc8* source ) {
 	
 	MOAIGfxDevice& gfxDevice = MOAIGfxDevice::Get ();
-<<<<<<< HEAD
-#ifdef __FLASCC__
-  return 0;
-#else
-	GLuint shader = glCreateShader ( type );
-=======
 
 	u32 shader = zglCreateShader ( type );
->>>>>>> zgl
+
 	cc8* sources [ 2 ];
 
 	sources [ 0 ] = gfxDevice.IsOpenGLES () ? OPENGL_ES_PREPROC : OPENGL_PREPROC;
@@ -562,7 +556,6 @@ u32 MOAIShader::CompileShader ( u32 type, cc8* source ) {
 	}
 
 	return shader;
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -696,13 +689,7 @@ void MOAIShader::OnCreate () {
 		MOAIShaderUniform& uniform = this->mUniforms [ i ];
 		
 		if ( uniform.mType != MOAIShaderUniform::UNIFORM_NONE ) {
-<<<<<<< HEAD
-#ifndef __FLASCC__			
-      uniform.mAddr = glGetUniformLocation ( this->mProgram, uniform.mName );
-#endif
-=======
 			uniform.mAddr = zglGetUniformLocation ( this->mProgram, uniform.mName );
->>>>>>> zgl
 			uniform.mName.clear ();
 		}
 	}
