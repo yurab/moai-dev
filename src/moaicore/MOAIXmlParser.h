@@ -6,6 +6,7 @@
 
 #include <moaicore/MOAILua.h>
 
+#if USE_TINYXML
 class TiXmlNode;
 
 //================================================================//
@@ -38,4 +39,5 @@ public:
 	void			RegisterLuaFuncs		( MOAILuaState& state );
 };
 
+#endif
 #endif

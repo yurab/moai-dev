@@ -2,15 +2,16 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <Box2D/Box2D.h>
-#include <moaicore/MOAIBox2DBody.h>
-#include <moaicore/MOAIBox2DFixture.h>
 #include <moaicore/MOAILogMessages.h>
-#include <moaicore/MOAIBox2DWorld.h>
 #include <moaicore/MOAITransform.h>
 
 SUPPRESS_EMPTY_FILE_WARNING
 #if USE_BOX2D
+
+#include <Box2D/Box2D.h>
+#include <moaicore/MOAIBox2DBody.h>
+#include <moaicore/MOAIBox2DFixture.h>
+#include <moaicore/MOAIBox2DWorld.h>
 
 //================================================================//
 // local

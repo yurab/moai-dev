@@ -11,7 +11,7 @@
 
 //----------------------------------------------------------------//
 void USHashWriterSHA512::FinalizeHash () {
-#if !MOAI_OS_NACL
+#if !MOAI_OS_NACL && USE_SSL
 	SHA512_Final ( this->mHash, ( SHA512_CTX* )this->mAlgorithm );
 #endif
 }
@@ -35,7 +35,7 @@ size_t USHashWriterSHA512::GetHashSize () {
 
 //----------------------------------------------------------------//
 void USHashWriterSHA512::HashBytes ( const void* buffer, size_t size ) {
-#if !MOAI_OS_NACL
+#if !MOAI_OS_NACL && USE_SSL
 	SHA512_Update (( SHA512_CTX* )this->mAlgorithm, buffer, size );
 #endif
 }
@@ -45,7 +45,7 @@ void USHashWriterSHA512::InitHash () {
 
 	memset ( &this->mHash, 0, sizeof ( this->mHash ));
 	memset ( this->mAlgorithm, 0, sizeof ( SHA512_CTX ));
-#if !MOAI_OS_NACL
+#if !MOAI_OS_NACL && USE_SSL
 	SHA512_Init (( SHA512_CTX* )this->mAlgorithm );
 #endif
 }

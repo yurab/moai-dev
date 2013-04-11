@@ -4,6 +4,7 @@
 #include "pch.h"
 #include <moaicore/MOAIMath.h>
 
+#if USE_SFMT
 extern "C" {
 	#include <sfmt.h>
 }
@@ -77,3 +78,4 @@ void MOAIMath::RegisterLuaClass ( MOAILuaState& state ) {
 
 	luaL_register ( state, 0, regTable );
 }
+#endif

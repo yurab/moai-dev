@@ -2,7 +2,6 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <tinyxml.h>
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIParticlePexPlugin.h>
 #include <moaicore/MOAIParticleSystem.h>
@@ -10,6 +9,9 @@
 #include <moaicore/MOAIParticleScript.h>
 #include <moaicore/MOAIParticleTimedEmitter.h>
 
+#if USE_TINYXML
+  #include <tinyxml.h>
+#endif
 //================================================================
 // An implementation of a particle plugin that implements the
 // behavior that this tool creates:
@@ -110,16 +112,18 @@ int MOAIParticlePexPlugin::_load( lua_State* L ){
 		return 0;													
 	}																
 		
+  #if USE_TINYXML
 	cc8* xml = lua_tostring ( state, 1 );
 
 	if ( MOAILogMessages::CheckFileExists ( xml, L )) {
 		TiXmlDocument doc;
 		doc.LoadFile ( xml );
 		MOAIParticlePexPlugin *particle = new MOAIParticlePexPlugin();
-		MOAIParticlePexPlugin::Parse ( xml, *particle, doc.RootElement ());
-		particle->PushLuaUserdata( state );
+		  MOAIParticlePexPlugin::Parse ( xml, *particle, doc.RootElement ());
+  		particle->PushLuaUserdata( state );
 		return 1;
 	}
+	#endif
 	
 	return 0;
 }
@@ -127,7 +131,7 @@ int MOAIParticlePexPlugin::_load( lua_State* L ){
 // MOAIParticlePlugin
 //================================================================//
 
-
+#if USE_TINYXML
 void MOAIParticlePexPlugin::Parse( cc8* filename, MOAIParticlePexPlugin& plugin, TiXmlNode* node )
 {
 	if ( !node ) return;
@@ -318,6 +322,7 @@ void MOAIParticlePexPlugin::Parse( cc8* filename, MOAIParticlePexPlugin& plugin,
 		
 	}
 }
+#endif
 
 void MOAIParticlePexPlugin::_initGravityScript( float* particle, float* registers)
 {

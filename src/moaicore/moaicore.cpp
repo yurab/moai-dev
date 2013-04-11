@@ -2,7 +2,6 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <chipmunk/chipmunk.h>
 #include <moaicore/moaicore.h>
 
 extern "C" {
@@ -27,6 +26,10 @@ extern "C" {
 
 #if USE_ARES
 	#include <ares.h>
+#endif
+
+#if USE_CHIPMUNK
+  #include <chipmunk/chipmunk.h>
 #endif
 
 //----------------------------------------------------------------//
@@ -69,8 +72,14 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		MOAIUrlMgrNaCl::Affirm ();
 	#endif
 	
-	MOAIMath::Affirm ();
-	MOAIXmlParser::Affirm ();
+	#if USE_SFMT
+	  MOAIMath::Affirm ();
+	#endif
+  
+  #if USE_TINYXML
+	  MOAIXmlParser::Affirm ();
+	#endif
+	
 	MOAIProfiler::Affirm ();
 	MOAIActionMgr::Affirm ();
 	MOAIInputMgr::Affirm ();
@@ -139,14 +148,22 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIInputDevice )
 	REGISTER_LUA_CLASS ( MOAIInputMgr )
 	REGISTER_LUA_CLASS ( MOAIJoystickSensor )
-	REGISTER_LUA_CLASS ( MOAIJsonParser )
+  
+  #if USE_JSON
+	  REGISTER_LUA_CLASS ( MOAIJsonParser )
+	#endif
+	
 	REGISTER_LUA_CLASS ( MOAIKeyboardSensor )
 	REGISTER_LUA_CLASS ( MOAILayer )
 	REGISTER_LUA_CLASS ( MOAILayerBridge )
 	//REGISTER_LUA_CLASS ( MOAILayoutFrame )
 	REGISTER_LUA_CLASS ( MOAILocationSensor )
 	REGISTER_LUA_CLASS ( MOAILogMgr )
-	REGISTER_LUA_CLASS ( MOAIMath )
+
+  #if USE_SFMT
+	  REGISTER_LUA_CLASS ( MOAIMath )
+	#endif 
+	
 	REGISTER_LUA_CLASS ( MOAIMemStream )
 	REGISTER_LUA_CLASS ( MOAIMesh )
 	REGISTER_LUA_CLASS ( MOAIMotionSensor )
@@ -194,7 +211,10 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIVertexFormat )
 	REGISTER_LUA_CLASS ( MOAIViewport )
 	REGISTER_LUA_CLASS ( MOAIWheelSensor )
-	REGISTER_LUA_CLASS ( MOAIXmlParser )
+
+  #if USE_TINYXML
+	  REGISTER_LUA_CLASS ( MOAIXmlParser )
+	#endif
 	
 	#if USE_BOX2D
 		REGISTER_LUA_CLASS ( MOAIBox2DArbiter )

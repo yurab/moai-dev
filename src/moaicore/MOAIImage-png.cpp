@@ -2,9 +2,12 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <png.h>
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIImage.h>
+
+#if USE_PNG
+
+#include <png.h>
 
 //================================================================//
 // libpng callbacks
@@ -370,3 +373,5 @@ bool MOAIImage::WritePNG ( USStream& stream ) {
 	
 	return true;
 }
+
+#endif

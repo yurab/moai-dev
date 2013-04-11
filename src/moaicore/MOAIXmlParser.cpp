@@ -2,9 +2,11 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <tinyxml.h>
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIXmlParser.h>
+
+#if USE_TINYXML
+#include <tinyxml.h>
 
 //================================================================//
 // local
@@ -148,3 +150,4 @@ void MOAIXmlParser::RegisterLuaFuncs ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
+#endif

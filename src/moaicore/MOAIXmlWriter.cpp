@@ -4,6 +4,7 @@
 #include "pch.h"
 #include <moaicore/MOAIXmlWriter.h>
 
+#if USE_TINYXML
 //================================================================//
 // local
 //================================================================//
@@ -98,3 +99,5 @@ void MOAIXmlWriter::SaveDocument ( cc8* filename ) {
 
 	mDoc.SaveFile ( filename );
 }
+
+#endif

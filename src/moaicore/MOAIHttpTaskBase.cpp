@@ -3,10 +3,13 @@
 
 #include "pch.h"
 
-#include <tinyxml.h>
 #include <moaicore/MOAIDataBuffer.h>
 #include <moaicore/MOAIHttpTaskBase.h>
 #include <moaicore/MOAIXmlParser.h>
+
+#if USE_TINYXML
+  #include <tinyxml.h>
+#endif
 
 //================================================================//
 // local
@@ -219,10 +222,12 @@ int MOAIHttpTaskBase::_parseXml ( lua_State* L ) {
 	
 	cc8* xml = ( cc8* )self->mData.Data ();
 	
-	TiXmlDocument doc;
-	doc.Parse ( xml );
-	MOAIXmlParser::Parse ( state, doc.RootElement ());
-
+	#if USE_TINYXML
+  	TiXmlDocument doc;
+  	doc.Parse ( xml );
+  	MOAIXmlParser::Parse ( state, doc.RootElement ());
+  #endif
+  
 	return 1;
 }
 

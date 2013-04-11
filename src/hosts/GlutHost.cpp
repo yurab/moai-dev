@@ -71,7 +71,7 @@ namespace GlutInputDeviceSensorID {
 
 static bool sHasWindow = false;
 static bool sExitFullscreen = false;
-static bool sDynamicallyReevaluateLuaFiles = false;
+// static bool sDynamicallyReevaluateLuaFiles = false;
 
 static int sWinX;
 static int sWinY;
@@ -225,14 +225,14 @@ static void _onTimer ( int millisec ) {
 	#ifdef GLUTHOST_USE_FMOD_DESIGNER
 		AKUFmodDesignerUpdate (( float )fSimStep );
 	#endif
-
-	if ( sDynamicallyReevaluateLuaFiles ) {		
-		#ifdef _WIN32
-			winhostext_Query ();
-		#elif __APPLE__
-			FWReloadChangedLuaFiles ();
-		#endif
-	}
+    
+  // if ( sDynamicallyReevaluateLuaFiles ) {    
+  //  #ifdef _WIN32
+  //    winhostext_Query ();
+  //  #elif __APPLE__
+  //    FWReloadChangedLuaFiles ();
+  //  #endif
+  // }
 	
 	glutPostRedisplay ();
 }
@@ -335,13 +335,13 @@ static void _cleanup () {
 	
 	AKUFinalize ();
 	
-	if ( sDynamicallyReevaluateLuaFiles ) {
-		#ifdef _WIN32
-			winhostext_CleanUp ();
-		#elif __APPLE__
-			FWStopAll ();
-		#endif
-	}
+  // if ( sDynamicallyReevaluateLuaFiles ) {
+  //  #ifdef _WIN32
+  //    winhostext_CleanUp ();
+  //  #elif __APPLE__
+  //    FWStopAll ();
+  //  #endif
+  // }
 }
 
 //----------------------------------------------------------------//
@@ -367,7 +367,7 @@ int GlutHost ( int argc, char** argv ) {
 		for ( int i = 1; i < argc; ++i ) {
 			char* arg = argv [ i ];
 			if ( strcmp( arg, "-e" ) == 0 ) {
-				sDynamicallyReevaluateLuaFiles = true;
+        // sDynamicallyReevaluateLuaFiles = true;
 			}
 			else if ( strcmp( arg, "-s" ) == 0 && ++i < argc ) {
 				char* script = argv [ i ];
@@ -381,13 +381,13 @@ int GlutHost ( int argc, char** argv ) {
 	}
 	
 	//assuming that the last script is the entry point we watch for that directory and its subdirectories
-	if ( lastScript && sDynamicallyReevaluateLuaFiles ) {
-		#ifdef _WIN32
-			winhostext_WatchFolder ( lastScript );
-		#elif __APPLE__
-			FWWatchFolder( lastScript );
-		#endif
-	}
+  // if ( lastScript && sDynamicallyReevaluateLuaFiles ) {
+  //  #ifdef _WIN32
+  //    winhostext_WatchFolder ( lastScript );
+  //  #elif __APPLE__
+  //    FWWatchFolder( lastScript );
+  //  #endif
+  // }
 	
 	if ( sHasWindow ) {
 		glutTimerFunc ( 0, _onTimer, 0 );

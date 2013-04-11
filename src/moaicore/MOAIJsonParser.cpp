@@ -5,6 +5,8 @@
 #include <math.h>
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIJsonParser.h>
+
+#if USE_JSON
 #include <jansson.h>
 
 //================================================================//
@@ -282,3 +284,4 @@ void MOAIJsonParser::RegisterLuaFuncs ( MOAILuaState& state ) {
 	UNUSED ( state );
 }
 
+#endif

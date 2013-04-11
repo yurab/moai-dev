@@ -8,8 +8,11 @@
 #include <moaicore/MOAIParticlePlugin.h>
 #include <moaicore/MOAIParticleScript.h>
 #include <aku/AKU-particles.h>
-#include <tinyxml.h>
 #include <uslscore/STLString.h>
+
+#if USE_TINYXML
+  #include <tinyxml.h>
+#endif
 
 //================================================================//
 // MOAIParticlePexPlugin
@@ -122,7 +125,9 @@ private:
 	static int		_getTextureName		( lua_State* L );
 	static int		_load				( lua_State* L );
 
-	static void		Parse						( cc8* filename, MOAIParticlePexPlugin& plugin, TiXmlNode* node );
+  #if USE_TINYXML
+	  static void		Parse						( cc8* filename, MOAIParticlePexPlugin& plugin, TiXmlNode* node );
+	#endif
 	
 	void			_initGravityScript			( float* particle, float* registers );
 	void			_initRadialScript			( float* particle, float* registers );

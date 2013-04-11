@@ -2,11 +2,14 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <png.h>
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIImage.h>
 #include <moaicore/MOAIDataBuffer.h>
 #include <moaicore/MOAIGfxDevice.h>
+
+#if USE_PNG
+  #include <png.h>
+#endif
 
 #define DEFAULT_ELLIPSE_STEPS 64
 
@@ -561,7 +564,10 @@ int MOAIImage::_writePNG ( lua_State* L ) {
 	
 	USFileStream stream;
 	stream.OpenWrite ( filename );
-	self->WritePNG ( stream );
+
+	#if USE_PNG
+	  self->WritePNG ( stream );
+	#endif
 	
 	return 0;
 }
@@ -1584,10 +1590,14 @@ void MOAIImage::Load ( USStream& stream, u32 transform ) {
 	this->Clear ();
 	
 	if ( MOAIImage::IsPng ( stream )) {
-		this->LoadPng ( stream, transform );
+	  #if USE_PNG
+		  this->LoadPng ( stream, transform );
+		#endif
 	}
 	else if ( MOAIImage::IsJpg ( stream )) {
-		this->LoadJpg ( stream, transform );
+	  #if USE_JPG
+		  this->LoadJpg ( stream, transform );
+		#endif
 	}
 }
 
