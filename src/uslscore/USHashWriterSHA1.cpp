@@ -2,9 +2,10 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <openssl/sha.h>
 #include <uslscore/USHashWriterSHA1.h>
 
+#if USE_SSL
+#include <openssl/sha.h>
 //================================================================//
 // USHashWriterSHA1
 //================================================================//
@@ -61,3 +62,5 @@ USHashWriterSHA1::~USHashWriterSHA1 () {
 	this->Close ();
 	free ( this->mAlgorithm );
 }
+
+#endif

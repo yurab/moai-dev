@@ -2,9 +2,10 @@
 // http://getmoai.com
 
 #include "pch.h"
-#include <openssl/md5.h>
 #include <uslscore/USHashWriterMD5.h>
 
+#if USE_SSL
+#include <openssl/md5.h>
 //================================================================//
 // USHashWriterMD5
 //================================================================//
@@ -63,3 +64,5 @@ USHashWriterMD5::~USHashWriterMD5 () {
 	this->Close ();
 	free ( this->mAlgorithm );
 }
+
+#endif

@@ -4,7 +4,9 @@
 #ifndef	USXMLREADER_H
 #define	USXMLREADER_H
 
-#include <expat.h>
+#if USE_EXPAT
+  #include <expat.h>
+
 #include <uslscore/STLList.h>
 #include <uslscore/STLMap.h>
 #include <uslscore/STLString.h>
@@ -103,5 +105,7 @@ public:
 					USXmlReader		();
 					~USXmlReader	();
 };
+
+#endif
 
 #endif

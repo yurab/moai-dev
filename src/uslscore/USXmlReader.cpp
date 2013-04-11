@@ -5,6 +5,7 @@
 #include <uslscore/USStream.h>
 #include <uslscore/USXmlReader.h>
 
+#if USE_EXPAT
 //================================================================//
 // USXmlElement
 //================================================================//
@@ -286,3 +287,5 @@ USXmlReader::~USXmlReader () {
 
 	this->Clear ();
 }
+
+#endif
