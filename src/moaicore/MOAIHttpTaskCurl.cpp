@@ -7,8 +7,7 @@
 #include <moaicore/MOAIHttpTaskCurl.h>
 #include <moaicore/MOAIUrlMgrCurl.h>
 
-SUPPRESS_EMPTY_FILE_WARNING
-#ifdef USE_CURL
+#if USE_CURL
 
 #define MAX_HEADER_LENGTH 1024
 

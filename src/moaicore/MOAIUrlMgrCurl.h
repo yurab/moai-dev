@@ -4,7 +4,7 @@
 #ifndef MOAIURLMGRCURL_H
 #define MOAIURLMGRCURL_H
 
-#ifdef USE_CURL
+#if USE_CURL
 
 #include <moaicore/MOAIHttpTaskCurl.h>
 
