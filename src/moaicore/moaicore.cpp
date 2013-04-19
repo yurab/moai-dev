@@ -59,11 +59,7 @@ static void _typeCheck () {
 //----------------------------------------------------------------//
 void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 
-	printf ( "FOO\n" );
-
 	MOAIGlobalsMgr::Set ( globals );
-
-	printf ( "BAR\n" );
 
 	MOAILuaRuntime::Affirm ();
 	MOAIProfiler::Affirm ();
@@ -84,8 +80,6 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		MOAIXmlParser::Affirm ();
 	#endif
 	
-	printf ( "A\n" );
-	
 	MOAIActionMgr::Affirm ();
 	MOAIInputMgr::Affirm ();
 	MOAINodeMgr::Affirm ();
@@ -96,8 +90,6 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	MOAIPartitionResultMgr::Affirm ();
 	MOAISim::Affirm ();
 	MOAIRenderMgr::Affirm ();
-	
-	printf ( "B\n" );
 	
 	#if MOAI_WITH_CHIPMUNK
 		MOAICp::Affirm ();
@@ -110,7 +102,6 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	
 	MOAILogMessages::RegisterDefaultLogMessages ();
 	
-	printf ( "Registering Lua Actions\n" );
 	// MOAI
 	REGISTER_LUA_CLASS ( MOAIAction )
 	REGISTER_LUA_CLASS ( MOAIActionMgr )
@@ -144,11 +135,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIFooMgr )
 	REGISTER_LUA_CLASS ( MOAIFont )
 	REGISTER_LUA_CLASS ( MOAIFrameBuffer )
-
-	#ifndef __FLASCC__
-		REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
-	#endif
-
+	REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
 	REGISTER_LUA_CLASS ( MOAIGfxDevice )
 	REGISTER_LUA_CLASS ( MOAIGfxQuad2D )
 	REGISTER_LUA_CLASS ( MOAIGfxQuadDeck2D )
@@ -265,10 +252,9 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	
 	#if MOAI_WITH_TINYXML
 		REGISTER_LUA_CLASS ( MOAIParticlePexPlugin )
-  	REGISTER_LUA_CLASS ( MOAIXmlParser )
+  		REGISTER_LUA_CLASS ( MOAIXmlParser )
 	#endif
-	printf ( "Lua Actions registered\n" );
-	printf ( "Detecting environment\n" );
+
 	MOAIEnvironment::Get ().DetectEnvironment ();
 }
 
