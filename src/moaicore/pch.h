@@ -1,50 +1,14 @@
 #include <uslscore/uslscore.h>
-#include <moaicore-config.h>
 
-#ifdef MOAI_OS_WINDOWS
-	#define GLEW_STATIC
-	#include <gl/glew.h>
-#endif
+#ifdef __FLASCC__
 
-#ifdef MOAI_OS_OSX
-	//#include <GL/glew.h>
-	#include <OpenGL/gl.h>
-	#include <OpenGL/glext.h>
-#endif
+	//#include <AS3/AS3.h>
+	//#include <Flash++.h>
+	//#include <AGAL.h>
 
-#ifdef MOAI_OS_IPHONE
-	#import <OpenGLES/ES1/gl.h>
-	#import <OpenGLES/ES1/glext.h>
-	#import <OpenGLES/ES2/gl.h>
-	#import <OpenGLES/ES2/glext.h>
-	
-	// TODO: replace this w/ runtime ogl extension checks
-	#define MOAI_TEST_PVR
-	
-	#define GL_RGBA8 GL_RGBA8_OES
-	
-#endif
-
-#ifdef MOAI_OS_ANDROID
-	#include <GLES/gl.h>
-	#include <GLES/glext.h>
-	#include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
-#endif
-
-#ifdef MOAI_OS_LINUX
-	#ifndef MOAI_OS_NACL
-	#ifndef ANDROID
-		#include <GL/glew.h>
-	#endif
-	#endif
-#endif
-
-#ifdef MOAI_OS_NACL
-	#include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
-
-	#define GL_RGBA8 GL_RGBA8_OES
+	//#include <GL/gl.h>
+	//#include <GL/glu.h>
+	//#include <GL/glext.h>
 #endif
 
 #ifdef _ARM_ARCH_7

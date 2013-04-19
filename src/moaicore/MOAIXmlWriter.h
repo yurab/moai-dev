@@ -4,7 +4,7 @@
 #ifndef	MOAIXMLWRITER_H
 #define	MOAIXMLWRITER_H
 
-#if USE_TINYXML
+#if MOAI_WITH_TINYXML
 #include <tinyxml.h>
 
 //================================================================//
@@ -45,6 +45,5 @@ public:
 
 	//TODO: Make it work with file streams??
 };
-
 #endif
 #endif

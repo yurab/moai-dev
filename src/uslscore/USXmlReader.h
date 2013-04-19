@@ -3,10 +3,9 @@
 
 #ifndef	USXMLREADER_H
 #define	USXMLREADER_H
+#if MOAI_WITH_EXPAT
 
-#if USE_EXPAT
-  #include <expat.h>
-
+#include <expat.h>
 #include <uslscore/STLList.h>
 #include <uslscore/STLMap.h>
 #include <uslscore/STLString.h>
@@ -107,5 +106,4 @@ public:
 };
 
 #endif
-
 #endif

@@ -40,12 +40,6 @@
 #include <uslscore/USHashWriter.h>
 #include <uslscore/USHashWriterAdler32.h>
 #include <uslscore/USHashWriterCRC32.h>
-#include <uslscore/USHashWriterMD5.h>
-#include <uslscore/USHashWriterSHA1.h>
-#include <uslscore/USHashWriterSHA224.h>
-#include <uslscore/USHashWriterSHA256.h>
-#include <uslscore/USHashWriterSHA384.h>
-#include <uslscore/USHashWriterSHA512.h>
 #include <uslscore/USHashWriterWhirlpool.h>
 #include <uslscore/USHexDump.h>
 #include <uslscore/USHexReader.h>
@@ -95,5 +89,14 @@
 #include <uslscore/USXmlReader.h>
 #include <uslscore/USZip.h>
 #include <uslscore/USZipFile.h>
+
+#if MOAI_WITH_LIBCRYPTO
+	#include <uslscore/USHashWriterMD5.h>
+	#include <uslscore/USHashWriterSHA1.h>
+	#include <uslscore/USHashWriterSHA224.h>
+	#include <uslscore/USHashWriterSHA256.h>
+	#include <uslscore/USHashWriterSHA384.h>
+	#include <uslscore/USHashWriterSHA512.h>
+#endif
 
 #endif

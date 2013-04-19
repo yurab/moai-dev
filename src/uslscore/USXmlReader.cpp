@@ -5,7 +5,9 @@
 #include <uslscore/USStream.h>
 #include <uslscore/USXmlReader.h>
 
-#if USE_EXPAT
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_EXPAT
+
 //================================================================//
 // USXmlElement
 //================================================================//

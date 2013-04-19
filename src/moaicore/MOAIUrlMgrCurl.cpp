@@ -6,7 +6,8 @@
 #include <moaicore/MOAIHttpTaskCurl.h>
 #include <moaicore/MOAIUrlMgrCurl.h>
 
-#if USE_CURL
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCURL
 
 //================================================================//
 // MOAIUrlMgrCurl

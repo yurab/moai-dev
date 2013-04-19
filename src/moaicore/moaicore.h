@@ -52,7 +52,11 @@
 #include <moaicore/MOAIFont.h>
 #include <moaicore/MOAIFontReader.h>
 #include <moaicore/MOAIFrameBuffer.h>
+
+#ifndef __FLASCC__
 #include <moaicore/MOAIFrameBufferTexture.h>
+#endif
+
 #include <moaicore/MOAIFreeTypeFontReader.h>
 #include <moaicore/MOAIGfxDevice.h>
 #include <moaicore/MOAIGfxQuad2D.h>
@@ -100,7 +104,6 @@
 #include <moaicore/MOAIParticleDistanceEmitter.h>
 #include <moaicore/MOAIParticleEmitter.h>
 #include <moaicore/MOAIParticleForce.h>
-#include <moaicore/MOAIParticlePexPlugin.h>
 #include <moaicore/MOAIParticlePlugin.h>
 #include <moaicore/MOAIParticleScript.h>
 #include <moaicore/MOAIParticleState.h>
@@ -169,10 +172,14 @@
 #include <moaicore/MOAIViewport.h>
 #include <moaicore/MOAIWeakPtr.h>
 #include <moaicore/MOAIWheelSensor.h>
-#include <moaicore/MOAIXmlParser.h>
-#include <moaicore/MOAIXmlWriter.h>
 
-#if USE_BOX2D
+#if MOAI_WITH_TINYXML
+  #include <moaicore/MOAIParticlePexPlugin.h>
+  #include <moaicore/MOAIXmlParser.h>
+  #include <moaicore/MOAIXmlWriter.h>
+#endif 
+
+#if MOAI_WITH_BOX2D
 	#include <moaicore/MOAIBox2DArbiter.h>
 	#include <moaicore/MOAIBox2DBody.h>
 	#include <moaicore/MOAIBox2DDebugDraw.h>
@@ -191,7 +198,7 @@
 	#include <moaicore/MOAIBox2DWorld.h>
 #endif
 
-#if USE_CHIPMUNK
+#if MOAI_WITH_CHIPMUNK
 	#include <moaicore/MOAICp.h>
 	#include <moaicore/MOAICpArbiter.h>
 	#include <moaicore/MOAICpBody.h>
@@ -201,7 +208,7 @@
 	#include <moaicore/MOAICpSpace.h>
 #endif
 
-#if USE_CURL
+#if MOAI_WITH_LIBCURL
 	#include <moaicore/MOAIHttpTaskCurl.h>
 	#include <moaicore/MOAIUrlMgrCurl.h>
 #endif

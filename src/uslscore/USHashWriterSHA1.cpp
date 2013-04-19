@@ -4,21 +4,24 @@
 #include "pch.h"
 #include <uslscore/USHashWriterSHA1.h>
 
-#if USE_SSL
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCRYPTO
+
 #include <openssl/sha.h>
+
 //================================================================//
 // USHashWriterSHA1
 //================================================================//
 
 //----------------------------------------------------------------//
 void USHashWriterSHA1::FinalizeHash () {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA1_Final ( this->mHash, ( SHA_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
 size_t USHashWriterSHA1::GetBlockSize () {
+
 	return SHA_CBLOCK;
 }
 
@@ -36,9 +39,8 @@ size_t USHashWriterSHA1::GetHashSize () {
 
 //----------------------------------------------------------------//
 void USHashWriterSHA1::HashBytes ( const void* buffer, size_t size ) {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA1_Update (( SHA_CTX* )this->mAlgorithm, buffer, size );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -46,9 +48,7 @@ void USHashWriterSHA1::InitHash () {
 
 	memset ( &this->mHash, 0, sizeof ( this->mHash ));
 	memset ( this->mAlgorithm, 0, sizeof ( SHA_CTX ));
-#if !MOAI_OS_NACL && USE_SSL
 	SHA1_Init (( SHA_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -59,6 +59,7 @@ USHashWriterSHA1::USHashWriterSHA1 () {
 
 //----------------------------------------------------------------//
 USHashWriterSHA1::~USHashWriterSHA1 () {
+
 	this->Close ();
 	free ( this->mAlgorithm );
 }

@@ -5,7 +5,8 @@
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIXmlParser.h>
 
-#if USE_TINYXML
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_TINYXML
 #include <tinyxml.h>
 
 //================================================================//

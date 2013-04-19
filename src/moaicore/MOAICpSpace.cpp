@@ -12,7 +12,7 @@
 #include <moaicore/MOAILogMessages.h>
 
 SUPPRESS_EMPTY_FILE_WARNING
-#if USE_CHIPMUNK
+#if MOAI_WITH_CHIPMUNK
 
 //================================================================//
 // MOAICpPrim
@@ -774,7 +774,7 @@ void MOAICpSpace::DrawDebug () {
 
 		MOAIGfxDevice::Get ().SetTexture ();
 
-		glEnableClientState ( GL_VERTEX_ARRAY );
+		zglEnableClientState ( ZGL_PIPELINE_VERTEX_ARRAY );
 		MOAICpDebugDraw::DrawSpace ( this->mSpace, &options );
 	}
 }

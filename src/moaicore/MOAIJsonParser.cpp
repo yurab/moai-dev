@@ -6,7 +6,9 @@
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIJsonParser.h>
 
-#if USE_JSON
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_JANSSON
+
 #include <jansson.h>
 
 //================================================================//

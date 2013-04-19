@@ -2,14 +2,15 @@
 // http://getmoai.com
 
 #include "pch.h"
+
+#if MOAI_WITH_LIBPNG
+  #include <png.h>
+#endif
+
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIImage.h>
 #include <moaicore/MOAIDataBuffer.h>
 #include <moaicore/MOAIGfxDevice.h>
-
-#if USE_PNG
-  #include <png.h>
-#endif
 
 #define DEFAULT_ELLIPSE_STEPS 64
 
@@ -560,13 +561,12 @@ int MOAIImage::_setRGBA ( lua_State* L ) {
 int MOAIImage::_writePNG ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIImage, "US" )
 	
-	cc8* filename = state.GetValue < cc8* >( 2, "" );
-	
-	USFileStream stream;
-	stream.OpenWrite ( filename );
-
-	#if USE_PNG
-	  self->WritePNG ( stream );
+	#if MOAI_WITH_LIBPNG
+		cc8* filename = state.GetValue < cc8* >( 2, "" );
+		
+		USFileStream stream;
+		stream.OpenWrite ( filename );
+		self->WritePNG ( stream );
 	#endif
 	
 	return 0;
@@ -1586,17 +1586,18 @@ void MOAIImage::Load ( cc8* filename, u32 transform ) {
 
 //----------------------------------------------------------------//
 void MOAIImage::Load ( USStream& stream, u32 transform ) {
+	UNUSED ( transform );
 
 	this->Clear ();
 	
 	if ( MOAIImage::IsPng ( stream )) {
-	  #if USE_PNG
-		  this->LoadPng ( stream, transform );
+		#if MOAI_WITH_LIBPNG
+			this->LoadPng ( stream, transform );
 		#endif
 	}
 	else if ( MOAIImage::IsJpg ( stream )) {
-	  #if USE_JPG
-		  this->LoadJpg ( stream, transform );
+		#if MOAI_WITH_LIBJPG
+			this->LoadJpg ( stream, transform );
 		#endif
 	}
 }

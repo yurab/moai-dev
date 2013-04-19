@@ -5,11 +5,11 @@
 
 #include <moaicore/MOAIDataBuffer.h>
 #include <moaicore/MOAIHttpTaskBase.h>
-#include <moaicore/MOAIXmlParser.h>
 
-#if USE_TINYXML
+#if MOAI_WITH_TINYXML
   #include <tinyxml.h>
-#endif
+  #include <moaicore/MOAIXmlParser.h>
+#endif 
 
 //================================================================//
 // local
@@ -218,17 +218,21 @@ int MOAIHttpTaskBase::_isBusy ( lua_State* L ) {
 int MOAIHttpTaskBase::_parseXml ( lua_State* L ) {
 	MOAI_LUA_SETUP ( MOAIHttpTaskBase, "U" )
 
-	if ( !self->mData.Size ()) return 0;
-	
-	cc8* xml = ( cc8* )self->mData.Data ();
-	
-	#if USE_TINYXML
-  	TiXmlDocument doc;
-  	doc.Parse ( xml );
-  	MOAIXmlParser::Parse ( state, doc.RootElement ());
-  #endif
-  
-	return 1;
+	#if MOAI_WITH_TINYXML
+
+		if ( !self->mData.Size ()) return 0;
+		
+		cc8* xml = ( cc8* )self->mData.Data ();
+		
+		TiXmlDocument doc;
+		doc.Parse ( xml );
+		MOAIXmlParser::Parse ( state, doc.RootElement ());
+
+		return 1;
+		
+	#else
+		return 0;
+	#endif
 }
 
 //----------------------------------------------------------------//

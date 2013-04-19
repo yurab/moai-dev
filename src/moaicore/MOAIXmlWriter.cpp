@@ -4,7 +4,9 @@
 #include "pch.h"
 #include <moaicore/MOAIXmlWriter.h>
 
-#if USE_TINYXML
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_TINYXML
+
 //================================================================//
 // local
 //================================================================//

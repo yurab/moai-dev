@@ -4,21 +4,24 @@
 #include "pch.h"
 #include <uslscore/USHashWriterSHA224.h>
 
-#if USE_SSL
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCRYPTO
+
 #include <openssl/sha.h>
+
 //================================================================//
 // USHashWriterSHA224
 //================================================================//
 
 //----------------------------------------------------------------//
 void USHashWriterSHA224::FinalizeHash () {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA224_Final ( this->mHash, ( SHA256_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
 size_t USHashWriterSHA224::GetBlockSize () {
+
 	return SHA_CBLOCK;
 }
 
@@ -36,9 +39,8 @@ size_t USHashWriterSHA224::GetHashSize () {
 
 //----------------------------------------------------------------//
 void USHashWriterSHA224::HashBytes ( const void* buffer, size_t size ) {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA224_Update (( SHA256_CTX* )this->mAlgorithm, buffer, size );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -46,9 +48,7 @@ void USHashWriterSHA224::InitHash () {
 
 	memset ( &this->mHash, 0, sizeof ( this->mHash ));
 	memset ( this->mAlgorithm, 0, sizeof ( SHA256_CTX ));
-#if !MOAI_OS_NACL && USE_SSL
 	SHA224_Init (( SHA256_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -59,6 +59,7 @@ USHashWriterSHA224::USHashWriterSHA224 () {
 
 //----------------------------------------------------------------//
 USHashWriterSHA224::~USHashWriterSHA224 () {
+
 	this->Close ();
 	free ( this->mAlgorithm );
 }

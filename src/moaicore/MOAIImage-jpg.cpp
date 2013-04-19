@@ -5,7 +5,8 @@
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIImage.h>
 
-#if USE_JPG
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBJPG
 
 extern "C" {
 	#include <jinclude.h>
@@ -266,5 +267,107 @@ void MOAIImage::LoadJpg ( void* jpgInfoParam, u32 transform ) {
 		}
 	}
 }
+
+////----------------------------------------------------------------//
+//bool MOAIImage::WritePNG ( USStream& stream ) {
+//
+//	png_structp png_ptr;
+//	png_infop info_ptr;
+//	
+//	png_ptr = png_create_write_struct ( PNG_LIBPNG_VER_STRING, 0, _pngError, 0 );
+//	assert ( png_ptr ); // TODO
+//
+//	info_ptr = png_create_info_struct ( png_ptr );
+//	assert ( png_ptr ); // TODO
+//
+//	png_set_write_fn ( png_ptr, &stream, _pngWrite, _pngFlush );
+//
+//	int bitDepth = 0;
+//	int colorType = 0;
+//	
+//	switch ( this->mColorFormat ) {
+//		
+//		case USColor::A_8:
+//			
+//			bitDepth = 8;
+//			colorType = PNG_COLOR_TYPE_GRAY;
+//			break;
+//		
+//		case USColor::RGB_888:
+//		
+//			bitDepth = 8;
+//			colorType = PNG_COLOR_TYPE_RGB;
+//			break;
+//		
+//		case USColor::RGBA_4444:
+//		
+//			bitDepth = 4;
+//			colorType = PNG_COLOR_TYPE_RGB_ALPHA;
+//			break;
+//		
+//		case USColor::RGBA_8888:
+//		
+//			bitDepth = 8;
+//			colorType = PNG_COLOR_TYPE_RGB_ALPHA;
+//			break;
+//		
+//		// TODO: support these formats
+//		case USColor::RGB_565:
+//		case USColor::RGBA_5551:
+//		default:
+//			assert ( false ); // TODO
+//	};
+//	
+//	// Set the image information here.  Width and height are up to 2^31,
+//	// bit_depth is one of 1, 2, 4, 8, or 16, but valid values also depend on
+//	// the color_type selected. color_type is one of PNG_COLOR_TYPE_GRAY,
+//	// PNG_COLOR_TYPE_GRAY_ALPHA, PNG_COLOR_TYPE_PALETTE, PNG_COLOR_TYPE_RGB,
+//	// or PNG_COLOR_TYPE_RGB_ALPHA.  interlace is either PNG_INTERLACE_NONE or
+//	// PNG_INTERLACE_ADAM7, and the compression_type and filter_type MUST
+//	// currently be PNG_COMPRESSION_TYPE_BASE and PNG_FILTER_TYPE_BASE. REQUIRED
+//	png_set_IHDR (
+//		png_ptr,
+//		info_ptr,
+//		this->mWidth,
+//		this->mHeight,
+//		bitDepth,
+//		colorType,
+//		PNG_INTERLACE_NONE,
+//		PNG_COMPRESSION_TYPE_BASE,
+//		PNG_FILTER_TYPE_BASE
+//	);
+//
+//	// Set the palette if there is one.  REQUIRED for indexed-color images
+//	//png_colorp palette;
+//	//palette = ( png_colorp )png_malloc ( png_ptr, PNG_MAX_PALETTE_LENGTH * png_sizeof ( png_color ));
+//	
+//	// ... Set palette colors...
+//	//png_set_PLTE ( png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH );
+//
+//	// Write the file header information.
+//	png_write_info(png_ptr, info_ptr);
+//
+//	// Flip BGR pixels to RGB
+//	//png_set_bgr(png_ptr);
+//
+//	for ( u32 y = 0; y < this->mHeight; y++ ) {
+//		png_bytep row = ( png_bytep )this->GetRowAddr ( y );
+//		png_write_row ( png_ptr, row );
+//	}
+//
+//	png_write_end(png_ptr, info_ptr);
+//
+//	//if ( palette ) {
+//	//	png_free ( png_ptr, palette );
+//	//}
+//
+//	//if ( trans ) {
+//	//	png_free ( png_ptr, trans );
+//	//}
+//
+//	png_destroy_write_struct ( &png_ptr, &info_ptr );
+//	
+//	return true;
+//}
 
 #endif

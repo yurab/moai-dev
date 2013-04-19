@@ -4,21 +4,24 @@
 #include "pch.h"
 #include <uslscore/USHashWriterSHA384.h>
 
-#if USE_SSL
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCRYPTO
+
 #include <openssl/sha.h>
+
 //================================================================//
 // USHashWriterSHA384
 //================================================================//
 
 //----------------------------------------------------------------//
 void USHashWriterSHA384::FinalizeHash () {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA384_Final ( this->mHash, ( SHA512_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
 size_t USHashWriterSHA384::GetBlockSize () {
+
 	return SHA_CBLOCK;
 }
 
@@ -36,9 +39,8 @@ size_t USHashWriterSHA384::GetHashSize () {
 
 //----------------------------------------------------------------//
 void USHashWriterSHA384::HashBytes ( const void* buffer, size_t size ) {
-#if !MOAI_OS_NACL && USE_SSL
+
 	SHA384_Update (( SHA512_CTX* )this->mAlgorithm, buffer, size );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -46,9 +48,7 @@ void USHashWriterSHA384::InitHash () {
 
 	memset ( &this->mHash, 0, sizeof ( this->mHash ));
 	memset ( this->mAlgorithm, 0, sizeof ( SHA512_CTX ));
-#if !MOAI_OS_NACL && USE_SSL
 	SHA384_Init (( SHA512_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -59,6 +59,7 @@ USHashWriterSHA384::USHashWriterSHA384 () {
 
 //----------------------------------------------------------------//
 USHashWriterSHA384::~USHashWriterSHA384 () {
+
 	this->Close ();
 	free ( this->mAlgorithm );
 }

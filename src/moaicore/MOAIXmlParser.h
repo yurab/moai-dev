@@ -3,10 +3,10 @@
 
 #ifndef	MOAIXMLPARSER_H
 #define	MOAIXMLPARSER_H
+#if MOAI_WITH_TINYXML
 
 #include <moaicore/MOAILua.h>
 
-#if USE_TINYXML
 class TiXmlNode;
 
 //================================================================//

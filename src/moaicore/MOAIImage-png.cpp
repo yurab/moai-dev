@@ -5,7 +5,8 @@
 #include <moaicore/MOAILogMessages.h>
 #include <moaicore/MOAIImage.h>
 
-#if USE_PNG
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBPNG
 
 #include <png.h>
 

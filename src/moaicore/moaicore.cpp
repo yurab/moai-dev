@@ -2,6 +2,11 @@
 // http://getmoai.com
 
 #include "pch.h"
+
+#if USE_CHIPMUNK
+  #include <chipmunk/chipmunk.h>
+#endif
+
 #include <moaicore/moaicore.h>
 
 extern "C" {
@@ -9,7 +14,7 @@ extern "C" {
 	#include <zlcore/ZLZipArchive.h>
 }
 
-#if USE_OPENSSL
+#if MOAI_WITH_OPENSSL
 	#include <openssl/conf.h>
 	#include <openssl/crypto.h>
 
@@ -26,10 +31,6 @@ extern "C" {
 
 #if USE_ARES
 	#include <ares.h>
-#endif
-
-#if USE_CHIPMUNK
-  #include <chipmunk/chipmunk.h>
 #endif
 
 //----------------------------------------------------------------//
@@ -58,13 +59,18 @@ static void _typeCheck () {
 //----------------------------------------------------------------//
 void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 
+	printf ( "FOO\n" );
+
 	MOAIGlobalsMgr::Set ( globals );
 
+	printf ( "BAR\n" );
+
 	MOAILuaRuntime::Affirm ();
+	MOAIProfiler::Affirm ();
 	MOAILogMgr::Affirm ();
 	MOAIGfxDevice::Affirm ();
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		MOAIUrlMgrCurl::Affirm ();
 	#endif
 	
@@ -72,15 +78,14 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		MOAIUrlMgrNaCl::Affirm ();
 	#endif
 	
-	#if USE_SFMT
-	  MOAIMath::Affirm ();
-	#endif
-  
-  #if USE_TINYXML
-	  MOAIXmlParser::Affirm ();
+	MOAIMath::Affirm ();
+	
+	#if MOAI_WITH_TINYXML
+		MOAIXmlParser::Affirm ();
 	#endif
 	
-	MOAIProfiler::Affirm ();
+	printf ( "A\n" );
+	
 	MOAIActionMgr::Affirm ();
 	MOAIInputMgr::Affirm ();
 	MOAINodeMgr::Affirm ();
@@ -92,6 +97,12 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	MOAISim::Affirm ();
 	MOAIRenderMgr::Affirm ();
 	
+	printf ( "B\n" );
+	
+	#if MOAI_WITH_CHIPMUNK
+		MOAICp::Affirm ();
+	#endif
+	
 	// Start Lua
 	MOAILuaRuntime& luaRuntime = MOAILuaRuntime::Get ();
 	luaRuntime.Open ();
@@ -99,6 +110,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	
 	MOAILogMessages::RegisterDefaultLogMessages ();
 	
+	printf ( "Registering Lua Actions\n" );
 	// MOAI
 	REGISTER_LUA_CLASS ( MOAIAction )
 	REGISTER_LUA_CLASS ( MOAIActionMgr )
@@ -132,7 +144,11 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIFooMgr )
 	REGISTER_LUA_CLASS ( MOAIFont )
 	REGISTER_LUA_CLASS ( MOAIFrameBuffer )
-	REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
+
+	#ifndef __FLASCC__
+		REGISTER_LUA_CLASS ( MOAIFrameBufferTexture )
+	#endif
+
 	REGISTER_LUA_CLASS ( MOAIGfxDevice )
 	REGISTER_LUA_CLASS ( MOAIGfxQuad2D )
 	REGISTER_LUA_CLASS ( MOAIGfxQuadDeck2D )
@@ -148,31 +164,20 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIInputDevice )
 	REGISTER_LUA_CLASS ( MOAIInputMgr )
 	REGISTER_LUA_CLASS ( MOAIJoystickSensor )
-  
-  #if USE_JSON
-	  REGISTER_LUA_CLASS ( MOAIJsonParser )
-	#endif
-	
 	REGISTER_LUA_CLASS ( MOAIKeyboardSensor )
 	REGISTER_LUA_CLASS ( MOAILayer )
 	REGISTER_LUA_CLASS ( MOAILayerBridge )
 	//REGISTER_LUA_CLASS ( MOAILayoutFrame )
 	REGISTER_LUA_CLASS ( MOAILocationSensor )
 	REGISTER_LUA_CLASS ( MOAILogMgr )
-
-  #if USE_SFMT
-	  REGISTER_LUA_CLASS ( MOAIMath )
-	#endif 
-	
+	REGISTER_LUA_CLASS ( MOAIMath )
 	REGISTER_LUA_CLASS ( MOAIMemStream )
 	REGISTER_LUA_CLASS ( MOAIMesh )
 	REGISTER_LUA_CLASS ( MOAIMotionSensor )
 	REGISTER_LUA_CLASS ( MOAIMultiTexture )
-	REGISTER_LUA_CLASS ( MOAIParser )
 	REGISTER_LUA_CLASS ( MOAIParticleCallbackPlugin )
 	REGISTER_LUA_CLASS ( MOAIParticleDistanceEmitter )
 	REGISTER_LUA_CLASS ( MOAIParticleForce )
-	REGISTER_LUA_CLASS ( MOAIParticlePexPlugin )
 	REGISTER_LUA_CLASS ( MOAIParticleScript )
 	REGISTER_LUA_CLASS ( MOAIParticleState )
 	REGISTER_LUA_CLASS ( MOAIParticleSystem )
@@ -211,12 +216,8 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 	REGISTER_LUA_CLASS ( MOAIVertexFormat )
 	REGISTER_LUA_CLASS ( MOAIViewport )
 	REGISTER_LUA_CLASS ( MOAIWheelSensor )
-
-  #if USE_TINYXML
-	  REGISTER_LUA_CLASS ( MOAIXmlParser )
-	#endif
 	
-	#if USE_BOX2D
+	#if MOAI_WITH_BOX2D
 		REGISTER_LUA_CLASS ( MOAIBox2DArbiter )
 		REGISTER_LUA_CLASS ( MOAIBox2DBody )
 		REGISTER_LUA_CLASS ( MOAIBox2DDistanceJoint )
@@ -233,10 +234,7 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		REGISTER_LUA_CLASS ( MOAIBox2DWorld )
 	#endif
 	
-	#if USE_CHIPMUNK
-	
-		MOAICp::Affirm ();
-	
+	#if MOAI_WITH_CHIPMUNK	
 		REGISTER_LUA_CLASS ( MOAICp )
 		REGISTER_LUA_CLASS ( MOAICpArbiter )
 		REGISTER_LUA_CLASS ( MOAICpBody )
@@ -245,11 +243,11 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		REGISTER_LUA_CLASS ( MOAICpSpace )
 	#endif
 	
-	#if USE_FREETYPE
+	#if MOAI_WITH_FREETYPE
 		REGISTER_LUA_CLASS ( MOAIFreeTypeFontReader )
 	#endif
 
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		REGISTER_LUA_CLASS ( MOAIHttpTaskCurl )
 	#endif
 
@@ -257,6 +255,20 @@ void moaicore::InitGlobals ( MOAIGlobals* globals ) {
 		REGISTER_LUA_CLASS ( MOAIHttpTaskNaCl )
 	#endif
 	
+	#if MOAI_WITH_JANSSON
+		REGISTER_LUA_CLASS ( MOAIJsonParser )
+	#endif
+	
+	#if MOAI_WITH_GPB
+		REGISTER_LUA_CLASS ( MOAIParser )
+	#endif
+	
+	#if MOAI_WITH_TINYXML
+		REGISTER_LUA_CLASS ( MOAIParticlePexPlugin )
+  	REGISTER_LUA_CLASS ( MOAIXmlParser )
+	#endif
+	printf ( "Lua Actions registered\n" );
+	printf ( "Detecting environment\n" );
 	MOAIEnvironment::Get ().DetectEnvironment ();
 }
 
@@ -265,11 +277,12 @@ void moaicore::SystemFinalize () {
 
 	MOAIGlobalsMgr::Finalize ();
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		curl_global_cleanup ();
 	#endif
 	
-	#if USE_OPENSSL
+	#if MOAI_WITH_OPENSSL
+	
 		#ifndef OPENSSL_NO_ENGINE
 			ENGINE_cleanup ();
 		#endif
@@ -295,7 +308,7 @@ void moaicore::SystemInit () {
 	srand (( u32 )time ( 0 ));
 	zl_init ();
 	
-	#if USE_OPENSSL
+	#if MOAI_WITH_OPENSSL
 		SSL_load_error_strings ();
 		SSL_library_init ();
 	#endif
@@ -304,11 +317,11 @@ void moaicore::SystemInit () {
 		ares_set_default_dns_addr ( 0x08080808 );
 	#endif
 	
-	#if USE_CURL
+	#if MOAI_WITH_LIBCURL
 		curl_global_init ( CURL_GLOBAL_WIN32 | CURL_GLOBAL_SSL );
 	#endif
 	
-	#if USE_CHIPMUNK
+	#if MOAI_WITH_CHIPMUNK
 		cpInitChipmunk ();
 	#endif
 }

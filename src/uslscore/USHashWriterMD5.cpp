@@ -4,8 +4,11 @@
 #include "pch.h"
 #include <uslscore/USHashWriterMD5.h>
 
-#if USE_SSL
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCRYPTO
+
 #include <openssl/md5.h>
+
 //================================================================//
 // USHashWriterMD5
 //================================================================//
@@ -13,13 +16,12 @@
 //----------------------------------------------------------------//
 void USHashWriterMD5::FinalizeHash () {
 	
-#if !MOAI_OS_NACL && USE_CURL
 	MD5_Final ( this->mHash, ( MD5_CTX* )this->mAlgorithm );
-#endif
 }
 
 //----------------------------------------------------------------//
 size_t USHashWriterMD5::GetBlockSize () {
+
 	return MD5_CBLOCK;
 }
 
@@ -38,9 +40,7 @@ size_t USHashWriterMD5::GetHashSize () {
 //----------------------------------------------------------------//
 void USHashWriterMD5::HashBytes ( const void* buffer, size_t size ) {
 
-#if !MOAI_OS_NACL && USE_CURL
 	MD5_Update (( MD5_CTX* )this->mAlgorithm, buffer, size );
-#endif
 }
 
 //----------------------------------------------------------------//
@@ -48,9 +48,7 @@ void USHashWriterMD5::InitHash () {
 
 	memset ( &this->mHash, 0, sizeof ( this->mHash ));
 	memset ( this->mAlgorithm, 0, sizeof ( MD5_CTX ));
-#if !MOAI_OS_NACL && USE_CURL
 	MD5_Init (( MD5_CTX* )this->mAlgorithm );
-#endif	
 }
 
 //----------------------------------------------------------------//
@@ -61,6 +59,7 @@ USHashWriterMD5::USHashWriterMD5 () {
 
 //----------------------------------------------------------------//
 USHashWriterMD5::~USHashWriterMD5 () {
+
 	this->Close ();
 	free ( this->mAlgorithm );
 }

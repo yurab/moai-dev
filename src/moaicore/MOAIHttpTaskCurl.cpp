@@ -4,10 +4,11 @@
 #include "pch.h"
 
 #include <algorithm>
+
+SUPPRESS_EMPTY_FILE_WARNING
+#if MOAI_WITH_LIBCURL
 #include <moaicore/MOAIHttpTaskCurl.h>
 #include <moaicore/MOAIUrlMgrCurl.h>
-
-#if USE_CURL
 
 #define MAX_HEADER_LENGTH 1024
 
