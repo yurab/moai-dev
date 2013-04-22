@@ -1,13 +1,16 @@
 cmake_minimum_required ( VERSION 2.8.5 )
 project ( glew )
 
-set ( CMAKE_CURRENT_SOURCE_DIR "../../../3rdparty/glew-1.5.6/src" )
+if ( BUILD_BLACKBERRY )
+else ( BUILD_BLACKBERRY )
+  set ( CMAKE_CURRENT_SOURCE_DIR "../../../3rdparty/glew-1.5.6/src" )
 
-set ( GLEW_INCLUDES "../../3rdparty/glew-1.5.6/include" CACHE INTERNAL "doc string" )
+  set ( GLEW_INCLUDES "../../3rdparty/glew-1.5.6/include" CACHE INTERNAL "doc string" )
 
-set ( GLEW_SOURCES 
+  set ( GLEW_SOURCES 
 
-    ${CMAKE_CURRENT_SOURCE_DIR}/glew.c
+      ${CMAKE_CURRENT_SOURCE_DIR}/glew.c
     
-CACHE INTERNAL "doc string" )
+  CACHE INTERNAL "doc string" )
 
+endif ( BUILD_BLACKBERRY )

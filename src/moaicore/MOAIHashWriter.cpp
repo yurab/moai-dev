@@ -1,6 +1,8 @@
 // Copyright (c) 2010-2011 Zipline Games, Inc. All Rights Reserved.
 // http://getmoai.com
 
+#if USE_SSL
+
 #include "pch.h"
 #include <moaicore/MOAIHashWriter.h>
 
@@ -347,3 +349,5 @@ void MOAIHashWriter::RegisterLuaFuncs ( MOAILuaState& state ) {
 
 	luaL_register ( state, 0, regTable );
 }
+
+#endif

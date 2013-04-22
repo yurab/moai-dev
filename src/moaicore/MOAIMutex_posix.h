@@ -6,6 +6,10 @@
 
 #ifndef _WIN32
 
+#ifdef __QNX__
+#include <pthread.h>
+#endif
+
 #include <moaicore/MOAIThread.h>
 
 //================================================================//

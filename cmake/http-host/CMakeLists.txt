@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.5)
 project(http-host)
 
+
+if ( BUILD_LINUX )
+
 set ( HTTPHOST_INCLUDES "../../src/;../../src/hosts/" CACHE INTERNAL "doc string" )
 
 include_directories ( 
@@ -18,3 +21,5 @@ add_executable ( http-host
 )
 
 target_link_libraries ( http-host moai-core zlcore uslscore third-party )
+
+endif ( BUILD_LINUX )

@@ -10,6 +10,6 @@ set ( ZLCORE_INCLUDES "../../src/;../../3rdparty/tlsf-2.0/;../../3rdparty/zlib-1
 # Use all cpp files in directory as source code
 file ( GLOB SRC_ZLCORE "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" )
 
-include_directories ( ${ZLCORE_INCLUDES} )
+include_directories ( ${ZLCORE_INCLUDES} ${BLACKBERRY_INCLUDES} )
 
 add_library ( zlcore STATIC ${SRC_ZLCORE} )

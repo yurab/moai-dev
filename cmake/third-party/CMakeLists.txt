@@ -2,7 +2,11 @@ cmake_minimum_required ( VERSION 2.8.5 )
 
 project ( third-party )
 
-set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -DNDEBUG -DHAVE_MEMMOVE -DFT2_BUILD_LIBRARY" )
+if ( BUILD_BLACKBERRY )
+  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DNDEBUG -DHAVE_MEMMOVE -DFT2_BUILD_LIBRARY" )
+else ( BUILD_BLACKBERRY )
+  set ( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -DNDEBUG -DHAVE_MEMMOVE -DFT2_BUILD_LIBRARY" )
+endif ( BUILD_BLACKBERRY )
 
 set ( CMAKE_CURRENT_SOURCE_DIR "${ROOT_DIR}../../../3rdparty" )
 
@@ -50,6 +54,7 @@ CACHE INTERNAL "doc string" )
 
 include_directories ( 
   ${THIRD_PARTY_INCLUDES}
+  ${BLACKBERRY_INCLUDES}
 )
 
 add_library ( third-party STATIC 

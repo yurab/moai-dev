@@ -30,6 +30,9 @@
 	#include <mach/mach.h>
 #endif
 
+#ifdef MOAI_OS_BLACKBERRY
+#include <unistd.h>
+#endif
 
 //================================================================//
 // local

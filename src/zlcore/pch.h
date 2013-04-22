@@ -33,6 +33,10 @@
 		#define MOAI_OS_LINUX
 	#endif
 
+#elif defined ( __QNX__ )
+	#define MOAI_PHONE
+	#define MOAI_OS_BLACKBERRY
+
 #else
 	#define MOAI_OS_UNKNOWN
 
