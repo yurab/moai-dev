@@ -1,16 +1,27 @@
-#include <aku/AKU.h>
+#include <moaicore/AKU.h>
 #include <moaiext-server/AKU-server.h>
 
-#include <windows.h>
-#include <signal.h>
+#ifdef _WIN32
+	#include <windows.h>
+	#define sleep(x) Sleep((x) * 1000)
+#else
+	#include <unistd.h>
+#endif
 
-#define sleep(x) Sleep((x) * 1000)
-#define WINCDECL __cdecl
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <errno.h>
+#include <limits.h>
+#include <stddef.h>
+#include <stdarg.h>
+#include <ctype.h>
 
 static int sExitFlag = 0;
 
 //----------------------------------------------------------------//
-static void WINCDECL signal_handler ( int sig_num ) {
+static void signal_handler ( int sig_num ) {
   sExitFlag = sig_num;
 }
 

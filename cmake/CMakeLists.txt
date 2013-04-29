@@ -85,7 +85,7 @@ add_subdirectory ( third-party )
 add_subdirectory ( zlcore )
 add_subdirectory ( uslscore )
 add_subdirectory ( moai-core )
-add_subdirectory ( aku )
+add_subdirectory ( moaiext-server )
 
 # add_subdirectory ( moai-host-glut )
 
@@ -100,5 +100,5 @@ add_subdirectory ( http-host )
 # add_subdirectory ( windows-host )
 add_subdirectory ( blackberry-host )
 
-add_subdirectory(untz)
-add_subdirectory(moai-untz)
+add_subdirectory ( untz )
+add_subdirectory ( moai-untz )
