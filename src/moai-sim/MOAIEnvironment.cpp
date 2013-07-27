@@ -113,7 +113,12 @@ void MOAIEnvironment::DetectEnvironment () {
 		
 			strcpy ( pszOS, TEXT ( "Win" ));			
 			if ( osvi.dwMajorVersion == 6 ) {
-				if ( osvi.dwMinorVersion == 1 ) {
+				if ( osvi.dwMinorVersion == 2 ) {
+					if( osvi.wProductType == VER_NT_WORKSTATION )
+						strcat(pszOS, TEXT("8"));
+					else strcat(pszOS, TEXT(" Server 2012" ));
+				}
+				else if ( osvi.dwMinorVersion == 1 ) {
 					if( osvi.wProductType == VER_NT_WORKSTATION )
 						strcat(pszOS, TEXT("7"));
 					else strcat(pszOS, TEXT("2008R2" ));

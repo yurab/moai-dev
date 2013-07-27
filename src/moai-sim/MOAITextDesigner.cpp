@@ -45,7 +45,7 @@ void MOAITextDesigner::AcceptLine () {
 	}
 	else {
 		this->mPen.mX = 0.0f;
-		this->mTokenRect.Init ( 0.0f, this->mPen.mY, 0.0f, this->mPen.mY + this->mDeck->mHeight );
+		this->mTokenRect.Init ( 0.0f, this->mPen.mY, 0.0f, this->mPen.mY + (this->mDeck? this->mDeck->mHeight : 0) );
 	}
 }
 
@@ -157,7 +157,7 @@ void MOAITextDesigner::BuildLayout () {
 				
 				this->AcceptToken ();
 				
-				if ( !this->mLineRect.Height ()) {
+				if ( !this->mLineRect.Height () && this->mDeck) {
 					this->mLineRect.mYMax += this->mDeck->mHeight * scale;
 				}
 				
@@ -174,7 +174,7 @@ void MOAITextDesigner::BuildLayout () {
 		}
 		else {
 			
-			MOAIGlyph* glyph = this->mDeck->GetGlyph ( c );
+			MOAIGlyph* glyph = this->mDeck ? this->mDeck->GetGlyph ( c ) : 0;
 			if ( !glyph ) continue;
 			
 			// apply kerning
